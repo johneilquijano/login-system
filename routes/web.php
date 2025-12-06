@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\PasswordResetController;
+use App\Http\Controllers\PasswordController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\UserController;
@@ -35,6 +36,8 @@ Route::post('/password-reset', [PasswordResetController::class, 'resetPassword']
 // Employee Routes (Protected)
 Route::middleware([EmployeeMiddleware::class])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/change-password', [PasswordController::class, 'showChangePasswordForm'])->name('password.form');
+    Route::post('/change-password', [PasswordController::class, 'updatePassword'])->name('password.update');
 });
 
 // Admin Routes (Protected)

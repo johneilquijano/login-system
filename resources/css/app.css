@@ -1,1 +1,27 @@
 @import "tailwindcss";
+
+/* Sidebar Overrides */
+.dashboard-sidebar {
+  display: flex;
+  flex-direction: column;
+  width: 16rem;
+  height: 100vh;
+  position: sticky;
+  top: 0;
+}
+
+.dashboard-nav {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.dashboard-nav a {
+  width: 100%;
+}
+
+/* SVG icon spacing fix */
+.dashboard-nav svg {
+  margin-right: 0.75rem !important;
+  flex-shrink: 0;
+}

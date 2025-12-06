@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 
 class LoginController extends Controller
 {
@@ -20,7 +21,15 @@ class LoginController extends Controller
             'password' => 'required',
         ]);
 
-        if (Auth::attempt($credentials, $request->remember)) {
+        // If the user exists but is disabled, prevent login
+        $maybeUser = User::where('email', $request->input('email'))->first();
+        if ($maybeUser && ! $maybeUser->active) {
+            return back()->withErrors([
+                'email' => 'This account has been disabled. Please contact an administrator.',
+            ])->onlyInput('email');
+        }
+
+        if (Auth::attempt($credentials, $request->boolean('remember'))) {
             $request->session()->regenerate();
 
             // Redirect based on role
