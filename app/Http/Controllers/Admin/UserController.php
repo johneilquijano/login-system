@@ -97,10 +97,20 @@ class UserController extends Controller
 
     public function resetPassword(User $user)
     {
-        $newPassword = 'Password123!';
-        $user->update(['password' => Hash::make($newPassword)]);
+        // This method now expects a new password via POST from the admin form.
+        // Validate and update the user's password securely.
+        request()->validate([
+            'password' => 'required|string|min:8|confirmed',
+        ]);
 
-        return back()->with('success', "Password reset. Temporary password: {$newPassword}");
+        $user->update(['password' => Hash::make(request('password'))]);
+
+        return redirect()->route('admin.users.index')->with('success', 'Password updated successfully.');
+    }
+
+    public function showResetPasswordForm(User $user)
+    {
+        return view('admin.users.reset-password', compact('user'));
     }
 
     public function disable(User $user)

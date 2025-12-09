@@ -30,17 +30,41 @@
                     </a> -->
                 </nav>
 
-                <!-- Logout Button -->
-                <div class="absolute bottom-0 w-64 border-t px-6 py-4">
-                    <form method="POST" action="{{ route('logout') }}">
-                        @csrf
-                        <button type="submit" class="w-full bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded-lg transition flex items-center justify-center space-x-2">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+                <!-- Profile Section -->
+                <div class="absolute bottom-0 w-64 border-t px-4 py-4">
+                    <div class="relative">
+                        <button onclick="toggleAdminProfileMenu()" class="flex items-center space-x-3 w-full hover:bg-gray-50 p-2 rounded-lg transition">
+                            <div class="w-12 h-12 bg-gradient-to-br from-purple-600 to-indigo-600 rounded-full flex items-center justify-center text-white font-bold text-lg shadow-md">
+                                {{ substr(Auth::user()->name, 0, 1) }}
+                            </div>
+                            <div class="flex-1 text-left">
+                                <p class="text-sm font-semibold text-gray-900">{{ Auth::user()->name }}</p>
+                                <p class="text-xs text-gray-600">{{ ucfirst(Auth::user()->role) }}</p>
+                            </div>
+                            <svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
                             </svg>
-                            <span>Logout</span>
                         </button>
-                    </form>
+
+                        <!-- Dropdown Menu (fixed position, appears above) -->
+                        <div id="admin-profile-dropdown" class="hidden fixed bg-white rounded-lg shadow-xl border border-gray-200 z-50 overflow-hidden w-48" style="display: none;">
+                            <a href="{{ route('password.form') }}" class="block px-4 py-3 text-sm text-gray-700 hover:bg-purple-50 hover:text-purple-600 transition flex items-center space-x-2">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                                </svg>
+                                <span>Change Password</span>
+                            </a>
+                            <form method="POST" action="{{ route('logout') }}" class="border-t">
+                                @csrf
+                                <button type="submit" class="w-full text-left px-4 py-3 text-sm text-red-600 hover:bg-red-50 transition flex items-center space-x-2">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+                                    </svg>
+                                    <span>Logout</span>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -110,6 +134,35 @@
     </div>
 
     <script>
+        // Toggle admin profile dropdown menu
+        function toggleAdminProfileMenu() {
+            const dropdown = document.getElementById('admin-profile-dropdown');
+            const isHidden = dropdown.style.display === 'none' || !dropdown.style.display;
+            
+            if (isHidden) {
+                const button = event.currentTarget;
+                const rect = button.getBoundingClientRect();
+                dropdown.style.left = rect.left + 'px';
+                dropdown.style.bottom = (window.innerHeight - rect.top) + 'px';
+                dropdown.style.display = 'block';
+                dropdown.classList.remove('hidden');
+            } else {
+                dropdown.style.display = 'none';
+                dropdown.classList.add('hidden');
+            }
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(e) {
+            const dropdown = document.getElementById('admin-profile-dropdown');
+            if (dropdown && dropdown.style.display === 'block') {
+                if (!e.target.closest('#admin-profile-dropdown') && !e.target.closest('button[onclick="toggleAdminProfileMenu()"]')) {
+                    dropdown.style.display = 'none';
+                    dropdown.classList.add('hidden');
+                }
+            }
+        });
+
         // Toggle dropdown menu for a specific user id and manage z-index so the menu appears above
         function toggleMenu(id) {
             const menu = document.getElementById('menu-' + id);

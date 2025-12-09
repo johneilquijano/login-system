@@ -47,6 +47,7 @@ Route::middleware([AdminMiddleware::class])->prefix('admin')->name('admin.')->gr
 
     // User Management
     Route::resource('users', UserController::class);
+    Route::get('/users/{user}/reset-password', [UserController::class, 'showResetPasswordForm'])->name('users.resetPassword.form');
     Route::post('/users/{user}/reset-password', [UserController::class, 'resetPassword'])->name('users.resetPassword');
     Route::post('/users/{user}/disable', [UserController::class, 'disable'])->name('users.disable');
     Route::post('/users/{user}/enable', [UserController::class, 'enable'])->name('users.enable');
