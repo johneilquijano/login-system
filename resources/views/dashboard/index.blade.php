@@ -36,7 +36,7 @@
                 </nav>
 
                 <!-- User Profile Section (Bottom) -->
-                <div class="mt-auto border-t px-6 py-4">
+                <div class="mt-auto border-t px-6 py-4" style="border-top-color: #ccc;">
                     <div class="relative">
                         <button id="profile-menu-btn" onclick="toggleProfileMenu()" class="w-full flex items-center space-x-3 hover:bg-gray-100 p-2 rounded-lg transition cursor-pointer">
                             <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full flex items-center justify-center text-white font-bold text-lg shadow-md">
@@ -106,7 +106,7 @@
             <!-- Main Content Area -->
             <div class="flex-1 overflow-auto">
                 <!-- Header -->
-                <header class="sticky top-0 z-40 bg-white shadow-sm border-b border-gray-200">
+                <header class="sticky top-0 z-40 bg-white shadow-sm border-b" style="border-bottom-color: #ccc;">
                     <div class="flex items-center justify-between px-8 py-4">
                         <div>
                             <h2 class="text-2xl font-bold text-gray-900">Dashboard</h2>

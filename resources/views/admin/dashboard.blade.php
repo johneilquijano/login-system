@@ -24,7 +24,7 @@
                 </nav>
                 
                 <!-- User Profile Section (Bottom) -->
-                <div class="mt-auto border-t px-6 py-4">
+                <div class="mt-auto border-t px-6 py-4" style="border-top-color: #ccc;">
                     <div class="relative">
                         <button id="admin-profile-menu-btn" onclick="toggleAdminProfileMenu()" class="w-full flex items-center space-x-3 hover:bg-gray-100 p-2 rounded-lg transition cursor-pointer">
                             <div class="w-12 h-12 bg-gradient-to-br from-purple-600 to-indigo-600 rounded-full flex items-center justify-center text-white font-bold text-lg shadow-md">
