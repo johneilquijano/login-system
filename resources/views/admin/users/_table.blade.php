@@ -1,6 +1,6 @@
 <div class="bg-white rounded-lg shadow overflow-visible">
     <table class="w-full">
-        <thead class="bg-gray-100 border-b">
+        <thead class="bg-gray-100 border-b" style="border-bottom-color: #ccc;">
             <tr>
                 <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Name</th>
                 <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Email</th>
@@ -13,7 +13,7 @@
         </thead>
         <tbody>
             @forelse($users as $user)
-            <tr class="border-b hover:bg-gray-50 transition">
+            <tr class="border-b hover:bg-gray-50 transition" style="border-bottom-color: #ccc;">
                 <td class="px-6 py-4 text-sm text-gray-900">{{ $user->name }}</td>
                 <td class="px-6 py-4 text-sm text-gray-600">{{ $user->email }}</td>
                 <td class="px-6 py-4 text-sm">

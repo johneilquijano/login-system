@@ -31,7 +31,7 @@
                 </nav>
 
                 <!-- Profile Section -->
-                <div class="absolute bottom-0 w-64 border-t px-4 py-4">
+                <div class="absolute bottom-0 w-64 border-t px-4 py-4" style="border-top-color: #ccc;">
                     <div class="relative">
                         <button onclick="toggleAdminProfileMenu()" class="flex items-center space-x-3 w-full hover:bg-gray-50 p-2 rounded-lg transition">
                             <div class="w-12 h-12 bg-gradient-to-br from-purple-600 to-indigo-600 rounded-full flex items-center justify-center text-white font-bold text-lg shadow-md">
