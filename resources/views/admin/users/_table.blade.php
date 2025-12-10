@@ -42,10 +42,7 @@
                             <div class="py-1">
                                 <a href="{{ route('admin.users.edit', $user) }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 whitespace-nowrap">Edit</a>
 
-                                <form method="POST" action="{{ route('admin.users.resetPassword', $user) }}">
-                                    @csrf
-                                    <button type="submit" class="w-full text-left block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 whitespace-nowrap">Reset Password</button>
-                                </form>
+                                <a href="{{ route('admin.users.resetPassword.form', $user) }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 whitespace-nowrap">Reset Password</a>
 
                                 <form method="POST" action="{{ route('admin.users.destroy', $user) }}" onsubmit="return confirm('Are you sure you want to delete this user?')">
                                     @csrf
