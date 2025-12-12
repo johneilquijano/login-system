@@ -1,72 +1,7 @@
 <x-layout>
     <div class="min-h-screen bg-gray-50">
         <div class="flex h-screen">
-            <!-- Sidebar Navigation -->
-            <div class="w-64 bg-white shadow-lg">
-                <div class="h-16 bg-gradient-to-r from-purple-600 to-indigo-600 flex items-center px-6">
-                    <h1 class="text-white font-bold text-xl">Admin Panel</h1>
-                </div>
-
-                <nav class="mt-6">
-                    <a href="{{ route('admin.dashboard') }}" class="px-6 py-3 border-l-4 border-transparent hover:border-gray-300 text-gray-700 hover:bg-gray-50 font-medium flex items-center space-x-3 transition">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-3m0 0l7-4 7 4M5 9v10a1 1 0 001 1h2a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1h2a1 1 0 001-1V9m-9 0a2 2 0 012-2h2a2 2 0 012 2"></path>
-                        </svg>
-                        <span>Dashboard</span>
-                    </a>
-
-                    <a href="{{ route('admin.users.index') }}" class="px-6 py-3 border-l-4 border-purple-600 bg-purple-50 text-purple-700 font-semibold flex items-center space-x-3">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.856-1.487M15 10a3 3 0 11-6 0 3 3 0 016 0zM6 20a6 6 0 0112 0v2H6v-2z"></path>
-                        </svg>
-                        <span>Manage Users</span>
-                    </a>
-
-                    <!-- <a href="{{ route('dashboard') }}" class="px-6 py-3 border-l-4 border-transparent hover:border-gray-300 text-gray-700 hover:bg-gray-50 font-medium flex items-center space-x-3 transition">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 15l-3-3m0 0l3-3m-3 3h8M3 12a9 9 0 1118 0 9 9 0 01-18 0z"></path>
-                        </svg>
-                        <span>Back to Dashboard</span>
-                    </a> -->
-                </nav>
-
-                <!-- Profile Section -->
-                <div class="absolute bottom-0 w-64 border-t px-4 py-4" style="border-top-color: #ccc;">
-                    <div class="relative">
-                        <button onclick="toggleAdminProfileMenu()" class="flex items-center space-x-3 w-full hover:bg-gray-50 p-2 rounded-lg transition">
-                            <div class="w-12 h-12 bg-gradient-to-br from-purple-600 to-indigo-600 rounded-full flex items-center justify-center text-white font-bold text-lg shadow-md">
-                                {{ substr(Auth::user()->name, 0, 1) }}
-                            </div>
-                            <div class="flex-1 text-left">
-                                <p class="text-sm font-semibold text-gray-900">{{ Auth::user()->name }}</p>
-                                <p class="text-xs text-gray-600">{{ ucfirst(Auth::user()->role) }}</p>
-                            </div>
-                            <svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
-                            </svg>
-                        </button>
-
-                        <!-- Dropdown Menu (fixed position, appears above) -->
-                        <div id="admin-profile-dropdown" class="hidden fixed bg-white rounded-lg shadow-xl border border-gray-200 z-50 overflow-hidden w-48" style="display: none;">
-                            <a href="{{ route('password.form') }}" class="block px-4 py-3 text-sm text-gray-700 hover:bg-purple-50 hover:text-purple-600 transition flex items-center space-x-2">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
-                                </svg>
-                                <span>Change Password</span>
-                            </a>
-                            <form method="POST" action="{{ route('logout') }}" class="border-t">
-                                @csrf
-                                <button type="submit" class="w-full text-left px-4 py-3 text-sm text-red-600 hover:bg-red-50 transition flex items-center space-x-2">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
-                                    </svg>
-                                    <span>Logout</span>
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <x-admin-sidebar />
 
             <!-- Main Content Area -->
             <div class="flex-1 overflow-auto">

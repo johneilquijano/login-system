@@ -45,4 +45,20 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    // Relationships
+    public function documents()
+    {
+        return $this->hasMany(Document::class);
+    }
+
+    public function toolCheckouts()
+    {
+        return $this->hasMany(ToolCheckout::class);
+    }
+
+    public function inventoryRequests()
+    {
+        return $this->hasMany(InventoryRequest::class);
+    }
 }

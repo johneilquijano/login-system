@@ -25,3 +25,21 @@
   margin-right: 0.75rem !important;
   flex-shrink: 0;
 }
+
+/* Profile dropdown optimization */
+#profile-dropdown {
+  display: none !important;
+}
+
+#profile-dropdown.show {
+  display: block !important;
+}
+
+/* Reduce motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
