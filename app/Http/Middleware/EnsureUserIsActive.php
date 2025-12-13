@@ -15,7 +15,7 @@ class EnsureUserIsActive
     public function handle(Request $request, Closure $next)
     {
         $user = Auth::user();
-        if ($user && ! $user->active) {
+        if ($user && $user->status === 'disabled') {
             Auth::logout();
             $request->session()->invalidate();
             $request->session()->regenerateToken();

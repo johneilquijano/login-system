@@ -6,13 +6,16 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 
 class UserController extends Controller
 {
     public function index(Request $request)
     {
-        $query = User::query();
+        $orgId = Auth::user()->org_id;
+        // Start query filtered by organization
+        $query = User::forOrganization($orgId);
 
         // Search filter
         if ($request->filled('search')) {
@@ -29,11 +32,10 @@ class UserController extends Controller
             $query->where('role', $request->input('role'));
         }
 
-        // Active/Disabled filter
+        // Status filter - uses 'active' parameter with values 1 (active) or 0 (disabled)
         if ($request->filled('active')) {
-            $activeVal = $request->input('active');
-            // allow '1' or '0' (strings) or boolean-like
-            $query->where('active', $activeVal);
+            $status = $request->input('active') === '1' ? 'active' : 'disabled';
+            $query->where('status', $status);
         }
 
         // preserve search/filters when paginating
@@ -56,13 +58,13 @@ class UserController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users',
+            'email' => ['required', 'email', Rule::unique('users')->where('org_id', Auth::user()->org_id)],
             'password' => 'required|string|min:8|confirmed',
             'role' => 'required|in:employee,admin',
-            'org_id' => 'nullable|integer',
         ]);
 
         $validated['password'] = Hash::make($validated['password']);
+        $validated['org_id'] = Auth::user()->org_id;  // Automatically assign to current organization
 
         User::create($validated);
 
@@ -71,16 +73,24 @@ class UserController extends Controller
 
     public function edit(User $user)
     {
+        // Verify user belongs to same organization
+        if ($user->org_id !== Auth::user()->org_id) {
+            abort(403, 'Unauthorized');
+        }
         return view('admin.users.edit', compact('user'));
     }
 
     public function update(Request $request, User $user)
     {
+        // Verify user belongs to same organization
+        if ($user->org_id !== Auth::user()->org_id) {
+            abort(403, 'Unauthorized');
+        }
+
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'email' => ['required', 'email', Rule::unique('users')->ignore($user->id)],
+            'email' => ['required', 'email', Rule::unique('users')->where('org_id', Auth::user()->org_id)->ignore($user->id)],
             'role' => 'required|in:employee,admin',
-            'org_id' => 'nullable|integer',
         ]);
 
         $user->update($validated);
@@ -90,6 +100,11 @@ class UserController extends Controller
 
     public function destroy(User $user)
     {
+        // Verify user belongs to same organization
+        if ($user->org_id !== Auth::user()->org_id) {
+            abort(403, 'Unauthorized');
+        }
+
         $user->delete();
 
         return redirect()->route('admin.users.index')->with('success', 'User deleted successfully.');
@@ -97,6 +112,11 @@ class UserController extends Controller
 
     public function resetPassword(User $user)
     {
+        // Verify user belongs to same organization
+        if ($user->org_id !== Auth::user()->org_id) {
+            abort(403, 'Unauthorized');
+        }
+
         // This method now expects a new password via POST from the admin form.
         // Validate and update the user's password securely.
         request()->validate([
@@ -110,19 +130,34 @@ class UserController extends Controller
 
     public function showResetPasswordForm(User $user)
     {
+        // Verify user belongs to same organization
+        if ($user->org_id !== Auth::user()->org_id) {
+            abort(403, 'Unauthorized');
+        }
+
         return view('admin.users.reset-password', compact('user'));
     }
 
     public function disable(User $user)
     {
-        $user->update(['active' => false]);
+        // Verify user belongs to same organization
+        if ($user->org_id !== Auth::user()->org_id) {
+            abort(403, 'Unauthorized');
+        }
+
+        $user->update(['status' => 'disabled']);
 
         return back()->with('success', 'User disabled successfully.');
     }
 
     public function enable(User $user)
     {
-        $user->update(['active' => true]);
+        // Verify user belongs to same organization
+        if ($user->org_id !== Auth::user()->org_id) {
+            abort(403, 'Unauthorized');
+        }
+
+        $user->update(['status' => 'active']);
 
         return back()->with('success', 'User enabled successfully.');
     }

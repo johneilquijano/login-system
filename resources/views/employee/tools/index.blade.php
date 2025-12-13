@@ -59,11 +59,11 @@
                                             {{ ucfirst(str_replace('_', ' ', $checkout->status)) }}
                                         </span>
                                     </td>
-                                    <td class="px-6 py-4 text-sm text-gray-600">{{ $checkout->checked_out_date->format('M d, Y') }}</td>
+                                    <td class="px-6 py-4 text-sm text-gray-600">{{ $checkout->checked_out_at ? $checkout->checked_out_at->format('M d, Y') : '-' }}</td>
                                     <td class="px-6 py-4 text-sm text-gray-600">
-                                        @if($checkout->due_date)
-                                            <span class="@if($checkout->due_date->isPast()) text-red-600 font-semibold @endif">
-                                                {{ $checkout->due_date->format('M d, Y') }}
+                                        @if($checkout->return_due_date)
+                                            <span class="@if($checkout->return_due_date->isPast()) text-red-600 font-semibold @endif">
+                                                {{ $checkout->return_due_date->format('M d, Y') }}
                                             </span>
                                         @else
                                             -

@@ -12,8 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->unsignedBigInteger('org_id')->nullable()->after('role');
-            $table->boolean('active')->default(true)->after('org_id');
+            if (!Schema::hasColumn('users', 'is_super_admin')) {
+                $table->boolean('is_super_admin')->default(false);
+            }
         });
     }
 
@@ -23,7 +24,9 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn(['org_id', 'active']);
+            if (Schema::hasColumn('users', 'is_super_admin')) {
+                $table->dropColumn('is_super_admin');
+            }
         });
     }
 };

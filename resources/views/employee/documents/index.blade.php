@@ -56,7 +56,7 @@
                                     </div>
                                     <div>
                                         <h3 class="font-semibold text-gray-900">{{ $doc->title }}</h3>
-                                        <p class="text-xs text-gray-500">{{ $doc->category }}</p>
+                                        <p class="text-xs text-gray-500">{{ $doc->status ? ucfirst(str_replace('_', ' ', $doc->status)) : 'Document' }}</p>
                                     </div>
                                 </div>
                             </div>

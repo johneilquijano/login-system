@@ -21,9 +21,9 @@ class LoginController extends Controller
             'password' => 'required',
         ]);
 
-        // If the user exists but is disabled, prevent login
+        // Check if the user exists but is disabled, prevent login
         $maybeUser = User::where('email', $request->input('email'))->first();
-        if ($maybeUser && ! $maybeUser->active) {
+        if ($maybeUser && $maybeUser->status === 'disabled') {
             return back()->withErrors([
                 'email' => 'This account has been disabled. Please contact an administrator.',
             ])->onlyInput('email');
@@ -34,6 +34,10 @@ class LoginController extends Controller
 
             // Redirect based on role
             $user = Auth::user();
+            if ($user && $user->is_super_admin) {
+                return redirect()->route('super-admin.dashboard');
+            }
+            
             if ($user && $user->role === 'admin') {
                 return redirect()->route('admin.dashboard');
             }

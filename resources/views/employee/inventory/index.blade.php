@@ -57,7 +57,6 @@
                                 <tr>
                                     <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Item Name</th>
                                     <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Quantity</th>
-                                    <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Category</th>
                                     <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Status</th>
                                     <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Requested</th>
                                 </tr>
@@ -66,23 +65,22 @@
                                 @foreach($requests as $req)
                                 <tr class="border-b hover:bg-gray-50 transition" style="border-bottom-color: #ccc;">
                                     <td class="px-6 py-4 text-sm font-medium text-gray-900">{{ $req->item_name }}</td>
-                                    <td class="px-6 py-4 text-sm text-gray-600">{{ $req->quantity }}</td>
-                                    <td class="px-6 py-4 text-sm text-gray-600">{{ $req->category }}</td>
+                                    <td class="px-6 py-4 text-sm text-gray-600">{{ $req->quantity_requested }}</td>
                                     <td class="px-6 py-4 text-sm">
                                         <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold 
                                             @if($req->status === 'approved')
                                                 bg-green-100 text-green-800
-                                            @elseif($req->status === 'pending')
+                                            @elseif($req->status === 'submitted')
                                                 bg-yellow-100 text-yellow-800
                                             @elseif($req->status === 'rejected')
                                                 bg-red-100 text-red-800
                                             @else
                                                 bg-gray-100 text-gray-800
                                             @endif">
-                                            {{ ucfirst($req->status) }}
+                                            {{ ucfirst(str_replace('_', ' ', $req->status)) }}
                                         </span>
                                     </td>
-                                    <td class="px-6 py-4 text-sm text-gray-600">{{ $req->requested_date->format('M d, Y') }}</td>
+                                    <td class="px-6 py-4 text-sm text-gray-600">{{ $req->submitted_at ? $req->submitted_at->format('M d, Y') : $req->created_at->format('M d, Y') }}</td>
                                 </tr>
                                 @endforeach
                             </tbody>

@@ -10,13 +10,19 @@ class ToolCheckoutController extends Controller
 {
     public function index()
     {
-        $checkouts = Auth::user()->toolCheckouts()->orderBy('checked_out_date', 'desc')->paginate(10);
+        $orgId = Auth::user()->org_id;
+        // Employees only see their own tool checkouts
+        $checkouts = ToolCheckout::forOrganization($orgId)
+            ->where('user_id', Auth::id())
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
         return view('employee.tools.index', compact('checkouts'));
     }
 
     public function show(ToolCheckout $toolCheckout)
     {
-        if ($toolCheckout->user_id !== Auth::id()) {
+        // Verify checkout belongs to same organization and is user's checkout
+        if ($toolCheckout->org_id !== Auth::user()->org_id || $toolCheckout->user_id !== Auth::id()) {
             abort(403);
         }
         return view('employee.tools.show', compact('toolCheckout'));

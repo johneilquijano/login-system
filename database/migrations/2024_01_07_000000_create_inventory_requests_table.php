@@ -13,16 +13,25 @@ return new class extends Migration
     {
         Schema::create('inventory_requests', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->foreignId('org_id')->constrained('organizations')->onDelete('cascade');
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->string('item_name');
-            $table->integer('quantity')->default(1);
-            $table->string('category');
             $table->text('description')->nullable();
-            $table->string('status')->default('pending'); // pending, approved, rejected, fulfilled
-            $table->timestamp('requested_date')->nullable();
-            $table->timestamp('approved_date')->nullable();
-            $table->text('admin_notes')->nullable();
+            $table->integer('quantity_requested')->default(1);
+            $table->string('reason')->nullable();
+            $table->enum('status', ['draft', 'submitted', 'approved', 'rejected', 'fulfilled'])->default('draft');
+            $table->timestamp('submitted_at')->nullable();
+            $table->timestamp('approved_at')->nullable();
+            $table->timestamp('fulfilled_at')->nullable();
+            $table->foreignId('approved_by')->nullable()->constrained('users')->nullOnDelete();
+            $table->text('approval_notes')->nullable();
+            $table->text('rejection_reason')->nullable();
             $table->timestamps();
+
+            // Indices for common queries
+            $table->index(['org_id', 'user_id']);
+            $table->index(['org_id', 'status']);
+            $table->index('created_at');
         });
     }
 

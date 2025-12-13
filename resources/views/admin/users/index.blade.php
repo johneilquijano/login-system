@@ -158,7 +158,9 @@
             attachPaginationHandlers();
         }
 
-        function buildQueryUrl(baseUrl) {
+        const baseUrl = "{{ route('admin.users.index') }}";
+
+        function buildQueryUrl() {
             const search = document.querySelector('input[name="search"]')?.value || '';
             const role = document.querySelector('select[name="role"]')?.value || '';
             const active = window.currentActive || '';
@@ -171,7 +173,7 @@
         }
 
         const debouncedFetch = debounce(() => {
-            const url = buildQueryUrl("{{ route('admin.users.index') }}");
+            const url = buildQueryUrl();
             fetchUsers(url);
         }, 300);
 
@@ -214,7 +216,8 @@
                 window.currentActive = String(val);
             }
             updateActiveButtonsUi();
-            debouncedFetch();
+            const url = buildQueryUrl();
+            fetchUsers(url);
         }
 
         if (btnActive) btnActive.addEventListener('click', () => setActiveFilter(btnActive.dataset.activeValue));

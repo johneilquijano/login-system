@@ -6,12 +6,10 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class AdminMiddleware
+class SuperAdminMiddleware
 {
     /**
      * Handle an incoming request.
-     *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
     public function handle(Request $request, Closure $next): Response
     {
@@ -24,12 +22,12 @@ class AdminMiddleware
                 return redirect()->route('login')->with('error', 'Your account has been disabled.');
             }
             
-            // Check if user is admin
-            if ($user->role === 'admin') {
+            // Check if user is super admin
+            if ($user->is_super_admin) {
                 return $next($request);
             }
         }
 
-        return redirect()->route('login')->with('error', 'Admin access required.');
+        return redirect()->route('login')->with('error', 'Super admin access required.');
     }
 }

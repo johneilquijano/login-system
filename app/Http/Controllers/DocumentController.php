@@ -11,13 +11,19 @@ class DocumentController extends Controller
 {
     public function index()
     {
-        $documents = Auth::user()->documents()->orderBy('created_at', 'desc')->paginate(10);
+        $orgId = Auth::user()->org_id;
+        // Employees only see their own documents
+        $documents = Document::forOrganization($orgId)
+            ->where('user_id', Auth::id())
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
         return view('employee.documents.index', compact('documents'));
     }
 
     public function show(Document $document)
     {
-        if ($document->user_id !== Auth::id()) {
+        // Verify document belongs to same organization and is user's document
+        if ($document->org_id !== Auth::user()->org_id || $document->user_id !== Auth::id()) {
             abort(403);
         }
         return view('employee.documents.show', compact('document'));
@@ -25,9 +31,10 @@ class DocumentController extends Controller
 
     public function download(Document $document)
     {
-        if ($document->user_id !== Auth::id()) {
+        // Verify document belongs to same organization and is user's document
+        if ($document->org_id !== Auth::user()->org_id || $document->user_id !== Auth::id()) {
             abort(403);
         }
-        return Storage::download($document->file_path, $document->title);
+        return Storage::download($document->file_path, $document->file_name);
     }
 }

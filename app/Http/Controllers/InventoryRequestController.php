@@ -10,7 +10,12 @@ class InventoryRequestController extends Controller
 {
     public function index()
     {
-        $requests = Auth::user()->inventoryRequests()->orderBy('requested_date', 'desc')->paginate(10);
+        $orgId = Auth::user()->org_id;
+        // Employees only see their own inventory requests
+        $requests = InventoryRequest::forOrganization($orgId)
+            ->where('user_id', Auth::id())
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
         return view('employee.inventory.index', compact('requests'));
     }
 
@@ -23,23 +28,23 @@ class InventoryRequestController extends Controller
     {
         $validated = $request->validate([
             'item_name' => 'required|string|max:255',
-            'quantity' => 'required|integer|min:1',
-            'category' => 'required|string|max:100',
-            'description' => 'nullable|string|max:1000',
+            'quantity_requested' => 'required|integer|min:1',
+            'reason' => 'nullable|string|max:1000',
         ]);
 
         Auth::user()->inventoryRequests()->create([
+            'org_id' => Auth::user()->org_id,
             ...$validated,
-            'status' => 'pending',
-            'requested_date' => now(),
+            'status' => 'draft',
         ]);
 
-        return redirect()->route('inventory.index')->with('success', 'Inventory request submitted successfully');
+        return redirect()->route('inventory.index')->with('success', 'Inventory request created successfully');
     }
 
     public function show(InventoryRequest $inventoryRequest)
     {
-        if ($inventoryRequest->user_id !== Auth::id()) {
+        // Verify request belongs to same organization and is user's request
+        if ($inventoryRequest->org_id !== Auth::user()->org_id || $inventoryRequest->user_id !== Auth::id()) {
             abort(403);
         }
         return view('employee.inventory.show', compact('inventoryRequest'));
