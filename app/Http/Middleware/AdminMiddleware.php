@@ -15,8 +15,19 @@ class AdminMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (auth()->check() && auth()->user()->role === 'admin') {
-            return $next($request);
+        if (auth()->check()) {
+            $user = auth()->user();
+            
+            // Check if user is disabled
+            if ($user->status === 'disabled') {
+                auth()->logout();
+                return redirect()->route('login')->with('error', 'Your account has been disabled.');
+            }
+            
+            // Check if user is admin
+            if ($user->role === 'admin') {
+                return $next($request);
+            }
         }
 
         return redirect()->route('login')->with('error', 'Admin access required.');

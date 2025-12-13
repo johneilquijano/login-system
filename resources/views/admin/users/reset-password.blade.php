@@ -1,12 +1,7 @@
 <x-layout>
     <div class="min-h-screen bg-gray-50">
         <div class="flex h-screen">
-            <!-- Sidebar (reuse admin sidebar from index) -->
-            <div class="w-64 bg-white shadow-lg">
-                <div class="h-16 bg-gradient-to-r from-purple-600 to-indigo-600 flex items-center px-6">
-                    <h1 class="text-white font-bold text-xl">Admin Panel</h1>
-                </div>
-            </div>
+            <x-admin-sidebar />
 
             <div class="flex-1 overflow-auto">
                 <div class="bg-white shadow">

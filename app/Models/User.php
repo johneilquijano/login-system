@@ -23,7 +23,8 @@ class User extends Authenticatable
         'password',
         'role',
         'org_id',
-        'active',
+        'status',
+        'is_super_admin',
     ];
 
     /**
@@ -44,5 +45,38 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
+        'is_super_admin' => 'boolean',
     ];
+
+    // Relationships
+    /**
+     * Get the organization this user belongs to
+     */
+    public function organization()
+    {
+        return $this->belongsTo(Organization::class, 'org_id');
+    }
+
+    public function documents()
+    {
+        return $this->hasMany(Document::class);
+    }
+
+    public function toolCheckouts()
+    {
+        return $this->hasMany(ToolCheckout::class);
+    }
+
+    public function inventoryRequests()
+    {
+        return $this->hasMany(InventoryRequest::class);
+    }
+
+    /**
+     * Scope to filter users by organization
+     */
+    public function scopeForOrganization($query, $orgId)
+    {
+        return $query->where('org_id', $orgId);
+    }
 }

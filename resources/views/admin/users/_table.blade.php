@@ -5,7 +5,6 @@
                 <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Name</th>
                 <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Email</th>
                 <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Role</th>
-                <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Org ID</th>
                 <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Status</th>
                 <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Joined</th>
                 <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Actions</th>
@@ -21,9 +20,8 @@
                         {{ ucfirst($user->role) }}
                     </span>
                 </td>
-                <td class="px-6 py-4 text-sm text-gray-600">{{ $user->org_id ?? '-' }}</td>
                 <td class="px-6 py-4 text-sm">
-                    @if($user->active)
+                    @if($user->status === 'active')
                         <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-800">Active</span>
                     @else
                         <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-red-100 text-red-800">Disabled</span>
@@ -50,7 +48,7 @@
                                     <button type="submit" class="w-full text-left block px-4 py-2 text-sm text-red-700 hover:bg-red-50 whitespace-nowrap">Delete</button>
                                 </form>
 
-                                @if($user->active)
+                                @if($user->status === 'active')
                                 <form method="POST" action="{{ route('admin.users.disable', $user) }}">
                                     @csrf
                                     <button type="submit" class="w-full text-left block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 whitespace-nowrap">Disable</button>
@@ -68,7 +66,7 @@
             </tr>
             @empty
             <tr>
-                <td colspan="7" class="px-6 py-8 text-center text-gray-500">
+                <td colspan="6" class="px-6 py-8 text-center text-gray-500">
                     No users found. <a href="{{ route('admin.users.create') }}" class="text-blue-600 hover:text-blue-800">Create one</a>
                 </td>
             </tr>

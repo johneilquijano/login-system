@@ -12,7 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->string('role')->default('employee')->after('email');
+            if (!Schema::hasColumn('users', 'is_super_admin')) {
+                $table->boolean('is_super_admin')->default(false);
+            }
         });
     }
 
@@ -22,7 +24,9 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('role');
+            if (Schema::hasColumn('users', 'is_super_admin')) {
+                $table->dropColumn('is_super_admin');
+            }
         });
     }
 };
