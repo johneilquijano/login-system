@@ -12,8 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->unsignedBigInteger('org_id')->nullable()->after('role');
-            $table->boolean('active')->default(true)->after('org_id');
+            if (!Schema::hasColumn('users', 'org_id')) {
+                $table->unsignedBigInteger('org_id')->nullable()->after('role');
+            }
+            if (!Schema::hasColumn('users', 'active')) {
+                $table->boolean('active')->default(true)->after('org_id');
+            }
         });
     }
 

@@ -20,6 +20,8 @@ class Document extends Model
         'file_size',
         'status',
         'signed_at',
+        'signature_data',
+        'signature_type',
         'reviewed_at',
         'reviewed_by',
         'review_notes',
@@ -54,5 +56,29 @@ class Document extends Model
     public function scopePending($query)
     {
         return $query->where('status', 'pending_review');
+    }
+
+    /**
+     * Get formatted file type label
+     */
+    public function getFormattedTypeAttribute()
+    {
+        if (!$this->mime_type) {
+            return 'Document';
+        }
+
+        $mimeMap = [
+            'application/pdf' => 'PDF',
+            'application/msword' => 'DOC',
+            'application/vnd.openxmlformats-officedocument.wordprocessingml.document' => 'DOCX',
+            'application/vnd.ms-excel' => 'XLS',
+            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' => 'XLSX',
+            'image/jpeg' => 'JPG',
+            'image/png' => 'PNG',
+            'image/gif' => 'GIF',
+            'text/plain' => 'TXT',
+        ];
+
+        return $mimeMap[$this->mime_type] ?? str_replace('application/', '', $this->mime_type);
     }
 }

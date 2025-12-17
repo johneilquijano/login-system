@@ -35,6 +35,27 @@
   display: block !important;
 }
 
+/* Select dropdown styling - completely hide native arrows */
+select {
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+}
+
+/* Hide the arrow on IE10+ */
+select::-ms-expand {
+  display: none;
+}
+
+/* Style for filter selects */
+select.filter-select {
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22rgb(107,114,128)%22 stroke-width=%222%22><path d=%22M19 14l-7 7m0 0l-7-7m7 7V3%22/></svg>');
+  background-repeat: no-repeat;
+  background-position: right 0.5rem center;
+  background-size: 1.5em 1.5em;
+  padding-right: 2.5rem !important;
+}
+
 /* Reduce motion for accessibility */
 @media (prefers-reduced-motion: reduce) {
   * {

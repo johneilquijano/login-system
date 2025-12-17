@@ -9,6 +9,7 @@ use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\ToolCheckoutController;
 use App\Http\Controllers\InventoryRequestController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\Admin\DocumentController as AdminDocumentController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\SuperAdmin\DashboardController as SuperAdminDashboardController;
 use App\Http\Controllers\SuperAdmin\OrganizationController;
@@ -47,8 +48,13 @@ Route::middleware(['auth', 'employee', 'organization'])->group(function () {
 
     // Employee Documents
     Route::get('/documents', [DocumentController::class, 'index'])->name('documents.index');
+    Route::get('/documents/upload', [DocumentController::class, 'upload'])->name('documents.upload');
+    Route::post('/documents', [DocumentController::class, 'store'])->name('documents.store');
     Route::get('/documents/{document}', [DocumentController::class, 'show'])->name('documents.show');
+    Route::get('/documents/{document}/sign', [DocumentController::class, 'sign'])->name('documents.sign');
+    Route::post('/documents/{document}/sign', [DocumentController::class, 'storeSigning'])->name('documents.storeSign');
     Route::get('/documents/{document}/download', [DocumentController::class, 'download'])->name('documents.download');
+    Route::delete('/documents/{document}', [DocumentController::class, 'destroy'])->name('documents.destroy');
 
     // Tool Checkout
     Route::get('/tools', [ToolCheckoutController::class, 'index'])->name('tools.index');
@@ -72,6 +78,13 @@ Route::middleware(['auth', 'admin', 'organization'])->prefix('admin')->name('adm
     Route::post('/users/{user}/reset-password', [UserController::class, 'resetPassword'])->name('users.resetPassword');
     Route::post('/users/{user}/disable', [UserController::class, 'disable'])->name('users.disable');
     Route::post('/users/{user}/enable', [UserController::class, 'enable'])->name('users.enable');
+
+    // Document Management
+    Route::get('/documents', [AdminDocumentController::class, 'index'])->name('documents.index');
+    Route::post('/documents', [AdminDocumentController::class, 'store'])->name('documents.store');
+    Route::get('/documents/{document}', [AdminDocumentController::class, 'show'])->name('documents.show');
+    Route::get('/documents/{document}/download', [AdminDocumentController::class, 'download'])->name('documents.download');
+    Route::delete('/documents/{document}', [AdminDocumentController::class, 'destroy'])->name('documents.destroy');
 });
 
 // Super Admin Routes (Protected)

@@ -1,7 +1,7 @@
 <x-layout>
     <div class="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100">
         <div class="flex flex-row h-screen">
-            <x-employee-sidebar />
+            <x-admin-sidebar />
 
             <!-- Main Content Area -->
             <div class="flex-1 overflow-auto">
@@ -9,7 +9,7 @@
                 <header class="sticky top-0 z-40 bg-white/80 backdrop-blur-xl border-b border-gray-200 shadow-sm">
                     <div class="flex items-center justify-between px-8 py-5">
                         <div>
-                            <h2 class="text-3xl font-bold bg-gradient-to-r from-blue-600 to-blue-500 bg-clip-text text-transparent">Documents</h2>
+                            <h2 class="text-3xl font-bold bg-gradient-to-r from-blue-600 to-blue-500 bg-clip-text text-transparent">Document Management</h2>
                         </div>
                     </div>
                 </header>
@@ -33,23 +33,23 @@
 
                     <!-- Documents Section -->
                     <div class="bg-white rounded-2xl border border-gray-200 p-8 shadow-lg">
-                        <!-- Section Title with Upload Button -->
+                        <!-- Section Title with Assign Button -->
                         <div class="flex items-center justify-between mb-8">
                             <div>
-                                <h3 class="text-2xl font-bold text-gray-900">My Documents</h3>
-                                <p class="text-sm text-gray-600 mt-2">{{ $documents->total() }} document{{ $documents->total() !== 1 ? 's' : '' }} in your collection</p>
+                                <h3 class="text-2xl font-bold text-gray-900">All Documents</h3>
+                                <p class="text-sm text-gray-600 mt-2">{{ $documents->total() }} document{{ $documents->total() !== 1 ? 's' : '' }} in your organization</p>
                             </div>
-                            <a href="{{ route('documents.upload') }}" class="bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300 text-sm flex items-center gap-2 shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
+                            <button onclick="openAssignModal()" class="bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300 text-sm flex items-center gap-2 shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
                                 </svg>
-                                <span>Upload</span>
-                            </a>
+                                <span>Assign Document</span>
+                            </button>
                         </div>
 
                         <!-- Search, Filter, and Sort Controls (Single Row) -->
                         <div class="mb-8">
-                            <form id="document-filter-form" method="GET" action="{{ route('documents.index') }}" class="flex gap-3 items-end">
+                            <form id="document-filter-form" method="GET" action="{{ route('admin.documents.index') }}" class="flex gap-3 items-end">
                                 <!-- Search Bar -->
                                 <div class="flex-1 min-w-0">
                                     <label class="block text-sm font-semibold text-gray-700 mb-2">Search</label>
@@ -130,8 +130,9 @@
                                 <thead class="bg-gray-50 border-b border-gray-200">
                                     <tr>
                                         <th class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Document Name</th>
+                                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Assigned To</th>
                                         <th class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Type</th>
-                                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Uploaded On</th>
+                                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Date</th>
                                         <th class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Signature</th>
                                         <th class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Status</th>
                                         <th class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Actions</th>
@@ -139,11 +140,16 @@
                                 </thead>
                                 <tbody class="divide-y divide-gray-200">
                                     @foreach($documents as $doc)
-                                    <tr class="hover:bg-gray-50 transition-all duration-200 border-b border-gray-200">
+                                    <tr class="hover:bg-gray-50 transition-all duration-200">
                                         <td class="px-6 py-4 text-sm">
-                                            <a href="{{ route('documents.show', $doc) }}" class="text-blue-600 hover:text-blue-800 font-semibold hover:underline truncate block">
+                                            <a href="{{ route('admin.documents.show', $doc) }}" class="text-blue-600 hover:text-blue-800 font-semibold hover:underline truncate block">
                                                 {{ $doc->title }}
                                             </a>
+                                        </td>
+                                        <td class="px-6 py-4 text-sm text-gray-700">
+                                            <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-blue-100 text-blue-700 border border-blue-200">
+                                                {{ $doc->user->name ?? 'Unassigned' }}
+                                            </span>
                                         </td>
                                         <td class="px-6 py-4 text-sm text-gray-700">
                                             <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-purple-100 text-purple-700 border border-purple-200">
@@ -176,29 +182,18 @@
                                             </span>
                                         </td>
                                         <td class="px-6 py-4 text-sm flex gap-2">
-                                            <a href="{{ route('documents.show', $doc) }}" class="bg-blue-100 hover:bg-blue-200 text-blue-700 hover:text-blue-900 font-semibold py-2 px-2.5 rounded-lg transition-all text-xs border border-blue-200 hover:border-blue-300 flex items-center justify-center" title="Preview document">
+                                            <a href="{{ route('admin.documents.show', $doc) }}" class="bg-blue-100 hover:bg-blue-200 text-blue-700 hover:text-blue-900 font-semibold py-1.5 px-3 rounded-lg transition-all text-xs border border-blue-200 hover:border-blue-300" title="Preview">
                                                 <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                                     <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                                                     <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                                                 </svg>
                                             </a>
-                                            @if(!$doc->signed_at)
-                                            <a href="{{ route('documents.sign', $doc) }}" class="bg-emerald-100 hover:bg-emerald-200 text-emerald-700 hover:text-emerald-900 font-semibold py-2 px-3 rounded-lg transition-all text-xs border border-emerald-200 hover:border-emerald-300 flex items-center justify-center gap-1.5" title="Sign document">
-                                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                                                    <g transform="rotate(15 12 12)">
-                                                        <path d="M12 2L8 8L8 12L10 18L12 22L14 18L16 12L16 8L12 2Z"/>
-                                                        <line x1="12" y1="8" x2="12" y2="20" stroke="white" stroke-width="1.5"/>
-                                                    </g>
-                                                </svg>
-                                                <span>Sign</span>
-                                            </a>
-                                            @endif
-                                            <a href="{{ route('documents.download', $doc) }}" class="bg-gray-100 hover:bg-gray-200 text-gray-700 hover:text-gray-900 font-semibold py-2 px-2.5 rounded-lg transition-all text-xs border border-gray-200 hover:border-gray-300 flex items-center justify-center" title="Download document">
+                                            <a href="{{ route('admin.documents.download', $doc) }}" class="bg-gray-100 hover:bg-gray-200 text-gray-700 hover:text-gray-900 font-semibold py-1.5 px-3 rounded-lg transition-all text-xs border border-gray-200 hover:border-gray-300" title="Download">
                                                 <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                                     <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                                                 </svg>
                                             </a>
-                                            <button onclick="openDeleteModal('{{ $doc->id }}', '{{ $doc->title }}')" class="bg-red-100 hover:bg-red-200 text-red-700 hover:text-red-900 font-semibold py-2 px-2.5 rounded-lg transition-all text-xs border border-red-200 hover:border-red-300 flex items-center justify-center" title="Delete document">
+                                            <button onclick="openDeleteModal('{{ $doc->id }}', '{{ $doc->title }}')" class="bg-red-100 hover:bg-red-200 text-red-700 hover:text-red-900 font-semibold py-1.5 px-3 rounded-lg transition-all text-xs border border-red-200 hover:border-red-300" title="Delete">
                                                 <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                                     <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                                                 </svg>
@@ -224,15 +219,86 @@
                                 </svg>
                             </div>
                             <p class="text-gray-900 font-semibold text-lg">No documents yet</p>
-                            <p class="text-gray-600 text-sm mt-2 max-w-sm mx-auto">Start by uploading your first document or wait for your organization to share documents with you.</p>
-                            <a href="{{ route('documents.upload') }}" class="inline-block mt-6 bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 text-white font-semibold py-3 px-8 rounded-xl transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
-                                Upload Your First Document
-                            </a>
+                            <p class="text-gray-600 text-sm mt-2 max-w-sm mx-auto">Start by assigning your first document to employees in your organization.</p>
+                            <button onclick="openAssignModal()" class="inline-block mt-6 bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 text-white font-semibold py-3 px-8 rounded-xl transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
+                                Assign First Document
+                            </button>
                         </div>
                         @endif
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <!-- Assign Document Modal -->
+    <div id="assignModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl p-8 max-w-2xl w-full max-h-96 overflow-y-auto animate-in fade-in scale-95">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-bold text-gray-900">Assign Document to Employees</h3>
+                <button onclick="closeAssignModal()" class="text-gray-400 hover:text-gray-600 transition-all">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+
+            <form id="assignForm" action="{{ route('admin.documents.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
+                @csrf
+
+                <!-- Document Title -->
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Document Title *</label>
+                    <input type="text" name="title" required class="w-full px-4 py-2.5 bg-gray-50 border border-gray-300 rounded-xl text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all" placeholder="e.g., Employee Handbook">
+                </div>
+
+                <!-- Document Description -->
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Description</label>
+                    <textarea name="description" rows="3" class="w-full px-4 py-2.5 bg-gray-50 border border-gray-300 rounded-xl text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all" placeholder="Optional description"></textarea>
+                </div>
+
+                <!-- File Upload -->
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Upload Document *</label>
+                    <div id="dropZone" class="border-2 border-dashed border-gray-300 rounded-xl p-6 text-center cursor-pointer hover:border-blue-500 hover:bg-blue-50 transition-all">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 text-gray-400 mx-auto mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                        </svg>
+                        <p class="text-gray-600 font-medium">Drag and drop or <span class="text-blue-600">click to upload</span></p>
+                        <p class="text-gray-500 text-sm mt-1">PDF, DOC, DOCX, JPG, PNG (Max 10MB)</p>
+                        <input type="file" name="document" id="documentInput" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.gif" required class="hidden">
+                    </div>
+                    <div id="fileInfo" class="mt-3 hidden">
+                        <p class="text-sm text-gray-600">Selected: <span id="fileName" class="font-semibold"></span></p>
+                    </div>
+                </div>
+
+                <!-- Employee Selection -->
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Assign To Employees *</label>
+                    <div id="employeeList" class="space-y-2 max-h-48 overflow-y-auto border border-gray-300 rounded-xl p-4 bg-gray-50">
+                        @forelse($employees as $employee)
+                        <label class="flex items-center gap-3 cursor-pointer hover:bg-gray-100 p-2 rounded-lg">
+                            <input type="checkbox" name="employee_ids[]" value="{{ $employee->id }}" class="w-4 h-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500">
+                            <span class="text-gray-700">{{ $employee->name }}</span>
+                        </label>
+                        @empty
+                        <p class="text-gray-500 text-sm">No employees found in your organization</p>
+                        @endforelse
+                    </div>
+                </div>
+
+                <!-- Form Buttons -->
+                <div class="flex gap-3 pt-4 border-t border-gray-200">
+                    <button type="button" onclick="closeAssignModal()" class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2.5 px-4 rounded-xl transition-all">
+                        Cancel
+                    </button>
+                    <button type="submit" class="flex-1 bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 text-white font-semibold py-2.5 px-4 rounded-xl transition-all shadow-md hover:shadow-lg">
+                        Assign Document
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 
@@ -264,6 +330,16 @@
     <script>
         let deleteDocumentId = null;
 
+        function openAssignModal() {
+            document.getElementById('assignModal').classList.remove('hidden');
+        }
+
+        function closeAssignModal() {
+            document.getElementById('assignModal').classList.add('hidden');
+            document.getElementById('assignForm').reset();
+            document.getElementById('fileInfo').classList.add('hidden');
+        }
+
         function openDeleteModal(docId, docTitle) {
             deleteDocumentId = docId;
             document.getElementById('docTitle').textContent = docTitle;
@@ -280,7 +356,7 @@
             
             const form = document.createElement('form');
             form.method = 'POST';
-            form.action = '/documents/' + deleteDocumentId;
+            form.action = '/admin/documents/' + deleteDocumentId;
             
             const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
             const methodField = document.createElement('input');
@@ -300,12 +376,46 @@
             form.submit();
         }
 
-        // Close modal when clicking outside
-        document.getElementById('deleteModal')?.addEventListener('click', function(e) {
-            if (e.target === this) {
-                closeDeleteModal();
-            }
+        // File upload drag and drop
+        const dropZone = document.getElementById('dropZone');
+        const documentInput = document.getElementById('documentInput');
+
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            dropZone.addEventListener(eventName, preventDefaults, false);
         });
+
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        ['dragenter', 'dragover'].forEach(eventName => {
+            dropZone.addEventListener(eventName, () => dropZone.classList.add('border-blue-500', 'bg-blue-50'), false);
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            dropZone.addEventListener(eventName, () => dropZone.classList.remove('border-blue-500', 'bg-blue-50'), false);
+        });
+
+        dropZone.addEventListener('drop', (e) => {
+            const dt = e.dataTransfer;
+            const files = dt.files;
+            documentInput.files = files;
+            displayFileName();
+        }, false);
+
+        dropZone.addEventListener('click', () => documentInput.click());
+        documentInput.addEventListener('change', displayFileName);
+
+        function displayFileName() {
+            if (documentInput.files.length > 0) {
+                const fileName = documentInput.files[0].name;
+                document.getElementById('fileName').textContent = fileName;
+                document.getElementById('fileInfo').classList.remove('hidden');
+            } else {
+                document.getElementById('fileInfo').classList.add('hidden');
+            }
+        }
 
         // Real-time filtering
         let filterTimeout;
@@ -314,7 +424,7 @@
             clearTimeout(filterTimeout);
             filterTimeout = setTimeout(() => {
                 document.getElementById('document-filter-form').submit();
-            }, 300); // 300ms debounce for search
+            }, 300);
         }
 
         function toggleClearButton() {
@@ -343,29 +453,28 @@
             document.getElementById('document-filter-form').submit();
         }
 
-        // Search input - submit on keystroke with debounce
         document.getElementById('searchInput')?.addEventListener('keyup', () => {
             toggleClearButton();
             submitFiltersForm();
         });
 
-        // Initialize clear button visibility on page load
+        document.getElementById('signatureFilter')?.addEventListener('change', submitFiltersForm);
+        document.getElementById('statusFilter')?.addEventListener('change', submitFiltersForm);
+        document.getElementById('sortFilter')?.addEventListener('change', submitFiltersForm);
+
         toggleClearButton();
 
-        // Filter dropdowns - submit on change immediately
-        document.getElementById('signatureFilter')?.addEventListener('change', () => {
-            clearTimeout(filterTimeout);
-            document.getElementById('document-filter-form').submit();
+        // Close modals when clicking outside
+        document.getElementById('assignModal')?.addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeAssignModal();
+            }
         });
 
-        document.getElementById('statusFilter')?.addEventListener('change', () => {
-            clearTimeout(filterTimeout);
-            document.getElementById('document-filter-form').submit();
-        });
-
-        document.getElementById('sortFilter')?.addEventListener('change', () => {
-            clearTimeout(filterTimeout);
-            document.getElementById('document-filter-form').submit();
+        document.getElementById('deleteModal')?.addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeDeleteModal();
+            }
         });
     </script>
 </x-layout>
