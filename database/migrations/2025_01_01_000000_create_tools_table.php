@@ -1,0 +1,38 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('tools', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('org_id')->constrained('organizations')->onDelete('cascade');
+            $table->string('name');
+            $table->string('category');
+            $table->enum('condition', ['good', 'fair', 'needs_repair'])->default('good');
+            $table->string('image_path')->nullable();
+            $table->text('description')->nullable();
+            $table->string('serial_number')->nullable()->unique();
+            $table->boolean('is_active')->default(true);
+            $table->timestamps();
+
+            $table->index('org_id');
+            $table->index('is_active');
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('tools');
+    }
+};

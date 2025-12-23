@@ -48,6 +48,14 @@ class User extends Authenticatable
         'is_super_admin' => 'boolean',
     ];
 
+    /**
+     * Get the user's full name
+     */
+    public function getFullNameAttribute()
+    {
+        return $this->name;
+    }
+
     // Relationships
     /**
      * Get the organization this user belongs to

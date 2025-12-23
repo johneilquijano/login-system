@@ -12,10 +12,13 @@ class ToolCheckout extends Model
     protected $fillable = [
         'user_id',
         'org_id',
+        'tool_id',
         'tool_name',
         'description',
         'serial_number',
         'status',
+        'action_type',
+        'maintenance_reason',
         'requested_at',
         'approved_at',
         'checked_out_at',
@@ -23,6 +26,7 @@ class ToolCheckout extends Model
         'returned_at',
         'approved_by',
         'approval_notes',
+        'notes',
     ];
 
     protected $casts = [
@@ -36,6 +40,11 @@ class ToolCheckout extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function tool()
+    {
+        return $this->belongsTo(Tool::class);
     }
 
     public function organization()

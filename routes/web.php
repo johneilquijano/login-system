@@ -6,10 +6,12 @@ use App\Http\Controllers\Auth\PasswordResetController;
 use App\Http\Controllers\PasswordController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DocumentController;
+use App\Http\Controllers\ToolController;
 use App\Http\Controllers\ToolCheckoutController;
 use App\Http\Controllers\InventoryRequestController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\DocumentController as AdminDocumentController;
+use App\Http\Controllers\Admin\ToolController as AdminToolController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\SuperAdmin\DashboardController as SuperAdminDashboardController;
 use App\Http\Controllers\SuperAdmin\OrganizationController;
@@ -57,8 +59,9 @@ Route::middleware(['auth', 'employee', 'organization'])->group(function () {
     Route::delete('/documents/{document}', [DocumentController::class, 'destroy'])->name('documents.destroy');
 
     // Tool Checkout
-    Route::get('/tools', [ToolCheckoutController::class, 'index'])->name('tools.index');
-    Route::get('/tools/{toolCheckout}', [ToolCheckoutController::class, 'show'])->name('tools.show');
+    Route::get('/tools', [ToolController::class, 'index'])->name('tools.index');
+    Route::post('/tools/{tool}/checkout', [ToolController::class, 'checkout'])->name('tools.checkout');
+    Route::post('/tools/checkouts/{checkout}/return', [ToolController::class, 'return'])->name('tools.return');
 
     // Inventory Requests
     Route::get('/inventory', [InventoryRequestController::class, 'index'])->name('inventory.index');
@@ -85,6 +88,16 @@ Route::middleware(['auth', 'admin', 'organization'])->prefix('admin')->name('adm
     Route::get('/documents/{document}', [AdminDocumentController::class, 'show'])->name('documents.show');
     Route::get('/documents/{document}/download', [AdminDocumentController::class, 'download'])->name('documents.download');
     Route::delete('/documents/{document}', [AdminDocumentController::class, 'destroy'])->name('documents.destroy');
+
+    // Tools Inventory
+    Route::get('/tools/history', [AdminToolController::class, 'history'])->name('tools.history');
+    Route::post('/tools/{tool}/toggle-maintenance', [AdminToolController::class, 'toggleMaintenance'])->name('tools.toggleMaintenance');
+    Route::post('/tools/{tool}/force-return', [AdminToolController::class, 'forceReturn'])->name('tools.forceReturn');
+    Route::get('/tools', [AdminToolController::class, 'index'])->name('tools.index');
+    Route::post('/tools', [AdminToolController::class, 'store'])->name('tools.store');
+    Route::get('/tools/{tool}', [AdminToolController::class, 'show'])->name('tools.show');
+    Route::put('/tools/{tool}', [AdminToolController::class, 'update'])->name('tools.update');
+    Route::delete('/tools/{tool}', [AdminToolController::class, 'destroy'])->name('tools.destroy');
 });
 
 // Super Admin Routes (Protected)
