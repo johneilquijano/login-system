@@ -12,23 +12,29 @@ class InventoryRequest extends Model
     protected $fillable = [
         'user_id',
         'org_id',
-        'item_name',
-        'description',
-        'quantity_requested',
+        'request_title',
         'reason',
+        'priority',
+        'needed_by_date',
         'status',
+        'admin_notes',
         'submitted_at',
         'approved_at',
+        'denied_at',
         'fulfilled_at',
+        'cancelled_at',
         'approved_by',
-        'approval_notes',
-        'rejection_reason',
+        'denied_by',
+        'denied_reason',
     ];
 
     protected $casts = [
+        'needed_by_date' => 'date',
         'submitted_at' => 'datetime',
         'approved_at' => 'datetime',
+        'denied_at' => 'datetime',
         'fulfilled_at' => 'datetime',
+        'cancelled_at' => 'datetime',
     ];
 
     public function user()
@@ -39,6 +45,21 @@ class InventoryRequest extends Model
     public function organization()
     {
         return $this->belongsTo(Organization::class, 'org_id');
+    }
+
+    public function items()
+    {
+        return $this->hasMany(InventoryRequestItem::class);
+    }
+
+    public function approver()
+    {
+        return $this->belongsTo(User::class, 'approved_by');
+    }
+
+    public function denier()
+    {
+        return $this->belongsTo(User::class, 'denied_by');
     }
 
     /**
@@ -55,5 +76,21 @@ class InventoryRequest extends Model
     public function scopePending($query)
     {
         return $query->whereIn('status', ['draft', 'submitted']);
+    }
+
+    /**
+     * Scope to filter by status
+     */
+    public function scopeByStatus($query, $status)
+    {
+        return $query->where('status', $status);
+    }
+
+    /**
+     * Get total items count
+     */
+    public function getTotalItemsCount()
+    {
+        return $this->items()->sum('quantity');
     }
 }

@@ -105,8 +105,8 @@
                     <!-- Placeholder Sections -->
                     <h3 class="text-lg font-bold text-gray-900 mb-6">Available Features</h3>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                        <!-- Employee Documents -->
-                        <div class="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg hover:border-blue-200 transition">
+                        <!-- Employee Documents (Phase 2) -->
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg hover:border-blue-200 transition">
                             <div class="bg-gradient-to-r from-blue-500 to-blue-600 px-6 py-5">
                                 <h3 class="text-lg font-bold text-white flex items-center space-x-2">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -114,17 +114,55 @@
                                     </svg>
                                     <span>Employee Documents</span>
                                 </h3>
+                                <p class="text-blue-100 text-sm mt-1">Review, sign, and manage your assigned documents.</p>
                             </div>
-                            <div class="px-6 py-8 text-center">
-                                <p class="text-gray-600 mb-4">Access your employee handbook, policies, and important documents.</p>
-                                <span class="inline-block bg-gray-100 text-gray-600 font-medium py-2 px-4 rounded-lg text-sm">
-                                    Coming Soon
-                                </span>
+
+                            <div class="px-6 py-6">
+                                <!-- Stats -->
+                                <div class="grid grid-cols-2 gap-3 mb-5">
+                                    <div class="rounded-lg bg-blue-50 border border-blue-100 px-3 py-2">
+                                        <p class="text-xs text-blue-700 font-medium">Needs Signature</p>
+                                        <p class="text-xl font-bold text-blue-900">{{ $docs_needs_signature ?? 0 }}</p>
+                                    </div>
+                                    <div class="rounded-lg bg-indigo-50 border border-indigo-100 px-3 py-2">
+                                        <p class="text-xs text-indigo-700 font-medium">New Documents</p>
+                                        <p class="text-xl font-bold text-indigo-900">{{ $docs_new ?? 0 }}</p>
+                                    </div>
+                                    <div class="rounded-lg bg-emerald-50 border border-emerald-100 px-3 py-2">
+                                        <p class="text-xs text-emerald-700 font-medium">Signed</p>
+                                        <p class="text-xl font-bold text-emerald-900">{{ $docs_signed ?? 0 }}</p>
+                                    </div>
+                                    <div class="rounded-lg bg-gray-50 border border-gray-100 px-3 py-2">
+                                        <p class="text-xs text-gray-600 font-medium">Total</p>
+                                        <p class="text-xl font-bold text-gray-900">{{ $docs_total ?? 0 }}</p>
+                                    </div>
+                                </div>
+
+                                <!-- Quick info -->
+                                <div class="text-sm text-gray-600 mb-5">
+                                    @if(($docs_needs_signature ?? 0) > 0)
+                                        <span class="font-medium text-gray-900">Action needed:</span>
+                                        You have documents waiting for your signature.
+                                    @else
+                                        <span class="font-medium text-gray-900">All set:</span>
+                                        No documents pending signature.
+                                    @endif
+                                </div>
+
+                                <!-- Actions -->
+                                <div class="flex items-center gap-3">
+                                    <a href="{{ route('documents.index') }}" class="inline-flex items-center justify-center flex-1 rounded-lg bg-blue-600 text-white px-4 py-2.5 text-sm font-semibold hover:bg-blue-700 transition">
+                                        View Documents
+                                    </a>
+                                    <a href="{{ route('documents.index') }}" class="inline-flex items-center justify-center rounded-lg bg-white border border-blue-200 text-blue-700 px-4 py-2.5 text-sm font-semibold hover:bg-blue-50 transition">
+                                        Sign Now
+                                    </a>
+                                </div>
                             </div>
                         </div>
 
-                        <!-- Tool Check-Out -->
-                        <div class="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg hover:border-green-200 transition">
+                        <!-- Tool Check-Out (Phase 3) -->
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg hover:border-green-200 transition">
                             <div class="bg-gradient-to-r from-green-500 to-green-600 px-6 py-5">
                                 <h3 class="text-lg font-bold text-white flex items-center space-x-2">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -132,17 +170,48 @@
                                     </svg>
                                     <span>Tool Check-Out</span>
                                 </h3>
+                                <p class="text-green-100 text-sm mt-1">Browse tools, check out items, and return on time.</p>
                             </div>
-                            <div class="px-6 py-8 text-center">
-                                <p class="text-gray-600 mb-4">Request and manage tool check-outs from the inventory.</p>
-                                <span class="inline-block bg-gray-100 text-gray-600 font-medium py-2 px-4 rounded-lg text-sm">
-                                    Coming Soon
-                                </span>
+
+                            <div class="px-6 py-6">
+                                <!-- Stats -->
+                                <div class="grid grid-cols-2 gap-3 mb-5">
+                                    <div class="rounded-lg bg-green-50 border border-green-100 px-3 py-2">
+                                        <p class="text-xs text-green-700 font-medium">My Checked-Out</p>
+                                        <p class="text-xl font-bold text-green-900">{{ $tools_checked_out ?? 0 }}</p>
+                                    </div>
+                                    <div class="rounded-lg bg-amber-50 border border-amber-100 px-3 py-2">
+                                        <p class="text-xs text-amber-700 font-medium">Due Soon</p>
+                                        <p class="text-xl font-bold text-amber-900">{{ $tools_due_soon ?? 0 }}</p>
+                                    </div>
+                                    <div class="rounded-lg bg-gray-50 border border-gray-100 px-3 py-2 col-span-2">
+                                        <p class="text-xs text-gray-600 font-medium">Available Tools</p>
+                                        <p class="text-xl font-bold text-gray-900">{{ $tools_available ?? 0 }}</p>
+                                    </div>
+                                </div>
+
+                                <!-- Next due item (optional) -->
+                                <div class="text-sm text-gray-600 mb-5">
+                                    <span class="font-medium text-gray-900">Next due:</span>
+                                    {{ $next_due_tool_name ?? '—' }}
+                                    <span class="text-gray-400">•</span>
+                                    {{ $next_due_tool_date ?? 'No due items' }}
+                                </div>
+
+                                <!-- Actions -->
+                                <div class="flex items-center gap-3">
+                                    <a href="{{ route('tools.index') }}" class="inline-flex items-center justify-center flex-1 rounded-lg bg-green-600 text-white px-4 py-2.5 text-sm font-semibold hover:bg-green-700 transition">
+                                        Browse Tools
+                                    </a>
+                                    <a href="{{ route('tools.index') }}" class="inline-flex items-center justify-center rounded-lg bg-white border border-green-200 text-green-700 px-4 py-2.5 text-sm font-semibold hover:bg-green-50 transition">
+                                        View My Items
+                                    </a>
+                                </div>
                             </div>
                         </div>
 
-                        <!-- Inventory Requests -->
-                        <div class="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg hover:border-purple-200 transition">
+                        <!-- Inventory Requests (Phase 4) -->
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg hover:border-purple-200 transition">
                             <div class="bg-gradient-to-r from-purple-500 to-purple-600 px-6 py-5">
                                 <h3 class="text-lg font-bold text-white flex items-center space-x-2">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -150,12 +219,35 @@
                                     </svg>
                                     <span>Inventory Requests</span>
                                 </h3>
+                                <p class="text-purple-100 text-sm mt-1">Request supplies and track approvals and fulfillment.</p>
                             </div>
-                            <div class="px-6 py-8 text-center">
-                                <p class="text-gray-600 mb-4">Submit and track your inventory requests.</p>
-                                <span class="inline-block bg-gray-100 text-gray-600 font-medium py-2 px-4 rounded-lg text-sm">
-                                    Coming Soon
-                                </span>
+
+                            <div class="px-6 py-6">
+                                <!-- Stats -->
+                                <div class="grid grid-cols-2 gap-3 mb-5">
+                                    <div class="rounded-lg bg-purple-50 border border-purple-100 px-3 py-2">
+                                        <p class="text-xs text-purple-700 font-medium">Pending</p>
+                                        <p class="text-xl font-bold text-purple-900">{{ $inv_pending ?? 0 }}</p>
+                                    </div>
+                                    <div class="rounded-lg bg-pink-50 border border-pink-100 px-3 py-2">
+                                        <p class="text-xs text-pink-700 font-medium">Needs Action</p>
+                                        <p class="text-xl font-bold text-pink-900">{{ $inv_needs_action ?? 0 }}</p>
+                                    </div>
+                                    <div class="rounded-lg bg-gray-50 border border-gray-100 px-3 py-2 col-span-2">
+                                        <p class="text-xs text-gray-600 font-medium">Quick Create</p>
+                                        <p class="text-sm text-gray-700">Submit a new request in under a minute.</p>
+                                    </div>
+                                </div>
+
+                                <!-- Actions -->
+                                <div class="flex items-center gap-3">
+                                    <a href="{{ route('inventory-requests.index', ['new' => 'true']) }}" class="inline-flex items-center justify-center flex-1 rounded-lg bg-purple-600 text-white px-4 py-2.5 text-sm font-semibold hover:bg-purple-700 transition">
+                                        New Request
+                                    </a>
+                                    <a href="{{ route('inventory-requests.index') }}" class="inline-flex items-center justify-center rounded-lg bg-white border border-purple-200 text-purple-700 px-4 py-2.5 text-sm font-semibold hover:bg-purple-50 transition">
+                                        View Requests
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>

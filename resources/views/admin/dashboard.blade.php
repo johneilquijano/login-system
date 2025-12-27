@@ -28,6 +28,7 @@
                     </div>
 
                     <!-- Stats Row -->
+                     <h3 class="text-lg font-bold text-gray-900 mb-6">Manage Users Overview</h3>
                     <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
                         <div class="bg-white rounded-lg shadow-sm p-6 border border-gray-100 hover:shadow-md transition">
                             <div class="flex items-center justify-between">
@@ -83,6 +84,169 @@
                                     </svg>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+
+                    <!-- Separator -->
+                    <div class="border-t-2 border-gray-200 my-10"></div>
+
+                    <!-- Tools Inventory Stats -->
+                    <h3 class="text-lg font-bold text-gray-900 mb-6">Tools Inventory Overview</h3>
+                    <div class="grid grid-cols-5 gap-4 mb-8">
+                        <!-- Total Tools -->
+                        <div class="bg-white rounded-lg shadow-md border border-gray-200 p-6">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-sm text-gray-600">Total Tools</p>
+                                    <p class="text-3xl font-bold text-gray-900">{{ $toolsStats['total'] }}</p>
+                                </div>
+                                <svg class="w-12 h-12 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path>
+                                </svg>
+                            </div>
+                            <a href="{{ route('admin.tools.index') }}" class="mt-4 inline-block text-purple-600 hover:text-purple-800 font-semibold text-sm">
+                                Go to Inventory →
+                            </a>
+                        </div>
+
+                        <!-- Checked Out Now -->
+                        <div class="bg-white rounded-lg shadow-md border border-gray-200 p-6">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-sm text-gray-600">Checked Out Now</p>
+                                    <p class="text-3xl font-bold text-gray-900">{{ $toolsStats['checked_out'] }}</p>
+                                    @if($toolsStats['overdue'] > 0)
+                                        <p class="text-xs text-red-600 font-semibold mt-1">Overdue: {{ $toolsStats['overdue'] }}</p>
+                                    @endif
+                                </div>
+                                <svg class="w-12 h-12 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                            </div>
+                            <a href="{{ route('admin.tools.index') }}" class="mt-4 inline-block text-purple-600 hover:text-purple-800 font-semibold text-sm">
+                                View Active →
+                            </a>
+                        </div>
+
+                        <!-- Tools in Maintenance -->
+                        <div class="bg-white rounded-lg shadow-md border border-gray-200 p-6">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-sm text-gray-600">In Maintenance</p>
+                                    <p class="text-3xl font-bold text-gray-900">{{ $toolsStats['maintenance'] }}</p>
+                                </div>
+                                <svg class="w-12 h-12 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                                </svg>
+                            </div>
+                            <a href="{{ route('admin.tools.index') }}" class="mt-4 inline-block text-purple-600 hover:text-purple-800 font-semibold text-sm">
+                                View Maintenance →
+                            </a>
+                        </div>
+
+                        <!-- Due Today/This Week -->
+                        <div class="bg-white rounded-lg shadow-md border border-gray-200 p-6">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-sm text-gray-600">Due Soon</p>
+                                    <p class="text-3xl font-bold text-gray-900">{{ $toolsStats['due_today'] + $toolsStats['due_this_week'] }}</p>
+                                    <p class="text-xs text-gray-600 mt-1">{{ $toolsStats['due_today'] }} today</p>
+                                </div>
+                                <svg class="w-12 h-12 text-cyan-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                </svg>
+                            </div>
+                            <a href="{{ route('admin.tools.index') }}" class="mt-4 inline-block text-purple-600 hover:text-purple-800 font-semibold text-sm">
+                                View Due Items →
+                            </a>
+                        </div>
+
+                        <!-- Recent Activity -->
+                        <div class="bg-white rounded-lg shadow-md border border-gray-200 p-6">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-sm text-gray-600">Recent Activity</p>
+                                    <p class="text-3xl font-bold text-gray-900">{{ $toolsStats['recent_activity'] }}</p>
+                                    <p class="text-xs text-gray-600 mt-1">Last 24h</p>
+                                </div>
+                                <svg class="w-12 h-12 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                            </div>
+                            <a href="{{ route('admin.tools.history') }}" class="mt-4 inline-block text-purple-600 hover:text-purple-800 font-semibold text-sm">
+                                View History →
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Separator -->
+                    <div class="border-t-2 border-gray-200 my-10"></div>
+
+                    <!-- Inventory Requests Stats -->
+                    <h3 class="text-lg font-bold text-gray-900 mb-6">Inventory Requests Overview</h3>
+                    <div class="grid grid-cols-4 gap-4 mb-8">
+                        <!-- Pending Requests -->
+                        <div class="bg-white rounded-lg shadow-md border border-gray-200 p-6">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-sm text-gray-600">Pending Requests</p>
+                                    <p class="text-3xl font-bold text-gray-900">{{ $inventoryStats['pending'] }}</p>
+                                </div>
+                                <svg class="w-12 h-12 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                            </div>
+                            <a href="{{ route('admin.inventory-requests.index', ['status' => 'submitted']) }}" class="mt-4 inline-block text-purple-600 hover:text-purple-800 font-semibold text-sm">
+                                View Requests →
+                            </a>
+                        </div>
+
+                        <!-- Approved (Awaiting Fulfillment) -->
+                        <div class="bg-white rounded-lg shadow-md border border-gray-200 p-6">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-sm text-gray-600">Awaiting Fulfillment</p>
+                                    <p class="text-3xl font-bold text-gray-900">{{ $inventoryStats['approved'] }}</p>
+                                </div>
+                                <svg class="w-12 h-12 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                            </div>
+                            <a href="{{ route('admin.inventory-requests.index', ['status' => 'approved']) }}" class="mt-4 inline-block text-purple-600 hover:text-purple-800 font-semibold text-sm">
+                                View Requests →
+                            </a>
+                        </div>
+
+                        <!-- Overdue -->
+                        <div class="bg-white rounded-lg shadow-md border border-red-200 p-6">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-sm text-gray-600">Overdue</p>
+                                    <p class="text-3xl font-bold text-red-600">{{ $inventoryStats['overdue'] }}</p>
+                                </div>
+                                <svg class="w-12 h-12 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                            </div>
+                            <a href="{{ route('admin.inventory-requests.index', ['show_overdue' => '1']) }}" class="mt-4 inline-block text-purple-600 hover:text-purple-800 font-semibold text-sm">
+                                View Overdue →
+                            </a>
+                        </div>
+
+                        <!-- Fulfilled Today -->
+                        <div class="bg-white rounded-lg shadow-md border border-gray-200 p-6">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-sm text-gray-600">Fulfilled Today</p>
+                                    <p class="text-3xl font-bold text-gray-900">{{ $inventoryStats['fulfilled_today'] }}</p>
+                                </div>
+                                <svg class="w-12 h-12 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                            </div>
+                            <a href="{{ route('admin.inventory-requests.index', ['status' => 'fulfilled']) }}" class="mt-4 inline-block text-purple-600 hover:text-purple-800 font-semibold text-sm">
+                                View Requests →
+                            </a>
                         </div>
                     </div>
 

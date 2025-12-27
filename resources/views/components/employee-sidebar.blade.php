@@ -38,10 +38,10 @@
             Tool Checkout
         </a>
 
-        <a href="{{ route('inventory.index') }}" @class([
+        <a href="{{ route('inventory-requests.index') }}" @class([
             'w-full flex items-center px-6 py-3 border-l-4 transition',
-            'border-blue-600 bg-blue-50 text-blue-700 font-semibold' => request()->routeIs('inventory.*'),
-            'border-transparent hover:border-gray-300 text-gray-700 hover:bg-gray-50' => !request()->routeIs('inventory.*')
+            'border-blue-600 bg-blue-50 text-blue-700 font-semibold' => request()->routeIs('inventory-requests.*'),
+            'border-transparent hover:border-gray-300 text-gray-700 hover:bg-gray-50' => !request()->routeIs('inventory-requests.*')
         ])>
             <svg class="w-5 h-5 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>

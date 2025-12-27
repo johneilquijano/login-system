@@ -12,6 +12,7 @@ use App\Http\Controllers\InventoryRequestController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\DocumentController as AdminDocumentController;
 use App\Http\Controllers\Admin\ToolController as AdminToolController;
+use App\Http\Controllers\Admin\InventoryRequestController as AdminInventoryRequestController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\SuperAdmin\DashboardController as SuperAdminDashboardController;
 use App\Http\Controllers\SuperAdmin\OrganizationController;
@@ -64,10 +65,15 @@ Route::middleware(['auth', 'employee', 'organization'])->group(function () {
     Route::post('/tools/checkouts/{checkout}/return', [ToolController::class, 'return'])->name('tools.return');
 
     // Inventory Requests
-    Route::get('/inventory', [InventoryRequestController::class, 'index'])->name('inventory.index');
-    Route::get('/inventory/create', [InventoryRequestController::class, 'create'])->name('inventory.create');
-    Route::post('/inventory', [InventoryRequestController::class, 'store'])->name('inventory.store');
-    Route::get('/inventory/{inventoryRequest}', [InventoryRequestController::class, 'show'])->name('inventory.show');
+    Route::get('/inventory-requests', [InventoryRequestController::class, 'index'])->name('inventory-requests.index');
+    Route::get('/inventory-requests/create', [InventoryRequestController::class, 'create'])->name('inventory-requests.create');
+    Route::post('/inventory-requests', [InventoryRequestController::class, 'store'])->name('inventory-requests.store');
+    Route::get('/inventory-requests/{inventoryRequest}', [InventoryRequestController::class, 'show'])->name('inventory-requests.show');
+    Route::get('/inventory-requests/{inventoryRequest}/edit', [InventoryRequestController::class, 'edit'])->name('inventory-requests.edit');
+    Route::put('/inventory-requests/{inventoryRequest}', [InventoryRequestController::class, 'update'])->name('inventory-requests.update');
+    Route::post('/inventory-requests/{inventoryRequest}/submit', [InventoryRequestController::class, 'submit'])->name('inventory-requests.submit');
+    Route::post('/inventory-requests/{inventoryRequest}/cancel', [InventoryRequestController::class, 'cancel'])->name('inventory-requests.cancel');
+    Route::post('/inventory-requests/{inventoryRequest}/acknowledge', [InventoryRequestController::class, 'acknowledge'])->name('inventory-requests.acknowledge');
 });
 
 // Admin Routes (Protected)
@@ -98,6 +104,14 @@ Route::middleware(['auth', 'admin', 'organization'])->prefix('admin')->name('adm
     Route::get('/tools/{tool}', [AdminToolController::class, 'show'])->name('tools.show');
     Route::put('/tools/{tool}', [AdminToolController::class, 'update'])->name('tools.update');
     Route::delete('/tools/{tool}', [AdminToolController::class, 'destroy'])->name('tools.destroy');
+
+    // Inventory Requests
+    Route::get('/inventory-requests', [AdminInventoryRequestController::class, 'index'])->name('inventory-requests.index');
+    Route::get('/inventory-requests/{inventoryRequest}', [AdminInventoryRequestController::class, 'show'])->name('inventory-requests.show');
+    Route::post('/inventory-requests/{inventoryRequest}/approve', [AdminInventoryRequestController::class, 'approve'])->name('inventory-requests.approve');
+    Route::post('/inventory-requests/{inventoryRequest}/deny', [AdminInventoryRequestController::class, 'deny'])->name('inventory-requests.deny');
+    Route::post('/inventory-requests/{inventoryRequest}/fulfill', [AdminInventoryRequestController::class, 'fulfill'])->name('inventory-requests.fulfill');
+    Route::post('/inventory-requests/{inventoryRequest}/add-note', [AdminInventoryRequestController::class, 'addNote'])->name('inventory-requests.addNote');
 });
 
 // Super Admin Routes (Protected)
