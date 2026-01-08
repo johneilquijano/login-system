@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Document;
+use App\Services\DocumentSigningService;
+use App\Services\PdfSigningService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -139,15 +141,82 @@ class DocumentController extends Controller
             'signature_data' => 'required|string',
         ]);
 
-        // Update document with signature
-        $document->update([
+        // Create signed document certificate
+        $signingService = new DocumentSigningService();
+        $certificatePath = $signingService->createSignedDocument(
+            $document->file_path,
+            $validated['signature_data'],
+            $validated['signature_type'],
+            Auth::user()->name,
+            $document->id
+        );
+
+        if (!$certificatePath) {
+            \Log::error("Failed to create certificate for document {$document->id}, type: {$validated['signature_type']}");
+            return redirect()->route('documents.show', $document)->with('error', 'Failed to create signature certificate.');
+        }
+
+        // If PDF file, create a signed PDF with signature overlay (for both drawn and typed signatures)
+        $signedPdfPath = null;
+        $fileExtension = strtolower(pathinfo($document->file_path, PATHINFO_EXTENSION));
+        
+        if ($fileExtension === 'pdf') {
+            $pdfSigningService = new PdfSigningService();
+            $signedPdfPath = $pdfSigningService->signPdf(
+                $document->file_path,
+                $validated['signature_data'],
+                $validated['signature_type'],
+                Auth::user()->name,
+                $document->id
+            );
+        }
+
+        // Prepare update data
+        $updateData = [
             'signed_at' => now(),
             'status' => 'approved',
             'signature_type' => $validated['signature_type'],
             'signature_data' => $validated['signature_data'],
-        ]);
+        ];
 
-        return redirect()->route('documents.index')->with('success', 'Document signed successfully!');
+        // Add certificate path if available
+        if ($certificatePath) {
+            $updateData['signature_certificate_path'] = $certificatePath;
+        }
+
+        // Update file path to signed PDF if available (only if signature overlay succeeded)
+        if ($signedPdfPath) {
+            $updateData['file_path'] = $signedPdfPath;
+        }
+
+        $document->update($updateData);
+
+        return redirect()->route('documents.index')->with('success', 'Document signed successfully! Your certificate is ready for download.');
+    }
+
+    /**
+     * Download signed document certificate
+     */
+    public function downloadSignedCertificate(Document $document)
+    {
+        // Verify document belongs to same organization and is user's document
+        if ($document->org_id !== Auth::user()->org_id || $document->user_id !== Auth::id()) {
+            abort(403);
+        }
+
+        // Check if document is signed and has certificate
+        if (!$document->signed_at || !$document->signature_certificate_path) {
+            return redirect()->route('documents.show', $document)->with('error', 'No signed certificate available for this document.');
+        }
+
+        // Check if certificate file exists
+        if (!Storage::disk('private')->exists($document->signature_certificate_path)) {
+            return redirect()->route('documents.show', $document)->with('error', 'Signed certificate file not found.');
+        }
+
+        // Download the certificate
+        $filename = "DOC-{$document->id}_SIGNED_CERTIFICATE.html";
+        return Storage::disk('private')->download($document->signature_certificate_path, $filename);
     }
 
     public function destroy(Document $document)
@@ -156,7 +225,6 @@ class DocumentController extends Controller
         if ($document->org_id !== Auth::user()->org_id || $document->user_id !== Auth::id()) {
             abort(403);
         }
-
         // Delete file from storage
         if ($document->file_path) {
             Storage::disk('private')->delete($document->file_path);

@@ -6,16 +6,17 @@
             <!-- Main Content Area -->
             <div class="flex-1 overflow-auto">
                 <!-- Header -->
-                <header class="sticky top-0 z-40 bg-white/80 backdrop-blur-xl border-b border-gray-200 shadow-sm">
-                    <div class="flex items-center justify-between px-8 py-5">
-                        <div>
-                            <h2 class="text-3xl font-bold bg-gradient-to-r from-blue-600 to-blue-500 bg-clip-text text-transparent">Tools Inventory</h2>
-                        </div>
-                        <button onclick="openAddToolModal()" class="bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 text-white font-semibold py-2.5 px-6 rounded-lg transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
-                            + Add New Tool
-                        </button>
-                    </div>
-                </header>
+                <x-employee-header 
+                    title="Tools Inventory" 
+                    subtitle="" 
+                />
+                
+                <!-- Add Tool Button (moved below header) -->
+                <div class="px-8 py-4 bg-white border-b border-gray-200">
+                    <button onclick="openAddToolModal()" class="bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 text-white font-semibold py-2.5 px-6 rounded-lg transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
+                        + Add New Tool
+                    </button>
+                </div>
 
                 <!-- Main Content -->
                 <div class="p-8">

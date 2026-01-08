@@ -6,18 +6,10 @@
             <!-- Main Content Area -->
             <div class="flex-1 overflow-auto">
                 <!-- Top Header -->
-                <header class="sticky top-0 z-40 bg-white shadow-sm border-b border-gray-200">
-                    <div class="flex items-center justify-between px-8 py-4">
-                        <div>
-                            <h2 class="text-2xl font-bold text-gray-900">Dashboard Overview</h2>
-                            <p class="text-sm text-gray-600 mt-1">Monitor and manage your system</p>
-                        </div>
-                        <div class="text-right">
-                            <p class="text-sm font-medium text-gray-900">{{ Auth::user()->name }}</p>
-                            <p class="text-xs text-gray-600">Administrator</p>
-                        </div>
-                    </div>
-                </header>
+                <x-employee-header 
+                    title="Dashboard Overview" 
+                    subtitle="Monitor and manage your system" 
+                />
 
                 <!-- Main Content -->
                 <div class="p-8">

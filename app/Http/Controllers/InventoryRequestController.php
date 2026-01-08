@@ -6,6 +6,7 @@ use App\Models\InventoryRequest;
 use App\Models\InventoryRequestItem;
 use App\Models\User;
 use App\Notifications\InventoryRequestSubmittedNotification;
+use App\Events\InventoryRequestSubmitted;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Notification;
@@ -83,6 +84,9 @@ class InventoryRequestController extends Controller
         if ($validated['status'] === 'submitted') {
             $admins = User::where('org_id', $orgId)->where('role', 'admin')->get();
             Notification::send($admins, new InventoryRequestSubmittedNotification($inventoryRequest));
+            
+            // Fire event for AppNotification creation
+            event(new InventoryRequestSubmitted($inventoryRequest));
         }
 
         $message = $validated['status'] === 'submitted' 
@@ -226,27 +230,4 @@ class InventoryRequestController extends Controller
             ->with('success', 'Request submitted successfully');
     }
 
-    /**
-     * Acknowledge receipt of a fulfilled request
-     */
-    public function acknowledge(InventoryRequest $inventoryRequest)
-    {
-        // Verify request belongs to user
-        if ($inventoryRequest->org_id !== Auth::user()->org_id || 
-            $inventoryRequest->user_id !== Auth::id()) {
-            abort(403);
-        }
-
-        // Can only acknowledge fulfilled requests
-        if ($inventoryRequest->status !== 'fulfilled') {
-            return redirect()->route('inventory-requests.show', $inventoryRequest)
-                ->with('error', 'Only fulfilled requests can be acknowledged');
-        }
-
-        // Mark as acknowledged (you might add an acknowledged_at timestamp if needed)
-        // For now, we'll just return success
-
-        return redirect()->route('inventory-requests.show', $inventoryRequest)
-            ->with('success', 'Receipt acknowledged');
-    }
 }

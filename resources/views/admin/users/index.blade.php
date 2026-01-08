@@ -5,15 +5,11 @@
 
             <!-- Main Content Area -->
             <div class="flex-1 overflow-auto">
-                <!-- Top Header -->
-                <div class="bg-white shadow">
-                    <div class="px-8 py-4 flex justify-between items-center">
-                        <h2 class="text-2xl font-bold text-gray-900">Manage Users</h2>
-                        <div class="text-sm text-gray-600">
-                            Welcome, <span class="font-semibold">{{ Auth::user()->name }}</span>
-                        </div>
-                    </div>
-                </div>
+                <!-- Header -->
+                <x-employee-header 
+                    title="Manage Users" 
+                    subtitle="Welcome, manage your employees" 
+                />
 
                 <!-- Main Content -->
                 <div class="p-8">

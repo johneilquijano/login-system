@@ -29,7 +29,7 @@ class InventoryRequestSubmittedNotification extends Notification
      */
     public function via(object $notifiable): array
     {
-        return ['database'];
+        return []; // Using AppNotification system via listeners for database storage
     }
 
     /**

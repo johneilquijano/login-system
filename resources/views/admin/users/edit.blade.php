@@ -5,12 +5,11 @@
 
             <!-- Main Content Area -->
             <div class="flex-1 overflow-auto">
-                <!-- Top Header -->
-                <div class="bg-white shadow">
-                    <div class="px-8 py-4">
-                        <h2 class="text-2xl font-bold text-gray-900">Edit User: {{ $user->name }}</h2>
-                    </div>
-                </div>
+                <!-- Header -->
+                <x-employee-header 
+                    title="Edit User: {{ $user->name }}" 
+                    subtitle="" 
+                />
 
                 <!-- Main Content -->
                 <div class="p-8">

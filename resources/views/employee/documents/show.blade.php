@@ -6,18 +6,10 @@
             <!-- Main Content Area -->
             <div class="flex-1 overflow-auto">
                 <!-- Header -->
-                <header class="sticky top-0 z-40 bg-white/80 backdrop-blur-xl border-b border-gray-200 shadow-sm">
-                    <div class="flex items-center justify-between px-8 py-5">
-                        <div class="flex items-center gap-4">
-                            <a href="{{ route('documents.index') }}" class="p-2 hover:bg-gray-100 rounded-lg transition-all">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-                                </svg>
-                            </a>
-                            <h2 class="text-3xl font-bold bg-gradient-to-r from-blue-600 to-blue-500 bg-clip-text text-transparent">Document Preview</h2>
-                        </div>
-                    </div>
-                </header>
+                <x-employee-header 
+                    title="Document Preview" 
+                    subtitle="" 
+                />
 
                 <!-- Main Content -->
                 <div class="p-8">
@@ -120,14 +112,29 @@
                                             </svg>
                                             Sign Document
                                         </a>
+                                        @else
                                         @endif
+
+                                        @php
+                                            $isPdf = strtolower(pathinfo($document->file_path, PATHINFO_EXTENSION)) === 'pdf';
+                                        @endphp
 
                                         <a href="{{ route('documents.download', $document) }}" class="w-full block text-center bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 text-white font-semibold py-3 px-4 rounded-xl transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 inline mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                                 <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                                             </svg>
-                                            Download
+                                            Download Document
                                         </a>
+
+                                        <!-- Signing Info -->
+                                        @if($document->signed_at)
+                                        <div class="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg text-sm text-blue-800">
+                                            <p><strong>📄 Document Signed:</strong></p>
+                                            <p class="mt-2">Your document has been signed on {{ $document->signed_at->format('M d, Y \a\t h:i A') }}</p>
+                                            <p class="mt-2">Click <strong>"Download Document"</strong> (Blue) to download your signed document.</p>
+                                            </ol>
+                                        </div>
+                                        @endif
 
                                         <a href="{{ route('documents.index') }}" class="w-full block text-center bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-3 px-4 rounded-xl transition-all duration-300">
                                             Back to Documents

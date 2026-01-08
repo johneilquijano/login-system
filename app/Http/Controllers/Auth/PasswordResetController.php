@@ -7,12 +7,12 @@ use Illuminate\Http\Request;
 
 class PasswordResetController extends Controller
 {
-    public function showResetForm()
+    public function showResetForm(Request $request)
     {
-        return view('auth.reset-password', ['token' => ]);
+        return view('auth.reset-password', ['token' => $request->query('token')]);
     }
 
-    public function resetPassword(Request )
+    public function resetPassword(Request $request)
     {
         // TODO: Implement password reset logic
         return redirect()->route('login');

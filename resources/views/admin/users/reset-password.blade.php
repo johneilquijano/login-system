@@ -4,11 +4,15 @@
             <x-admin-sidebar />
 
             <div class="flex-1 overflow-auto">
-                <div class="bg-white shadow">
-                    <div class="px-8 py-4 flex justify-between items-center">
-                        <h2 class="text-2xl font-bold text-gray-900">Reset Password for {{ $user->name }}</h2>
-                        <a href="{{ route('admin.users.index') }}" class="text-sm text-gray-600">← Back to users</a>
-                    </div>
+                <!-- Header -->
+                <x-employee-header 
+                    title="Reset Password for {{ $user->name }}" 
+                    subtitle="" 
+                />
+                
+                <!-- Back button (moved below header) -->
+                <div class="px-8 py-3 bg-white border-b border-gray-100 flex items-center">
+                    <a href="{{ route('admin.users.index') }}" class="text-sm text-gray-600">← Back to users</a>
                 </div>
 
                 <div class="p-8">

@@ -22,6 +22,7 @@ class Document extends Model
         'signed_at',
         'signature_data',
         'signature_type',
+        'signature_certificate_path',
         'reviewed_at',
         'reviewed_by',
         'review_notes',

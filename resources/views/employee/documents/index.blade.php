@@ -6,13 +6,10 @@
             <!-- Main Content Area -->
             <div class="flex-1 overflow-auto">
                 <!-- Header -->
-                <header class="sticky top-0 z-40 bg-white/80 backdrop-blur-xl border-b border-gray-200 shadow-sm">
-                    <div class="flex items-center justify-between px-8 py-5">
-                        <div>
-                            <h2 class="text-3xl font-bold bg-gradient-to-r from-blue-600 to-blue-500 bg-clip-text text-transparent">Documents</h2>
-                        </div>
-                    </div>
-                </header>
+                <x-employee-header 
+                    title="Documents" 
+                    subtitle="View and manage your documents" 
+                />
 
                 <!-- Main Content -->
                 <div class="p-8">

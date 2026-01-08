@@ -6,17 +6,17 @@
             <!-- Main Content Area -->
             <div class="flex-1 overflow-auto">
                 <!-- Header -->
-                <header class="sticky top-0 z-40 bg-white/80 backdrop-blur-xl border-b border-gray-200 shadow-sm">
-                    <div class="flex items-center justify-between px-8 py-5">
-                        <div>
-                            <h2 class="text-3xl font-bold bg-gradient-to-r from-blue-600 to-blue-500 bg-clip-text text-transparent">Tools History</h2>
-                            <p class="text-sm text-gray-600 mt-1">All check-in/check-out transactions</p>
-                        </div>
-                        <a href="{{ route('admin.tools.index') }}" class="text-blue-600 hover:text-blue-700 font-semibold transition-colors">
-                            ← Back to Inventory
-                        </a>
-                    </div>
-                </header>
+                <x-employee-header 
+                    title="Tools History" 
+                    subtitle="All check-in/check-out transactions" 
+                />
+                
+                <!-- Back button (moved below header) -->
+                <div class="px-8 py-3 bg-white border-b border-gray-100 flex items-center">
+                    <a href="{{ route('admin.tools.index') }}" class="text-blue-600 hover:text-blue-700 font-semibold transition-colors">
+                        ← Back to Inventory
+                    </a>
+                </div>
 
                 <!-- Main Content -->
                 <div class="p-8">

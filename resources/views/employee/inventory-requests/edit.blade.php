@@ -6,20 +6,10 @@
             <!-- Main Content Area -->
             <div class="flex-1 overflow-auto">
                 <!-- Header -->
-                <header class="sticky top-0 z-40 bg-white shadow-sm border-b border-gray-200">
-                    <div class="flex items-center justify-between px-8 py-4">
-                        <div>
-                            <h2 class="text-2xl font-bold text-gray-900">Edit Request</h2>
-                            <p class="text-sm text-gray-600 mt-1">Update request #{{ str_pad($inventoryRequest->id, 4, '0', STR_PAD_LEFT) }}</p>
-                        </div>
-                        <div class="flex items-center space-x-4">
-                            <div class="text-right">
-                                <p class="text-sm font-medium text-gray-900">{{ Auth::user()->name }}</p>
-                                <p class="text-xs text-gray-600">{{ ucfirst(Auth::user()->role) }} Account</p>
-                            </div>
-                        </div>
-                    </div>
-                </header>
+                <x-employee-header 
+                    title="Edit Request" 
+                    subtitle="Update request #{{ str_pad($inventoryRequest->id, 4, '0', STR_PAD_LEFT) }}" 
+                />
 
                 <!-- Main Content -->
                 <div class="p-8">

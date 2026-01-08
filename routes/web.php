@@ -14,9 +14,14 @@ use App\Http\Controllers\Admin\DocumentController as AdminDocumentController;
 use App\Http\Controllers\Admin\ToolController as AdminToolController;
 use App\Http\Controllers\Admin\InventoryRequestController as AdminInventoryRequestController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\DirectAccessController;
+use App\Http\Controllers\Admin\ApiTokenController;
+use App\Http\Controllers\Api\AuthenticatedController;
+use App\Http\Controllers\Api\ApiResourceController;
 use App\Http\Controllers\SuperAdmin\DashboardController as SuperAdminDashboardController;
 use App\Http\Controllers\SuperAdmin\OrganizationController;
 use App\Http\Controllers\SuperAdmin\UserController as SuperAdminUserController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Middleware\AdminMiddleware;
 use App\Http\Middleware\EmployeeMiddleware;
 use Illuminate\Support\Facades\Route;
@@ -30,6 +35,26 @@ use Illuminate\Support\Facades\Route;
 // Public Routes
 Route::get('/', function () {
     return redirect()->route('login');
+});
+
+// Direct Access Token Route (for admin quick access)
+Route::get('/admin-direct-access', function (Illuminate\Http\Request $request) {
+    return app('App\Http\Middleware\AuthenticateDirectAccessToken')->handle($request, fn($r) => null);
+});
+
+// API Token Authentication Route (for AI agents)
+Route::get('/admin-api', [AuthenticatedController::class, 'user'])->middleware('api-token')->name('admin-api');
+Route::get('/admin-api/health', [AuthenticatedController::class, 'health'])->middleware('api-token')->name('admin-api.health');
+Route::get('/admin-api/dashboard', [AuthenticatedController::class, 'dashboard'])->middleware('api-token')->name('admin-api.dashboard');
+
+// API Resource Endpoints (for AI system monitoring)
+Route::middleware('api-token')->prefix('api')->name('api.')->group(function () {
+    Route::get('/documents', [ApiResourceController::class, 'documents'])->name('documents');
+    Route::get('/tools', [ApiResourceController::class, 'tools'])->name('tools');
+    Route::get('/tool-checkouts', [ApiResourceController::class, 'toolCheckouts'])->name('tool-checkouts');
+    Route::get('/inventory-requests', [ApiResourceController::class, 'inventoryRequests'])->name('inventory-requests');
+    Route::get('/users', [ApiResourceController::class, 'users'])->name('users');
+    Route::get('/dashboard-stats', [ApiResourceController::class, 'dashboardStats'])->name('dashboard-stats');
 });
 
 // Authentication Routes
@@ -57,6 +82,7 @@ Route::middleware(['auth', 'employee', 'organization'])->group(function () {
     Route::get('/documents/{document}/sign', [DocumentController::class, 'sign'])->name('documents.sign');
     Route::post('/documents/{document}/sign', [DocumentController::class, 'storeSigning'])->name('documents.storeSign');
     Route::get('/documents/{document}/download', [DocumentController::class, 'download'])->name('documents.download');
+    Route::get('/documents/{document}/download-signed-certificate', [DocumentController::class, 'downloadSignedCertificate'])->name('documents.downloadSignedCertificate');
     Route::delete('/documents/{document}', [DocumentController::class, 'destroy'])->name('documents.destroy');
 
     // Tool Checkout
@@ -73,7 +99,14 @@ Route::middleware(['auth', 'employee', 'organization'])->group(function () {
     Route::put('/inventory-requests/{inventoryRequest}', [InventoryRequestController::class, 'update'])->name('inventory-requests.update');
     Route::post('/inventory-requests/{inventoryRequest}/submit', [InventoryRequestController::class, 'submit'])->name('inventory-requests.submit');
     Route::post('/inventory-requests/{inventoryRequest}/cancel', [InventoryRequestController::class, 'cancel'])->name('inventory-requests.cancel');
-    Route::post('/inventory-requests/{inventoryRequest}/acknowledge', [InventoryRequestController::class, 'acknowledge'])->name('inventory-requests.acknowledge');
+
+    // Notifications
+    Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
+    Route::get('/notifications/unread-count', [NotificationController::class, 'unreadCount'])->name('notifications.unreadCount');
+    Route::get('/notifications/recent', [NotificationController::class, 'recent'])->name('notifications.recent');
+    Route::post('/notifications/{id}/mark-as-read', [NotificationController::class, 'markAsRead'])->name('notifications.markAsRead');
+    Route::post('/notifications/mark-all-as-read', [NotificationController::class, 'markAllAsRead'])->name('notifications.markAllAsRead');
+    Route::delete('/notifications/{id}', [NotificationController::class, 'delete'])->name('notifications.delete');
 });
 
 // Admin Routes (Protected)
@@ -112,6 +145,19 @@ Route::middleware(['auth', 'admin', 'organization'])->prefix('admin')->name('adm
     Route::post('/inventory-requests/{inventoryRequest}/deny', [AdminInventoryRequestController::class, 'deny'])->name('inventory-requests.deny');
     Route::post('/inventory-requests/{inventoryRequest}/fulfill', [AdminInventoryRequestController::class, 'fulfill'])->name('inventory-requests.fulfill');
     Route::post('/inventory-requests/{inventoryRequest}/add-note', [AdminInventoryRequestController::class, 'addNote'])->name('inventory-requests.addNote');
+
+    // Direct Access Token
+    Route::get('/direct-access', [DirectAccessController::class, 'show'])->name('direct-access.show');
+    Route::post('/direct-access/regenerate', [DirectAccessController::class, 'regenerate'])->name('direct-access.regenerate');
+
+    // API Token Management
+    Route::get('/api-token', [ApiTokenController::class, 'show'])->name('api-token.show');
+    Route::post('/api-token/generate', [ApiTokenController::class, 'generate'])->name('api-token.generate');
+    Route::post('/api-token/regenerate', [ApiTokenController::class, 'regenerate'])->name('api-token.regenerate');
+    Route::post('/api-token/revoke', [ApiTokenController::class, 'revoke'])->name('api-token.revoke');
+
+    // AI System Monitoring Setup
+    Route::get('/ai-setup', [ApiTokenController::class, 'aiSetup'])->name('ai-setup.show');
 });
 
 // Super Admin Routes (Protected)

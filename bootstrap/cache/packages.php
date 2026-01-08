@@ -1,4 +1,11 @@
 <?php return array (
+  'fpdf/fpdf' => 
+  array (
+    'aliases' => 
+    array (
+      'FPDF' => 'Fpdf\\Fpdf',
+    ),
+  ),
   'laravel/sail' => 
   array (
     'providers' => 

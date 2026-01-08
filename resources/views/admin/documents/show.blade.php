@@ -6,18 +6,19 @@
             <!-- Main Content Area -->
             <div class="flex-1 overflow-auto">
                 <!-- Header -->
-                <header class="sticky top-0 z-40 bg-white/80 backdrop-blur-xl border-b border-gray-200 shadow-sm">
-                    <div class="flex items-center justify-between px-8 py-5">
-                        <div class="flex items-center gap-4">
-                            <a href="{{ route('admin.documents.index') }}" class="p-2 hover:bg-gray-100 rounded-lg transition-all">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-                                </svg>
-                            </a>
-                            <h2 class="text-3xl font-bold bg-gradient-to-r from-blue-600 to-blue-500 bg-clip-text text-transparent">Document Preview</h2>
-                        </div>
-                    </div>
-                </header>
+                <x-employee-header 
+                    title="Document Preview" 
+                    subtitle="" 
+                />
+                
+                <!-- Back button (moved below header) -->
+                <div class="px-8 py-3 bg-white border-b border-gray-100 flex items-center">
+                    <a href="{{ route('admin.documents.index') }}" class="p-2 hover:bg-gray-100 rounded-lg transition-all">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                        </svg>
+                    </a>
+                </div>
 
                 <!-- Main Content -->
                 <div class="p-8">

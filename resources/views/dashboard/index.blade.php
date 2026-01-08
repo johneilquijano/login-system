@@ -12,7 +12,8 @@
                             <h2 class="text-2xl font-bold text-gray-900">Dashboard</h2>
                             <p class="text-sm text-gray-600 mt-1">Welcome back, {{ Auth::user()->name }}</p>
                         </div>
-                        <div class="flex items-center space-x-4">
+                        <div class="flex items-center space-x-6">
+                            <x-notification-bell />
                             <div class="text-right">
                                 <p class="text-sm font-medium text-gray-900">{{ Auth::user()->name }}</p>
                                 <p class="text-xs text-gray-600">{{ ucfirst(Auth::user()->role) }} Account</p>

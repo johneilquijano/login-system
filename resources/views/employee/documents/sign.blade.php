@@ -6,13 +6,10 @@
             <!-- Main Content Area -->
             <div class="flex-1 overflow-auto">
                 <!-- Header -->
-                <header class="sticky top-0 z-40 bg-white shadow-sm border-b" style="border-bottom-color: #ccc;">
-                    <div class="flex items-center justify-between px-8 py-4">
-                        <div>
-                            <h2 class="text-2xl font-bold text-gray-900">Sign Document</h2>
-                        </div>
-                    </div>
-                </header>
+                <x-employee-header 
+                    title="Sign Document" 
+                    subtitle="Add your signature to the document" 
+                />
 
                 <!-- Main Content -->
                 <div class="p-8">

@@ -5,12 +5,11 @@
 
             <!-- Main Content Area -->
             <div class="flex-1 overflow-auto">
-                <!-- Top Header -->
-                <div class="bg-white shadow">
-                    <div class="px-8 py-4">
-                        <h2 class="text-2xl font-bold text-gray-900">Create New User</h2>
-                    </div>
-                </div>
+                <!-- Header -->
+                <x-employee-header 
+                    title="Create New User" 
+                    subtitle="Add a new employee to the system" 
+                />
 
                 <!-- Main Content -->
                 <div class="p-8">
