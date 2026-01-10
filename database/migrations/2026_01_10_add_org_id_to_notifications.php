@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
@@ -10,15 +11,33 @@ return new class extends Migration
      */
     public function up(): void
     {
-        // Add org_id column using raw SQL if it doesn't exist
-        if (!DB::getSchemaBuilder()->hasColumn('notifications', 'org_id')) {
-            DB::statement('ALTER TABLE notifications ADD COLUMN org_id BIGINT UNSIGNED AFTER user_id');
-            DB::statement('ALTER TABLE notifications ADD CONSTRAINT fk_notifications_org_id FOREIGN KEY (org_id) REFERENCES organizations(id) ON DELETE CASCADE');
-            DB::statement('CREATE INDEX idx_notifications_org_user ON notifications(org_id, user_id)');
-            
-            // Set default org_id for existing rows
-            DB::statement('UPDATE notifications SET org_id = 1 WHERE org_id IS NULL');
+        // Drop and recreate notifications table with correct structure
+        if (Schema::hasTable('notifications')) {
+            Schema::dropIfExists('notifications');
         }
+
+        Schema::create('notifications', function ($table) {
+            $table->uuid('id')->primary();
+            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('org_id');
+            $table->string('type');
+            $table->string('title')->nullable();
+            $table->text('message');
+            $table->string('link_url')->nullable();
+            $table->json('data')->nullable();
+            $table->timestamp('read_at')->nullable();
+            $table->timestamps();
+
+            // Foreign keys
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('org_id')->references('id')->on('organizations')->onDelete('cascade');
+
+            // Indices for performance
+            $table->index(['org_id', 'user_id']);
+            $table->index(['user_id', 'read_at']);
+            $table->index('type');
+            $table->index('created_at');
+        });
     }
 
     /**
@@ -26,11 +45,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        if (DB::getSchemaBuilder()->hasColumn('notifications', 'org_id')) {
-            DB::statement('ALTER TABLE notifications DROP FOREIGN KEY fk_notifications_org_id');
-            DB::statement('DROP INDEX idx_notifications_org_user ON notifications');
-            DB::statement('ALTER TABLE notifications DROP COLUMN org_id');
-        }
+        Schema::dropIfExists('notifications');
     }
 };
+
 
