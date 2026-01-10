@@ -64,8 +64,17 @@ document.addEventListener('DOMContentLoaded', function() {
     // Load notifications
     function loadNotifications() {
         fetch('{{ route("notifications.recent") }}?limit=10')
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    console.error('Error loading notifications:', response.status);
+                    notificationList.innerHTML = '<div class="px-4 py-8 text-center text-red-500"><p class="text-sm">Error loading notifications</p></div>';
+                    return null;
+                }
+                return response.json();
+            })
             .then(notifications => {
+                if (!notifications) return;
+                
                 if (notifications.length === 0) {
                     notificationList.innerHTML = '<div class="px-4 py-8 text-center text-gray-500"><p class="text-sm">No notifications</p></div>';
                 } else {
@@ -83,13 +92,23 @@ document.addEventListener('DOMContentLoaded', function() {
                     `).join('');
                 }
                 updateBadge();
+            })
+            .catch(err => {
+                console.error('Error loading notifications:', err);
+                notificationList.innerHTML = '<div class="px-4 py-8 text-center text-red-500"><p class="text-sm">Error loading notifications</p></div>';
             });
     }
 
     // Update badge count
     function updateBadge() {
         fetch('{{ route("notifications.unreadCount") }}')
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    console.error('Error fetching unread count:', response.status);
+                    return { unread_count: 0 };
+                }
+                return response.json();
+            })
             .then(data => {
                 if (data.unread_count > 0) {
                     badge.textContent = data.unread_count > 99 ? '99+' : data.unread_count;
@@ -97,6 +116,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 } else {
                     badge.classList.add('hidden');
                 }
+            })
+            .catch(err => {
+                console.error('Error updating notification badge:', err);
             });
     }
 

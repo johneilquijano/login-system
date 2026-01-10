@@ -20,6 +20,7 @@ class Tool extends Model
         'serial_number',
         'description',
         'notes',
+        'quantity',
     ];
 
     protected $casts = [
@@ -38,13 +39,72 @@ class Tool extends Model
     }
 
     /**
-     * Check if tool is available (no active checkout)
+     * Check if tool is available (has quantity remaining for checkout)
      */
     public function isAvailable()
     {
-        return !$this->checkouts()
+        $activeCheckouts = $this->getActiveCheckoutCount();
+        return $activeCheckouts < $this->quantity;
+    }
+
+    /**
+     * Get count of active checkouts (checked out but not returned)
+     */
+    public function getActiveCheckoutCount()
+    {
+        // If checkouts are already loaded (eager loaded), use them
+        if ($this->relationLoaded('checkouts')) {
+            return $this->checkouts
+                ->where('returned_at', null)
+                ->where(function ($item) {
+                    // Only count actual employee checkouts, not admin maintenance actions
+                    return $item['action_type'] === 'checkout' || is_null($item['action_type']);
+                })
+                ->count();
+        }
+
+        // Otherwise query for it
+        return $this->checkouts()
             ->whereNull('returned_at')
-            ->exists();
+            ->where(function ($q) {
+                $q->where('action_type', 'checkout')
+                  ->orWhereNull('action_type');
+            })
+            ->count();
+    }
+
+    /**
+     * Get remaining quantity available for checkout
+     */
+    public function getAvailableQuantity()
+    {
+        return max(0, $this->quantity - $this->getActiveCheckoutCount());
+    }
+
+    /**
+     * Get all active checkouts (for multiple quantity display)
+     */
+    public function getActiveCheckouts()
+    {
+        // If checkouts are already loaded (eager loaded), use them
+        if ($this->relationLoaded('checkouts')) {
+            return $this->checkouts
+                ->where('returned_at', null)
+                ->where(function ($item) {
+                    // Only return actual employee checkouts, not admin maintenance actions
+                    return $item['action_type'] === 'checkout' || is_null($item['action_type']);
+                })
+                ->values();
+        }
+
+        // Otherwise query for it
+        return $this->checkouts()
+            ->whereNull('returned_at')
+            ->where(function ($q) {
+                $q->where('action_type', 'checkout')
+                  ->orWhereNull('action_type');
+            })
+            ->get();
     }
 
     /**
@@ -52,25 +112,8 @@ class Tool extends Model
      */
     public function currentCheckout()
     {
-        // If checkouts are already loaded (eager loaded), use them
-        if ($this->relationLoaded('checkouts')) {
-            return $this->checkouts
-                ->where('returned_at', null)
-                ->where(function ($item) {
-                    // Only return actual checkouts, not admin maintenance actions
-                    return $item['action_type'] === 'checkout' || is_null($item['action_type']);
-                })
-                ->first();
-        }
-        
-        // Otherwise query for it - only get actual employee checkouts
-        return $this->checkouts()
-            ->whereNull('returned_at')
-            ->where(function ($q) {
-                $q->where('action_type', 'checkout')
-                  ->orWhereNull('action_type');
-            })
-            ->first();
+        // Get the first active checkout
+        return $this->getActiveCheckouts()->first();
     }
 
     /**
@@ -82,11 +125,12 @@ class Tool extends Model
             return 'Maintenance';
         }
 
-        if ($this->currentCheckout()) {
-            return 'Checked Out';
+        // Check if there's remaining quantity available
+        if ($this->isAvailable()) {
+            return 'Available';
         }
 
-        return 'Available';
+        return 'Checked Out';
     }
 
     /**
@@ -99,21 +143,34 @@ class Tool extends Model
     }
 
     /**
-     * Get due date if tool is checked out
+     * Get earliest due date among all active checkouts
+     */
+    public function getEarliestDueDate()
+    {
+        $activeCheckouts = $this->getActiveCheckouts();
+        if ($activeCheckouts->isEmpty()) {
+            return null;
+        }
+
+        $dueDates = $activeCheckouts
+            ->map(function ($checkout) {
+                return $checkout->return_due_date instanceof \Carbon\Carbon
+                    ? $checkout->return_due_date
+                    : (\Carbon\Carbon::parse($checkout->return_due_date) ?? null);
+            })
+            ->filter(function ($date) {
+                return $date !== null;
+            });
+
+        return $dueDates->isNotEmpty() ? $dueDates->min() : null;
+    }
+
+    /**
+     * Get due date if tool is checked out (deprecated - use getEarliestDueDate)
      */
     public function getDueDate()
     {
-        $checkout = $this->currentCheckout();
-        if (!$checkout) {
-            return null;
-        }
-        
-        // Ensure return_due_date is a Carbon instance
-        if ($checkout->return_due_date instanceof \Carbon\Carbon) {
-            return $checkout->return_due_date;
-        }
-        
-        return $checkout->return_due_date ? \Carbon\Carbon::parse($checkout->return_due_date) : null;
+        return $this->getEarliestDueDate();
     }
 
     /**

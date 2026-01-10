@@ -19,279 +19,479 @@
                         <p class="mt-2 text-purple-100">Here's what's happening with your system today</p>
                     </div>
 
-                    <!-- Stats Row -->
-                     <h3 class="text-lg font-bold text-gray-900 mb-6">Manage Users Overview</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-                        <div class="bg-white rounded-lg shadow-sm p-6 border border-gray-100 hover:shadow-md transition">
-                            <div class="flex items-center justify-between">
-                                <div>
-                                    <p class="text-gray-600 text-sm font-medium">Total Users</p>
-                                    <p class="text-3xl font-bold text-gray-900 mt-2">{{ \App\Models\User::count() }}</p>
-                                </div>
-                                <div class="flex items-center justify-center h-14 w-14 rounded-lg bg-blue-100 text-blue-600">
-                                    <svg class="h-7 w-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.856-1.487M15 10a3 3 0 11-6 0 3 3 0 016 0zM6 20a6 6 0 0112 0v2H6v-2z"></path>
-                                    </svg>
-                                </div>
-                            </div>
-                        </div>
+                    <!-- ===== 1) QUICK ACTIONS ===== -->
+                    <div class="mb-8">
+                        <h2 class="text-xl font-bold text-gray-900 mb-4">Quick Actions</h2>
+                        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-7 gap-3">
+                            <!-- Review Inventory Requests -->
+                            <a href="{{ route('admin.inventory-requests.index') }}" class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 hover:shadow-md transition text-center">
+                                <svg class="h-6 w-6 text-blue-600 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path>
+                                </svg>
+                                <p class="text-sm font-semibold text-gray-900">Review Requests</p>
+                            </a>
 
-                        <div class="bg-white rounded-lg shadow-sm p-6 border border-gray-100 hover:shadow-md transition">
-                            <div class="flex items-center justify-between">
-                                <div>
-                                    <p class="text-gray-600 text-sm font-medium">Admins</p>
-                                    <p class="text-3xl font-bold text-gray-900 mt-2">{{ \App\Models\User::where('role', 'admin')->count() }}</p>
-                                </div>
-                                <div class="flex items-center justify-center h-14 w-14 rounded-lg bg-purple-100 text-purple-600">
-                                    <svg class="h-7 w-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path>
-                                    </svg>
-                                </div>
-                            </div>
-                        </div>
+                            <!-- Ordering Tasks -->
+                            <a href="{{ route('admin.ordering-tasks.index') }}" class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 hover:shadow-md transition text-center">
+                                <svg class="h-6 w-6 text-green-600 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m0 0l8-4m0 0l8 4m0 6l-8 4-8-4m0 0l8-4m0 0l8 4m0 6l-8 4-8-4"></path>
+                                </svg>
+                                <p class="text-sm font-semibold text-gray-900">Ordering Tasks</p>
+                            </a>
 
-                        <div class="bg-white rounded-lg shadow-sm p-6 border border-gray-100 hover:shadow-md transition">
-                            <div class="flex items-center justify-between">
-                                <div>
-                                    <p class="text-gray-600 text-sm font-medium">Employees</p>
-                                    <p class="text-3xl font-bold text-gray-900 mt-2">{{ \App\Models\User::where('role', 'employee')->count() }}</p>
-                                </div>
-                                <div class="flex items-center justify-center h-14 w-14 rounded-lg bg-green-100 text-green-600">
-                                    <svg class="h-7 w-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
-                                    </svg>
-                                </div>
-                            </div>
-                        </div>
+                            <!-- Add New Tool -->
+                            <a href="{{ route('admin.tools.create') }}" class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 hover:shadow-md transition text-center">
+                                <svg class="h-6 w-6 text-purple-600 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                                </svg>
+                                <p class="text-sm font-semibold text-gray-900">Add Tool</p>
+                            </a>
 
-                        <div class="bg-white rounded-lg shadow-sm p-6 border border-gray-100 hover:shadow-md transition">
-                            <div class="flex items-center justify-between">
-                                <div>
-                                    <p class="text-gray-600 text-sm font-medium">Last Update</p>
-                                    <p class="text-xl font-bold text-gray-900 mt-2">{{ now()->format('M d, Y') }}</p>
-                                </div>
-                                <div class="flex items-center justify-center h-14 w-14 rounded-lg bg-orange-100 text-orange-600">
-                                    <svg class="h-7 w-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                                    </svg>
-                                </div>
-                            </div>
+                            <!-- Manage Users -->
+                            <a href="{{ route('admin.users.index') }}" class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 hover:shadow-md transition text-center">
+                                <svg class="h-6 w-6 text-indigo-600 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.856-1.487M15 10a3 3 0 11-6 0 3 3 0 016 0zM6 20a6 6 0 0112 0v2H6v-2z"></path>
+                                </svg>
+                                <p class="text-sm font-semibold text-gray-900">Manage Users</p>
+                            </a>
+
+                            <!-- Tools Inventory -->
+                            <a href="{{ route('admin.tools.index') }}" class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 hover:shadow-md transition text-center">
+                                <svg class="h-6 w-6 text-orange-600 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+                                </svg>
+                                <p class="text-sm font-semibold text-gray-900">Tools</p>
+                            </a>
+
+                            <!-- Documents -->
+                            <a href="{{ route('admin.documents.index') }}" class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 hover:shadow-md transition text-center">
+                                <svg class="h-6 w-6 text-red-600 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                                </svg>
+                                <p class="text-sm font-semibold text-gray-900">Documents</p>
+                            </a>
+
+                            <!-- Vehicles -->
+                            <a href="{{ route('admin.vehicles.index') }}" class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 hover:shadow-md transition text-center">
+                                <svg class="h-6 w-6 text-cyan-600 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                                </svg>
+                                <p class="text-sm font-semibold text-gray-900">Vehicles</p>
+                            </a>
                         </div>
                     </div>
 
-                    <!-- Separator -->
-                    <div class="border-t-2 border-gray-200 my-10"></div>
-
-                    <!-- Tools Inventory Stats -->
-                    <h3 class="text-lg font-bold text-gray-900 mb-6">Tools Inventory Overview</h3>
-                    <div class="grid grid-cols-5 gap-4 mb-8">
-                        <!-- Total Tools -->
-                        <div class="bg-white rounded-lg shadow-md border border-gray-200 p-6">
-                            <div class="flex items-center justify-between">
-                                <div>
-                                    <p class="text-sm text-gray-600">Total Tools</p>
-                                    <p class="text-3xl font-bold text-gray-900">{{ $toolsStats['total'] }}</p>
+                    <!-- ===== 2) NEEDS ATTENTION TODAY ===== -->
+                    <div class="mb-8">
+                        <h2 class="text-xl font-bold text-gray-900 mb-4">Needs Attention Today</h2>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            
+                            <!-- Tile A: Inventory Requests -->
+                            <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                                <div class="flex items-center justify-between mb-4">
+                                    <div>
+                                        <h3 class="text-lg font-semibold text-gray-900">Inventory Requests</h3>
+                                        <p class="text-sm text-gray-600">Pending & Urgent</p>
+                                    </div>
+                                    <svg class="h-8 w-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+                                    </svg>
                                 </div>
-                                <svg class="w-12 h-12 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path>
-                                </svg>
-                            </div>
-                            <a href="{{ route('admin.tools.index') }}" class="mt-4 inline-block text-purple-600 hover:text-purple-800 font-semibold text-sm">
-                                Go to Inventory →
-                            </a>
-                        </div>
+                                
+                                <!-- Count Badge -->
+                                <div class="mb-4">
+                                    <div class="flex gap-3">
+                                        <div class="bg-yellow-100 rounded-lg px-3 py-2">
+                                            <p class="text-2xl font-bold text-yellow-900">{{ $pendingRequestsCount }}</p>
+                                            <p class="text-xs text-yellow-700">Pending</p>
+                                        </div>
+                                        <div class="bg-red-100 rounded-lg px-3 py-2">
+                                            <p class="text-2xl font-bold text-red-900">{{ $urgentRequestsCount }}</p>
+                                            <p class="text-xs text-red-700">Urgent</p>
+                                        </div>
+                                    </div>
+                                </div>
 
-                        <!-- Checked Out Now -->
-                        <div class="bg-white rounded-lg shadow-md border border-gray-200 p-6">
-                            <div class="flex items-center justify-between">
-                                <div>
-                                    <p class="text-sm text-gray-600">Checked Out Now</p>
-                                    <p class="text-3xl font-bold text-gray-900">{{ $toolsStats['checked_out'] }}</p>
-                                    @if($toolsStats['overdue'] > 0)
-                                        <p class="text-xs text-red-600 font-semibold mt-1">Overdue: {{ $toolsStats['overdue'] }}</p>
+                                <!-- Preview List -->
+                                <div class="border-t border-gray-200 pt-4 mb-4">
+                                    @if($pendingRequestsPreview->count() > 0)
+                                        <div class="space-y-3">
+                                            @foreach($pendingRequestsPreview as $request)
+                                            <a href="{{ route('admin.inventory-requests.show', $request) }}" class="block p-3 bg-gray-50 rounded hover:bg-gray-100 transition">
+                                                <div class="flex justify-between items-start">
+                                                    <div>
+                                                        <p class="text-sm font-semibold text-gray-900">Request #{{ $request->id }}</p>
+                                                        <p class="text-xs text-gray-600">{{ $request->user->name }}</p>
+                                                    </div>
+                                                    @if($request->priority === 'urgent')
+                                                        <span class="inline-block px-2 py-1 text-xs font-semibold bg-red-100 text-red-800 rounded">Urgent</span>
+                                                    @else
+                                                        <span class="inline-block px-2 py-1 text-xs font-semibold bg-yellow-100 text-yellow-800 rounded">Normal</span>
+                                                    @endif
+                                                </div>
+                                                <p class="text-xs text-gray-500 mt-1">{{ $request->created_at->diffForHumans() }}</p>
+                                            </a>
+                                            @endforeach
+                                        </div>
+                                    @else
+                                        <p class="text-sm text-gray-600 text-center py-4">No pending requests</p>
                                     @endif
                                 </div>
-                                <svg class="w-12 h-12 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                </svg>
+
+                                <!-- CTA -->
+                                <a href="{{ route('admin.inventory-requests.index', ['status' => 'submitted']) }}" class="w-full inline-block text-center px-4 py-2 bg-blue-600 text-white rounded font-semibold hover:bg-blue-700 transition text-sm">
+                                    Review All Requests
+                                </a>
                             </div>
-                            <a href="{{ route('admin.tools.index') }}" class="mt-4 inline-block text-purple-600 hover:text-purple-800 font-semibold text-sm">
-                                View Active →
-                            </a>
-                        </div>
 
-                        <!-- Tools in Maintenance -->
-                        <div class="bg-white rounded-lg shadow-md border border-gray-200 p-6">
-                            <div class="flex items-center justify-between">
-                                <div>
-                                    <p class="text-sm text-gray-600">In Maintenance</p>
-                                    <p class="text-3xl font-bold text-gray-900">{{ $toolsStats['maintenance'] }}</p>
-                                </div>
-                                <svg class="w-12 h-12 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
-                                </svg>
-                            </div>
-                            <a href="{{ route('admin.tools.index') }}" class="mt-4 inline-block text-purple-600 hover:text-purple-800 font-semibold text-sm">
-                                View Maintenance →
-                            </a>
-                        </div>
-
-                        <!-- Due Today/This Week -->
-                        <div class="bg-white rounded-lg shadow-md border border-gray-200 p-6">
-                            <div class="flex items-center justify-between">
-                                <div>
-                                    <p class="text-sm text-gray-600">Due Soon</p>
-                                    <p class="text-3xl font-bold text-gray-900">{{ $toolsStats['due_today'] + $toolsStats['due_this_week'] }}</p>
-                                    <p class="text-xs text-gray-600 mt-1">{{ $toolsStats['due_today'] }} today</p>
-                                </div>
-                                <svg class="w-12 h-12 text-cyan-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                                </svg>
-                            </div>
-                            <a href="{{ route('admin.tools.index') }}" class="mt-4 inline-block text-purple-600 hover:text-purple-800 font-semibold text-sm">
-                                View Due Items →
-                            </a>
-                        </div>
-
-                        <!-- Recent Activity -->
-                        <div class="bg-white rounded-lg shadow-md border border-gray-200 p-6">
-                            <div class="flex items-center justify-between">
-                                <div>
-                                    <p class="text-sm text-gray-600">Recent Activity</p>
-                                    <p class="text-3xl font-bold text-gray-900">{{ $toolsStats['recent_activity'] }}</p>
-                                    <p class="text-xs text-gray-600 mt-1">Last 24h</p>
-                                </div>
-                                <svg class="w-12 h-12 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                </svg>
-                            </div>
-                            <a href="{{ route('admin.tools.history') }}" class="mt-4 inline-block text-purple-600 hover:text-purple-800 font-semibold text-sm">
-                                View History →
-                            </a>
-                        </div>
-                    </div>
-
-                    <!-- Separator -->
-                    <div class="border-t-2 border-gray-200 my-10"></div>
-
-                    <!-- Inventory Requests Stats -->
-                    <h3 class="text-lg font-bold text-gray-900 mb-6">Inventory Requests Overview</h3>
-                    <div class="grid grid-cols-4 gap-4 mb-8">
-                        <!-- Pending Requests -->
-                        <div class="bg-white rounded-lg shadow-md border border-gray-200 p-6">
-                            <div class="flex items-center justify-between">
-                                <div>
-                                    <p class="text-sm text-gray-600">Pending Requests</p>
-                                    <p class="text-3xl font-bold text-gray-900">{{ $inventoryStats['pending'] }}</p>
-                                </div>
-                                <svg class="w-12 h-12 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                </svg>
-                            </div>
-                            <a href="{{ route('admin.inventory-requests.index', ['status' => 'submitted']) }}" class="mt-4 inline-block text-purple-600 hover:text-purple-800 font-semibold text-sm">
-                                View Requests →
-                            </a>
-                        </div>
-
-                        <!-- Approved (Awaiting Fulfillment) -->
-                        <div class="bg-white rounded-lg shadow-md border border-gray-200 p-6">
-                            <div class="flex items-center justify-between">
-                                <div>
-                                    <p class="text-sm text-gray-600">Awaiting Fulfillment</p>
-                                    <p class="text-3xl font-bold text-gray-900">{{ $inventoryStats['approved'] }}</p>
-                                </div>
-                                <svg class="w-12 h-12 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                </svg>
-                            </div>
-                            <a href="{{ route('admin.inventory-requests.index', ['status' => 'approved']) }}" class="mt-4 inline-block text-purple-600 hover:text-purple-800 font-semibold text-sm">
-                                View Requests →
-                            </a>
-                        </div>
-
-                        <!-- Overdue -->
-                        <div class="bg-white rounded-lg shadow-md border border-red-200 p-6">
-                            <div class="flex items-center justify-between">
-                                <div>
-                                    <p class="text-sm text-gray-600">Overdue</p>
-                                    <p class="text-3xl font-bold text-red-600">{{ $inventoryStats['overdue'] }}</p>
-                                </div>
-                                <svg class="w-12 h-12 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                </svg>
-                            </div>
-                            <a href="{{ route('admin.inventory-requests.index', ['show_overdue' => '1']) }}" class="mt-4 inline-block text-purple-600 hover:text-purple-800 font-semibold text-sm">
-                                View Overdue →
-                            </a>
-                        </div>
-
-                        <!-- Fulfilled Today -->
-                        <div class="bg-white rounded-lg shadow-md border border-gray-200 p-6">
-                            <div class="flex items-center justify-between">
-                                <div>
-                                    <p class="text-sm text-gray-600">Fulfilled Today</p>
-                                    <p class="text-3xl font-bold text-gray-900">{{ $inventoryStats['fulfilled_today'] }}</p>
-                                </div>
-                                <svg class="w-12 h-12 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                </svg>
-                            </div>
-                            <a href="{{ route('admin.inventory-requests.index', ['status' => 'fulfilled']) }}" class="mt-4 inline-block text-purple-600 hover:text-purple-800 font-semibold text-sm">
-                                View Requests →
-                            </a>
-                        </div>
-                    </div>
-
-                    <!-- Quick Actions -->
-                    <h3 class="text-lg font-bold text-gray-900 mb-6">Quick Actions</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        <div class="bg-white rounded-lg shadow-sm border border-gray-100 p-6 hover:shadow-lg hover:border-blue-200 transition">
-                            <div class="flex items-center justify-between mb-4">
-                                <div class="flex items-center justify-center h-12 w-12 rounded-lg bg-blue-100 text-blue-600">
-                                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.856-1.487M15 10a3 3 0 11-6 0 3 3 0 016 0zM6 20a6 6 0 0112 0v2H6v-2z"></path>
+                            <!-- Tile B: Ordering Tasks -->
+                            <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                                <div class="flex items-center justify-between mb-4">
+                                    <div>
+                                        <h3 class="text-lg font-semibold text-gray-900">Ordering Tasks</h3>
+                                        <p class="text-sm text-gray-600">Needing Action</p>
+                                    </div>
+                                    <svg class="h-8 w-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m0 0l8-4m0 0l8 4m0 6l-8 4-8-4m0 0l8-4m0 0l8 4m0 6l-8 4-8-4"></path>
                                     </svg>
                                 </div>
-                            </div>
-                            <h3 class="text-lg font-semibold text-gray-900 mb-2">User Management</h3>
-                            <p class="text-gray-600 text-sm mb-4">Create, edit, disable accounts, and reset passwords</p>
-                            <a href="{{ route('admin.users.index') }}" class="inline-flex items-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition text-sm">
-                                <span>Manage Users</span>
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                                </svg>
-                            </a>
-                        </div>
+                                
+                                <!-- Count Badge -->
+                                <div class="mb-4">
+                                    <div class="flex gap-3">
+                                        <div class="bg-yellow-100 rounded-lg px-3 py-2">
+                                            <p class="text-2xl font-bold text-yellow-900">{{ $orderingTasksPendingCount }}</p>
+                                            <p class="text-xs text-yellow-700">Pending</p>
+                                        </div>
+                                        <div class="bg-blue-100 rounded-lg px-3 py-2">
+                                            <p class="text-2xl font-bold text-blue-900">{{ $orderingTasksWaitingCount }}</p>
+                                            <p class="text-xs text-blue-700">Waiting</p>
+                                        </div>
+                                    </div>
+                                </div>
 
-                        <div class="bg-white rounded-lg shadow-sm border border-gray-100 p-6 hover:shadow-lg hover:border-purple-200 transition">
-                            <div class="flex items-center justify-between mb-4">
-                                <div class="flex items-center justify-center h-12 w-12 rounded-lg bg-purple-100 text-purple-600">
-                                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <!-- Preview List -->
+                                <div class="border-t border-gray-200 pt-4 mb-4">
+                                    @if($orderingTasksPreview->count() > 0)
+                                        <div class="space-y-3">
+                                            @foreach($orderingTasksPreview as $item)
+                                            <a href="{{ route('admin.ordering-tasks.show', $item->orderingTask) }}" class="block p-3 bg-gray-50 rounded hover:bg-gray-100 transition">
+                                                <div class="flex justify-between items-start">
+                                                    <div>
+                                                        <p class="text-sm font-semibold text-gray-900">{{ $item->item_name }}</p>
+                                                        <p class="text-xs text-gray-600">{{ $item->job_number }} / {{ $item->model_number }}</p>
+                                                        <p class="text-xs text-gray-600 mt-1">{{ $item->quantity_received }} / {{ $item->quantity_approved }}</p>
+                                                    </div>
+                                                    <span class="inline-block px-2 py-1 text-xs font-semibold 
+                                                        @if($item->status === 'pending')
+                                                            bg-yellow-100 text-yellow-800
+                                                        @elseif($item->status === 'ordered')
+                                                            bg-blue-100 text-blue-800
+                                                        @elseif($item->status === 'partially_received')
+                                                            bg-orange-100 text-orange-800
+                                                        @else
+                                                            bg-green-100 text-green-800
+                                                        @endif
+                                                        rounded">
+                                                        {{ ucfirst(str_replace('_', ' ', $item->status)) }}
+                                                    </span>
+                                                </div>
+                                            </a>
+                                            @endforeach
+                                        </div>
+                                    @else
+                                        <p class="text-sm text-gray-600 text-center py-4">All items ordered & received</p>
+                                    @endif
+                                </div>
+
+                                <!-- CTA -->
+                                <a href="{{ route('admin.ordering-tasks.index') }}" class="w-full inline-block text-center px-4 py-2 bg-green-600 text-white rounded font-semibold hover:bg-green-700 transition text-sm">
+                                    Open Ordering Tasks
+                                </a>
+                            </div>
+
+                            <!-- Tile C: Broken Tools / Maintenance -->
+                            <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                                <div class="flex items-center justify-between mb-4">
+                                    <div>
+                                        <h3 class="text-lg font-semibold text-gray-900">Maintenance</h3>
+                                        <p class="text-sm text-gray-600">Tools Needing Repair</p>
+                                    </div>
+                                    <svg class="h-8 w-8 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
                                     </svg>
                                 </div>
-                            </div>
-                            <h3 class="text-lg font-semibold text-gray-900 mb-2">System Settings</h3>
-                            <p class="text-gray-600 text-sm mb-4">Configure system-wide settings and preferences</p>
-                            <button disabled class="inline-flex items-center space-x-2 bg-gray-300 text-gray-500 font-medium py-2 px-4 rounded-lg cursor-not-allowed text-sm">
-                                <span>Coming Soon</span>
-                            </button>
-                        </div>
+                                
+                                <!-- Count Badge -->
+                                <div class="mb-4">
+                                    <div class="bg-orange-100 rounded-lg px-3 py-2">
+                                        <p class="text-2xl font-bold text-orange-900">{{ $maintenanceToolsCount }}</p>
+                                        <p class="text-xs text-orange-700">In Maintenance</p>
+                                    </div>
+                                </div>
 
-                        <div class="bg-white rounded-lg shadow-sm border border-gray-100 p-6 hover:shadow-lg hover:border-green-200 transition">
-                            <div class="flex items-center justify-between mb-4">
-                                <div class="flex items-center justify-center h-12 w-12 rounded-lg bg-green-100 text-green-600">
-                                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                <!-- Preview List -->
+                                <div class="border-t border-gray-200 pt-4 mb-4">
+                                    @if($maintenanceToolsPreview->count() > 0)
+                                        <div class="space-y-3">
+                                            @foreach($maintenanceToolsPreview as $tool)
+                                            <a href="{{ route('admin.tools.show', $tool) }}" class="block p-3 bg-gray-50 rounded hover:bg-gray-100 transition">
+                                                <div class="flex justify-between items-start">
+                                                    <div>
+                                                        <p class="text-sm font-semibold text-gray-900">{{ $tool->name }}</p>
+                                                        <p class="text-xs text-gray-600">{{ $tool->category ?? '-' }}</p>
+                                                    </div>
+                                                    <span class="inline-block px-2 py-1 text-xs font-semibold bg-orange-100 text-orange-800 rounded">Maintenance</span>
+                                                </div>
+                                                <p class="text-xs text-gray-500 mt-1">Updated {{ $tool->updated_at->diffForHumans() }}</p>
+                                            </a>
+                                            @endforeach
+                                        </div>
+                                    @else
+                                        <p class="text-sm text-gray-600 text-center py-4">No tools in maintenance</p>
+                                    @endif
+                                </div>
+
+                                <!-- CTA -->
+                                <a href="{{ route('admin.tools.index', ['maintenance' => 'true']) }}" class="w-full inline-block text-center px-4 py-2 bg-orange-600 text-white rounded font-semibold hover:bg-orange-700 transition text-sm">
+                                    View Maintenance Queue
+                                </a>
+                            </div>
+
+                            <!-- Tile D: Due Today / Overdue Returns -->
+                            <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                                <div class="flex items-center justify-between mb-4">
+                                    <div>
+                                        <h3 class="text-lg font-semibold text-gray-900">Tool Returns</h3>
+                                        <p class="text-sm text-gray-600">Due Today & Overdue</p>
+                                    </div>
+                                    <svg class="h-8 w-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                     </svg>
                                 </div>
+                                
+                                <!-- Count Badge -->
+                                <div class="mb-4">
+                                    <div class="flex gap-3">
+                                        <div class="bg-yellow-100 rounded-lg px-3 py-2">
+                                            <p class="text-2xl font-bold text-yellow-900">{{ $dueTodayCount }}</p>
+                                            <p class="text-xs text-yellow-700">Due Today</p>
+                                        </div>
+                                        <div class="bg-red-100 rounded-lg px-3 py-2">
+                                            <p class="text-2xl font-bold text-red-900">{{ $overdueCount }}</p>
+                                            <p class="text-xs text-red-700">Overdue</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Preview List -->
+                                <div class="border-t border-gray-200 pt-4 mb-4">
+                                    @if($dueCheckoutsPreview->count() > 0)
+                                        <div class="space-y-3">
+                                            @foreach($dueCheckoutsPreview as $checkout)
+                                            <a href="{{ route('admin.tools.show', $checkout->tool) }}" class="block p-3 bg-gray-50 rounded hover:bg-gray-100 transition">
+                                                <div class="flex justify-between items-start">
+                                                    <div>
+                                                        <p class="text-sm font-semibold text-gray-900">{{ $checkout->tool->name }}</p>
+                                                        <p class="text-xs text-gray-600">{{ $checkout->user->name }}</p>
+                                                    </div>
+                                                    @if($checkout->return_due_date->isPast())
+                                                        <span class="inline-block px-2 py-1 text-xs font-semibold bg-red-100 text-red-800 rounded">Overdue</span>
+                                                    @else
+                                                        <span class="inline-block px-2 py-1 text-xs font-semibold bg-yellow-100 text-yellow-800 rounded">Due Today</span>
+                                                    @endif
+                                                </div>
+                                                <p class="text-xs {{ $checkout->return_due_date->isPast() ? 'text-red-600' : 'text-gray-500' }} mt-1">
+                                                    Due: {{ $checkout->return_due_date->format('M d, Y') }}
+                                                </p>
+                                            </a>
+                                            @endforeach
+                                        </div>
+                                    @else
+                                        <p class="text-sm text-gray-600 text-center py-4">No tools due today or overdue</p>
+                                    @endif
+                                </div>
+
+                                <!-- CTA -->
+                                <a href="{{ route('admin.tools.index', ['checkouts' => 'overdue']) }}" class="w-full inline-block text-center px-4 py-2 bg-red-600 text-white rounded font-semibold hover:bg-red-700 transition text-sm">
+                                    View All Returns
+                                </a>
                             </div>
-                            <h3 class="text-lg font-semibold text-gray-900 mb-2">Reports & Analytics</h3>
-                            <p class="text-gray-600 text-sm mb-4">View system reports, analytics, and insights</p>
-                            <button disabled class="inline-flex items-center space-x-2 bg-gray-300 text-gray-500 font-medium py-2 px-4 rounded-lg cursor-not-allowed text-sm">
-                                <span>Coming Soon</span>
-                            </button>
+                        </div>
+                    </div>
+
+                    <!-- ===== 3) INVENTORY REQUESTS QUEUE ===== -->
+                    <div class="mb-8">
+                        <div class="flex justify-between items-center mb-4">
+                            <h2 class="text-xl font-bold text-gray-900">Inventory Requests Queue</h2>
+                            <a href="{{ route('admin.inventory-requests.index') }}" class="text-blue-600 hover:text-blue-800 font-semibold text-sm">View All</a>
+                        </div>
+                        <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+                            <!-- Tabs -->
+                            <div class="flex border-b border-gray-200">
+                                <a href="{{ route('admin.dashboard') }}" class="px-6 py-3 text-sm font-semibold text-gray-700 border-b-2 border-blue-600 text-blue-600">
+                                    Pending
+                                </a>
+                                <a href="{{ route('admin.dashboard') }}" class="px-6 py-3 text-sm font-semibold text-gray-500 hover:text-gray-700">
+                                    Approved
+                                </a>
+                                <a href="{{ route('admin.dashboard') }}" class="px-6 py-3 text-sm font-semibold text-gray-500 hover:text-gray-700">
+                                    All
+                                </a>
+                            </div>
+
+                            <!-- Table -->
+                            <div class="overflow-x-auto">
+                                <table class="w-full">
+                                    <thead class="bg-gray-50 border-b border-gray-200">
+                                        <tr>
+                                            <th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Request #</th>
+                                            <th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Employee</th>
+                                            <th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Priority</th>
+                                            <th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Status</th>
+                                            <th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Submitted</th>
+                                            <th class="px-6 py-3 text-center text-xs font-semibold text-gray-700 uppercase">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="divide-y divide-gray-200">
+                                        @forelse($latestInventoryRequests as $request)
+                                        <tr class="hover:bg-gray-50">
+                                            <td class="px-6 py-4 text-sm font-semibold text-gray-900">#{{ $request->id }}</td>
+                                            <td class="px-6 py-4 text-sm text-gray-600">{{ $request->user->name }}</td>
+                                            <td class="px-6 py-4 text-sm">
+                                                @if($request->priority === 'urgent')
+                                                    <span class="inline-block px-2 py-1 text-xs font-semibold bg-red-100 text-red-800 rounded">Urgent</span>
+                                                @else
+                                                    <span class="inline-block px-2 py-1 text-xs font-semibold bg-gray-100 text-gray-800 rounded">Normal</span>
+                                                @endif
+                                            </td>
+                                            <td class="px-6 py-4 text-sm">
+                                                @php
+                                                    $statusClasses = [
+                                                        'submitted' => 'bg-yellow-100 text-yellow-800',
+                                                        'approved' => 'bg-blue-100 text-blue-800',
+                                                        'denied' => 'bg-red-100 text-red-800',
+                                                        'fulfilled' => 'bg-green-100 text-green-800',
+                                                    ];
+                                                @endphp
+                                                <span class="inline-block px-2 py-1 text-xs font-semibold {{ $statusClasses[$request->status] ?? 'bg-gray-100 text-gray-800' }} rounded">
+                                                    {{ ucfirst($request->status) }}
+                                                </span>
+                                            </td>
+                                            <td class="px-6 py-4 text-sm text-gray-600">{{ $request->created_at->format('M d, Y') }}</td>
+                                            <td class="px-6 py-4 text-sm text-center">
+                                                <a href="{{ route('admin.inventory-requests.show', $request) }}" class="text-blue-600 hover:text-blue-800 font-semibold">
+                                                    View
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        @empty
+                                        <tr>
+                                            <td colspan="6" class="px-6 py-8 text-center text-gray-600">
+                                                No inventory requests found
+                                            </td>
+                                        </tr>
+                                        @endforelse
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ===== 4) TOOLS SUMMARY ===== -->
+                    <div class="mb-8">
+                        <div class="flex justify-between items-center mb-4">
+                            <h2 class="text-xl font-bold text-gray-900">Tools Inventory Summary</h2>
+                            <a href="{{ route('admin.tools.index') }}" class="text-blue-600 hover:text-blue-800 font-semibold text-sm">Manage Tools</a>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="text-gray-600 text-sm font-medium">Available</p>
+                                        <p class="text-3xl font-bold text-gray-900 mt-2">{{ $toolsStats['total'] - $toolsStats['checked_out'] - $toolsStats['maintenance'] }}</p>
+                                    </div>
+                                    <div class="flex items-center justify-center h-14 w-14 rounded-lg bg-green-100 text-green-600">
+                                        <svg class="h-7 w-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="text-gray-600 text-sm font-medium">Checked Out</p>
+                                        <p class="text-3xl font-bold text-gray-900 mt-2">{{ $toolsStats['checked_out'] }}</p>
+                                    </div>
+                                    <div class="flex items-center justify-center h-14 w-14 rounded-lg bg-blue-100 text-blue-600">
+                                        <svg class="h-7 w-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m0 0l8-4m0 0l8 4m0 6l-8 4-8-4m0 0l8-4m0 0l8 4m0 6l-8 4-8-4"></path>
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="text-gray-600 text-sm font-medium">Maintenance</p>
+                                        <p class="text-3xl font-bold text-gray-900 mt-2">{{ $toolsStats['maintenance'] }}</p>
+                                    </div>
+                                    <div class="flex items-center justify-center h-14 w-14 rounded-lg bg-orange-100 text-orange-600">
+                                        <svg class="h-7 w-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ===== 5) MANAGE USERS OVERVIEW ===== -->
+                    <div class="mb-8">
+                        <h2 class="text-xl font-bold text-gray-900 mb-4">Manage Users Overview</h2>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="text-gray-600 text-sm font-medium">Total Users</p>
+                                        <p class="text-3xl font-bold text-gray-900 mt-2">{{ $totalUsers }}</p>
+                                    </div>
+                                    <div class="flex items-center justify-center h-14 w-14 rounded-lg bg-blue-100 text-blue-600">
+                                        <svg class="h-7 w-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.856-1.487M15 10a3 3 0 11-6 0 3 3 0 016 0zM6 20a6 6 0 0112 0v2H6v-2z"></path>
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="text-gray-600 text-sm font-medium">Admins</p>
+                                        <p class="text-3xl font-bold text-gray-900 mt-2">{{ $adminCount }}</p>
+                                    </div>
+                                    <div class="flex items-center justify-center h-14 w-14 rounded-lg bg-purple-100 text-purple-600">
+                                        <svg class="h-7 w-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path>
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 flex flex-col justify-between">
+                                <div class="mb-4">
+                                    <p class="text-gray-600 text-sm font-medium">Employees</p>
+                                    <p class="text-3xl font-bold text-gray-900 mt-2">{{ $employeeCount }}</p>
+                                </div>
+                                <a href="{{ route('admin.users.index') }}" class="inline-block px-4 py-2 bg-indigo-600 text-white rounded font-semibold hover:bg-indigo-700 transition text-sm text-center">
+                                    Manage Users
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>

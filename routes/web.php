@@ -9,10 +9,12 @@ use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\ToolController;
 use App\Http\Controllers\ToolCheckoutController;
 use App\Http\Controllers\InventoryRequestController;
+use App\Http\Controllers\VehicleController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\DocumentController as AdminDocumentController;
 use App\Http\Controllers\Admin\ToolController as AdminToolController;
 use App\Http\Controllers\Admin\InventoryRequestController as AdminInventoryRequestController;
+use App\Http\Controllers\Admin\VehicleController as AdminVehicleController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\DirectAccessController;
 use App\Http\Controllers\Admin\ApiTokenController;
@@ -100,6 +102,9 @@ Route::middleware(['auth', 'employee', 'organization'])->group(function () {
     Route::post('/inventory-requests/{inventoryRequest}/submit', [InventoryRequestController::class, 'submit'])->name('inventory-requests.submit');
     Route::post('/inventory-requests/{inventoryRequest}/cancel', [InventoryRequestController::class, 'cancel'])->name('inventory-requests.cancel');
 
+    // Vehicles
+    Route::get('/vehicles', [VehicleController::class, 'index'])->name('vehicles.index');
+
     // Notifications
     Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
     Route::get('/notifications/unread-count', [NotificationController::class, 'unreadCount'])->name('notifications.unreadCount');
@@ -124,6 +129,9 @@ Route::middleware(['auth', 'admin', 'organization'])->prefix('admin')->name('adm
     // Document Management
     Route::get('/documents', [AdminDocumentController::class, 'index'])->name('documents.index');
     Route::post('/documents', [AdminDocumentController::class, 'store'])->name('documents.store');
+    Route::post('/documents/upload', [AdminDocumentController::class, 'uploadStore'])->name('documents.uploadStore');
+    Route::post('/documents/assign', [AdminDocumentController::class, 'assignDocument'])->name('documents.assign');
+    Route::get('/documents/employees', [AdminDocumentController::class, 'getEmployees'])->name('documents.employees');
     Route::get('/documents/{document}', [AdminDocumentController::class, 'show'])->name('documents.show');
     Route::get('/documents/{document}/download', [AdminDocumentController::class, 'download'])->name('documents.download');
     Route::delete('/documents/{document}', [AdminDocumentController::class, 'destroy'])->name('documents.destroy');
@@ -133,8 +141,10 @@ Route::middleware(['auth', 'admin', 'organization'])->prefix('admin')->name('adm
     Route::post('/tools/{tool}/toggle-maintenance', [AdminToolController::class, 'toggleMaintenance'])->name('tools.toggleMaintenance');
     Route::post('/tools/{tool}/force-return', [AdminToolController::class, 'forceReturn'])->name('tools.forceReturn');
     Route::get('/tools', [AdminToolController::class, 'index'])->name('tools.index');
+    Route::get('/tools/create', [AdminToolController::class, 'create'])->name('tools.create');
     Route::post('/tools', [AdminToolController::class, 'store'])->name('tools.store');
     Route::get('/tools/{tool}', [AdminToolController::class, 'show'])->name('tools.show');
+    Route::get('/tools/{tool}/edit', [AdminToolController::class, 'edit'])->name('tools.edit');
     Route::put('/tools/{tool}', [AdminToolController::class, 'update'])->name('tools.update');
     Route::delete('/tools/{tool}', [AdminToolController::class, 'destroy'])->name('tools.destroy');
 
@@ -145,6 +155,16 @@ Route::middleware(['auth', 'admin', 'organization'])->prefix('admin')->name('adm
     Route::post('/inventory-requests/{inventoryRequest}/deny', [AdminInventoryRequestController::class, 'deny'])->name('inventory-requests.deny');
     Route::post('/inventory-requests/{inventoryRequest}/fulfill', [AdminInventoryRequestController::class, 'fulfill'])->name('inventory-requests.fulfill');
     Route::post('/inventory-requests/{inventoryRequest}/add-note', [AdminInventoryRequestController::class, 'addNote'])->name('inventory-requests.addNote');
+
+    // Ordering Tasks
+    Route::get('/ordering-tasks', [\App\Http\Controllers\Admin\OrderingTaskController::class, 'index'])->name('ordering-tasks.index');
+    Route::get('/ordering-tasks/{orderingTask}', [\App\Http\Controllers\Admin\OrderingTaskController::class, 'show'])->name('ordering-tasks.show');
+    Route::post('/ordering-task-items/{id}/mark-ordered', [\App\Http\Controllers\Admin\OrderingTaskController::class, 'markOrdered'])->name('ordering-task-items.markOrdered');
+    Route::post('/ordering-task-items/{id}/receive', [\App\Http\Controllers\Admin\OrderingTaskController::class, 'receive'])->name('ordering-task-items.receive');
+    Route::delete('/ordering-task-items/{id}', [\App\Http\Controllers\Admin\OrderingTaskController::class, 'cancelItem'])->name('ordering-task-items.cancel');
+
+    // Vehicles
+    Route::get('/vehicles', [AdminVehicleController::class, 'index'])->name('vehicles.index');
 
     // Direct Access Token
     Route::get('/direct-access', [DirectAccessController::class, 'show'])->name('direct-access.show');

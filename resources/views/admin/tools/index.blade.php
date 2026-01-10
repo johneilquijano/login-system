@@ -78,8 +78,9 @@
                                         <th class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wide">Tool Name</th>
                                         <th class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wide">Category</th>
                                         <th class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wide">Status</th>
+                                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wide">Quantity</th>
                                         <th class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wide">Assigned To</th>
-                                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wide">Checked Out Date</th>
+                                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wide">Due Date</th>
                                         <th class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wide">Condition</th>
                                         <th class="px-6 py-4 text-center text-xs font-semibold text-gray-700 uppercase tracking-wide">Actions</th>
                                     </tr>
@@ -124,21 +125,53 @@
                                             </span>
                                         </td>
 
+                                        <!-- Quantity -->
+                                        <td class="px-6 py-4">
+                                            @php
+                                                $available = $tool->getAvailableQuantity();
+                                                $total = $tool->quantity;
+                                            @endphp
+                                            <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold {{ $available > 0 ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
+                                                {{ $available }} / {{ $total }}
+                                            </span>
+                                        </td>
+
                                         <!-- Assigned To -->
                                         <td class="px-6 py-4">
                                             @php
-                                                $employee = $tool->getAssignedEmployee();
+                                                $activeCheckouts = $tool->getActiveCheckouts();
+                                                $checkoutCount = $activeCheckouts->count();
                                             @endphp
-                                            <p class="text-sm font-semibold text-gray-900">{{ $employee ? $employee->full_name : '—' }}</p>
+                                            @if($checkoutCount > 0)
+                                                <div class="flex items-center gap-2">
+                                                    <span class="text-sm font-semibold text-gray-900">{{ $checkoutCount }} active checkout{{ $checkoutCount > 1 ? 's' : '' }}</span>
+                                                    <button onclick="toggleCheckoutDetails('checkouts-{{ $tool->id }}')" class="text-blue-600 hover:text-blue-900 transition-colors" title="Expand">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                                                        </svg>
+                                                    </button>
+                                                </div>
+                                                <!-- Expandable checkout details -->
+                                                <div id="checkouts-{{ $tool->id }}" class="hidden mt-3 pt-3 border-t border-gray-200 space-y-2">
+                                                    @foreach($activeCheckouts as $checkout)
+                                                        <div class="text-sm text-gray-700 pl-4">
+                                                            <p class="font-medium">{{ $checkout->user->full_name }}</p>
+                                                            <p class="text-xs text-gray-500">Due: {{ $checkout->return_due_date?->format('M d, Y') ?? '—' }}</p>
+                                                        </div>
+                                                    @endforeach
+                                                </div>
+                                            @else
+                                                <p class="text-sm text-gray-500">—</p>
+                                            @endif
                                         </td>
 
-                                        <!-- Checked Out Date -->
+                                        <!-- Due Date -->
                                         <td class="px-6 py-4">
                                             @php
-                                                $checkout = $tool->currentCheckout();
+                                                $earliestDue = $tool->getEarliestDueDate();
                                             @endphp
-                                            @if($checkout && $checkout->checked_out_at)
-                                                <p class="text-sm text-gray-900">{{ $checkout->checked_out_at->format('M d, Y') }}</p>
+                                            @if($earliestDue)
+                                                <p class="text-sm text-gray-900">{{ $earliestDue->format('M d, Y') }}</p>
                                             @else
                                                 <p class="text-sm text-gray-500">—</p>
                                             @endif
@@ -188,7 +221,7 @@
                                     </tr>
                                     @empty
                                     <tr>
-                                        <td colspan="8" class="px-6 py-16 text-center">
+                                        <td colspan="9" class="px-6 py-16 text-center">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="w-16 h-16 text-gray-400 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
                                             </svg>
@@ -251,6 +284,12 @@
                             <option value="fair">Fair</option>
                             <option value="needs_repair">Needs Repair</option>
                         </select>
+                    </div>
+
+                    <!-- Quantity -->
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Quantity *</label>
+                        <input type="number" id="toolQuantity" name="quantity" min="1" value="1" required class="w-full px-4 py-2.5 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
                     </div>
 
                     <!-- Description -->
@@ -516,6 +555,7 @@
                     document.getElementById('toolName').value = tool.name;
                     document.getElementById('toolCategory').value = tool.category;
                     document.getElementById('toolCondition').value = tool.condition;
+                    document.getElementById('toolQuantity').value = tool.quantity || 1;
                     document.getElementById('toolDescription').value = tool.description || '';
                     document.getElementById('toolNotes').value = tool.notes || '';
                     document.getElementById('toolSerial').value = tool.serial_number || '';
@@ -653,6 +693,14 @@
             if (e.target.id === 'viewToolModal') closeViewToolModal();
             if (e.target.id === 'forceReturnModal') closeForceReturnModal();
         });
+
+        // Toggle checkout details visibility
+        function toggleCheckoutDetails(elementId) {
+            const element = document.getElementById(elementId);
+            if (element) {
+                element.classList.toggle('hidden');
+            }
+        }
 
         // Search on typing with debounce
         let searchTimeout;

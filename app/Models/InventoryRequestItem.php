@@ -15,6 +15,8 @@ class InventoryRequestItem extends Model
         'inventory_request_id',
         'item_name',
         'category',
+        'job_number',
+        'model_number',
         'quantity',
         'notes',
         'fulfilled_quantity',

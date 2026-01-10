@@ -36,12 +36,20 @@
                                 <h3 class="text-2xl font-bold text-gray-900">All Documents</h3>
                                 <p class="text-sm text-gray-600 mt-2">{{ $documents->total() }} document{{ $documents->total() !== 1 ? 's' : '' }} in your organization</p>
                             </div>
-                            <button onclick="openAssignModal()" class="bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300 text-sm flex items-center gap-2 shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
-                                </svg>
-                                <span>Assign Document</span>
-                            </button>
+                            <div class="flex gap-3">
+                                <button onclick="openUploadModal()" class="bg-gradient-to-r from-purple-600 to-purple-500 hover:from-purple-700 hover:to-purple-600 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300 text-sm flex items-center gap-2 shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10" />
+                                    </svg>
+                                    <span>Upload Document</span>
+                                </button>
+                                <button onclick="openAssignModal()" class="bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300 text-sm flex items-center gap-2 shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+                                    </svg>
+                                    <span>Assign Document</span>
+                                </button>
+                            </div>
                         </div>
 
                         <!-- Search, Filter, and Sort Controls (Single Row) -->
@@ -144,9 +152,15 @@
                                             </a>
                                         </td>
                                         <td class="px-6 py-4 text-sm text-gray-700">
-                                            <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-blue-100 text-blue-700 border border-blue-200">
-                                                {{ $doc->user->name ?? 'Unassigned' }}
-                                            </span>
+                                            @if($doc->user)
+                                                <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-blue-100 text-blue-700 border border-blue-200">
+                                                    {{ $doc->user->name }}
+                                                </span>
+                                            @else
+                                                <button onclick="openQuickAssignModal('{{ $doc->id }}', '{{ $doc->title }}')" class="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-gray-100 text-gray-700 border border-gray-300 hover:bg-gray-200 hover:border-gray-400 transition-all cursor-pointer">
+                                                    Unassigned
+                                                </button>
+                                            @endif
                                         </td>
                                         <td class="px-6 py-4 text-sm text-gray-700">
                                             <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-purple-100 text-purple-700 border border-purple-200">
@@ -229,6 +243,82 @@
     </div>
 
     <!-- Assign Document Modal -->
+    <!-- Upload Document Modal -->
+    <div id="uploadModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl p-8 max-w-2xl w-full max-h-[90vh] overflow-y-auto animate-in fade-in scale-95">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-bold text-gray-900">Upload Document</h3>
+                <button onclick="closeUploadModal()" class="text-gray-400 hover:text-gray-600 transition-all">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+
+            <form id="uploadForm" action="{{ route('admin.documents.uploadStore') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
+                @csrf
+
+                <!-- Document Title -->
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Document Title *</label>
+                    <input type="text" name="title" required class="w-full px-4 py-2.5 bg-gray-50 border border-gray-300 rounded-xl text-gray-900 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all" placeholder="e.g., Employee Handbook">
+                </div>
+
+                <!-- Document Description -->
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Description</label>
+                    <textarea name="description" rows="3" class="w-full px-4 py-2.5 bg-gray-50 border border-gray-300 rounded-xl text-gray-900 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all" placeholder="Optional description"></textarea>
+                </div>
+
+                <!-- Drag & Drop Zone -->
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Upload File *</label>
+                    <div id="uploadDropZone" class="border-2 border-dashed border-purple-300 rounded-xl p-8 text-center cursor-pointer hover:border-purple-500 hover:bg-purple-50 transition-all bg-purple-50" onclick="document.getElementById('uploadFileInput').click()">
+                        <svg id="uploadIcon" xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 text-purple-400 mx-auto mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                        </svg>
+                        <p id="uploadText" class="text-gray-700 font-medium">Drag and drop your file here, or <span class="text-purple-600">click to browse</span></p>
+                        <p class="text-gray-500 text-sm mt-1">PDF, DOC, DOCX, JPG, PNG, GIF (Max 10MB)</p>
+                        <input type="file" name="document" id="uploadFileInput" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.gif" required class="hidden">
+                    </div>
+                    <div id="uploadFileInfo" class="mt-3 hidden">
+                        <div class="bg-green-50 border border-green-200 rounded-lg p-3">
+                            <p class="text-sm text-gray-600">Selected: <span id="uploadFileName" class="font-semibold text-green-700"></span></p>
+                            <div id="uploadProgress" class="mt-2 hidden">
+                                <div class="w-full bg-gray-200 rounded-full h-2">
+                                    <div id="uploadProgressBar" class="bg-purple-600 h-2 rounded-full" style="width: 0%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Form Buttons -->
+                <div class="flex gap-3 pt-4 border-t border-gray-200">
+                    <button type="button" onclick="closeUploadModal()" class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2.5 px-4 rounded-xl transition-all">
+                        Cancel
+                    </button>
+                    <button type="submit" id="uploadSubmitBtn" class="flex-1 bg-gradient-to-r from-purple-600 to-purple-500 hover:from-purple-700 hover:to-purple-600 text-white font-semibold py-2.5 px-4 rounded-xl transition-all shadow-md hover:shadow-lg">
+                        Upload Document
+                    </button>
+                </div>
+
+                <!-- Success Message -->
+                <div id="uploadSuccess" class="hidden mt-4 p-4 bg-green-50 border border-green-200 rounded-lg">
+                    <div class="flex items-center gap-3">
+                        <svg class="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                        </svg>
+                        <div>
+                            <p class="font-semibold text-green-700">Upload complete!</p>
+                            <p class="text-sm text-green-600">Your document has been uploaded successfully.</p>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <div id="assignModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
         <div class="bg-white rounded-2xl shadow-2xl p-8 max-w-2xl w-full max-h-96 overflow-y-auto animate-in fade-in scale-95">
             <div class="flex justify-between items-center mb-6">
@@ -324,8 +414,40 @@
         </div>
     </div>
 
+    <!-- Quick Assign Modal (NEW) -->
+    <div id="quickAssignModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-bold text-gray-900">Assign Document</h3>
+                <button onclick="closeQuickAssignModal()" class="text-gray-400 hover:text-gray-600">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+
+            <p class="text-sm text-gray-600 mb-4">Assign to: <span id="quickAssignDocName" class="font-semibold text-gray-900"></span></p>
+
+            <!-- Search -->
+            <input type="text" id="employeeSearch" placeholder="Search employees..." class="w-full px-4 py-2.5 bg-gray-50 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500">
+
+            <!-- Employee List -->
+            <div id="employeeListContainer" class="max-h-96 overflow-y-auto border border-gray-200 rounded-lg p-2 min-h-64 flex items-center justify-center">
+                <p class="text-gray-500 text-sm">Loading employees...</p>
+            </div>
+
+            <div class="flex gap-3 pt-4 border-t border-gray-200">
+                <button type="button" onclick="closeQuickAssignModal()" class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2.5 px-4 rounded-lg">
+                    Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+
     <script>
         let deleteDocumentId = null;
+        let quickAssignDocumentId = null;
+        let allEmployees = [];
 
         function openAssignModal() {
             document.getElementById('assignModal').classList.remove('hidden');
@@ -335,6 +457,145 @@
             document.getElementById('assignModal').classList.add('hidden');
             document.getElementById('assignForm').reset();
             document.getElementById('fileInfo').classList.add('hidden');
+        }
+
+        // ===== QUICK ASSIGN MODAL =====
+        function openQuickAssignModal(docId, docTitle) {
+            quickAssignDocumentId = docId;
+            document.getElementById('quickAssignDocName').textContent = docTitle;
+            document.getElementById('quickAssignModal').classList.remove('hidden');
+            document.getElementById('employeeSearch').value = '';
+            loadAndDisplayEmployees();
+        }
+
+        function closeQuickAssignModal() {
+            quickAssignDocumentId = null;
+            document.getElementById('quickAssignModal').classList.add('hidden');
+            allEmployees = [];
+        }
+
+        function loadAndDisplayEmployees() {
+            const container = document.getElementById('employeeListContainer');
+            container.innerHTML = '<p class="text-gray-500 text-sm">Loading...</p>';
+            
+            fetch('{{ route("admin.documents.employees") }}')
+                .then(r => r.json())
+                .then(data => {
+                    console.log('Employees loaded:', data.employees.length);
+                    allEmployees = data.employees || [];
+                    renderEmployeeList(allEmployees);
+                })
+                .catch(err => {
+                    console.error('Error loading employees:', err);
+                    container.innerHTML = '<p class="text-red-500 text-sm">Error loading employees</p>';
+                });
+        }
+
+        function renderEmployeeList(employees) {
+            const container = document.getElementById('employeeListContainer');
+            
+            if (!employees || employees.length === 0) {
+                container.innerHTML = '<p class="text-gray-500 text-sm text-center py-8">No employees found</p>';
+                return;
+            }
+
+            let html = '<div class="divide-y divide-gray-200">';
+            employees.forEach(emp => {
+                const initial = emp.name.charAt(0).toUpperCase();
+                const colors = ['bg-blue-500', 'bg-indigo-500', 'bg-purple-500', 'bg-pink-500', 'bg-green-500', 'bg-teal-500'];
+                const colorIndex = emp.id % colors.length;
+                const bgColor = colors[colorIndex];
+                
+                html += `
+                    <button type="button" onclick="assignDocumentToEmployee(${emp.id})" class="w-full px-4 py-3 hover:bg-gray-50 transition-colors text-left flex items-center gap-3 group">
+                        <div class="w-10 h-10 rounded-full ${bgColor} text-white flex items-center justify-center text-sm font-semibold flex-shrink-0">
+                            ${initial}
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <p class="font-semibold text-gray-900 group-hover:text-blue-600">${emp.name}</p>
+                            <p class="text-xs text-gray-500 truncate">${emp.email}</p>
+                        </div>
+                        <div class="text-gray-400 group-hover:text-blue-500 flex-shrink-0">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                            </svg>
+                        </div>
+                    </button>
+                `;
+            });
+            html += '</div>';
+            
+            container.innerHTML = html;
+            console.log('Rendered ' + employees.length + ' employees');
+        }
+
+        function filterEmployees() {
+            const searchTerm = document.getElementById('employeeSearch').value.toLowerCase();
+            if (!searchTerm) {
+                renderEmployeeList(allEmployees);
+                return;
+            }
+
+            const filtered = allEmployees.filter(emp => 
+                emp.name.toLowerCase().includes(searchTerm) || 
+                emp.email.toLowerCase().includes(searchTerm)
+            );
+            renderEmployeeList(filtered);
+        }
+
+        function assignDocumentToEmployee(employeeId) {
+            if (!quickAssignDocumentId) {
+                alert('Error: Document ID not set');
+                return;
+            }
+
+            console.log('Assigning document', quickAssignDocumentId, 'to employee', employeeId);
+
+            fetch('{{ route("admin.documents.assign") }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                },
+                body: JSON.stringify({
+                    document_id: quickAssignDocumentId,
+                    user_id: employeeId
+                })
+            })
+            .then(r => r.json())
+            .then(data => {
+                console.log('Assignment response:', data);
+                if (data.success) {
+                    closeQuickAssignModal();
+                    location.reload();
+                } else {
+                    alert('Error: ' + (data.message || 'Unknown error'));
+                }
+            })
+            .catch(err => {
+                console.error('Assignment error:', err);
+                alert('Error assigning document: ' + err.message);
+            });
+        }
+
+        // Search listener
+        document.getElementById('employeeSearch')?.addEventListener('keyup', filterEmployees);
+
+        function openUploadModal() {
+            document.getElementById('uploadModal').classList.remove('hidden');
+        }
+
+        function closeUploadModal() {
+            document.getElementById('uploadModal').classList.add('hidden');
+            resetUploadForm();
+        }
+
+        function resetUploadForm() {
+            document.getElementById('uploadForm').reset();
+            document.getElementById('uploadFileInfo').classList.add('hidden');
+            document.getElementById('uploadSuccess').classList.add('hidden');
+            document.getElementById('uploadProgress').classList.add('hidden');
+            document.getElementById('uploadSubmitBtn').disabled = false;
         }
 
         function openDeleteModal(docId, docTitle) {
@@ -471,6 +732,133 @@
         document.getElementById('deleteModal')?.addEventListener('click', function(e) {
             if (e.target === this) {
                 closeDeleteModal();
+            }
+        });
+
+        // Upload Modal - Close when clicking outside
+        document.getElementById('uploadModal')?.addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeUploadModal();
+            }
+        });
+
+        // Quick Assign Modal - Close when clicking outside
+        document.getElementById('quickAssignModal')?.addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeQuickAssignModal();
+            }
+        });
+
+        // =====  DRAG & DROP UPLOAD FUNCTIONALITY =====
+        const uploadDropZone = document.getElementById('uploadDropZone');
+        const uploadFileInput = document.getElementById('uploadFileInput');
+        const uploadFileInfo = document.getElementById('uploadFileInfo');
+        const uploadFileName = document.getElementById('uploadFileName');
+
+        if (uploadDropZone) {
+            // File input change
+            uploadFileInput.addEventListener('change', handleFileSelect);
+
+            // Drag over
+            uploadDropZone.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                uploadDropZone.classList.add('border-purple-500', 'bg-purple-100');
+                uploadDropZone.classList.remove('border-purple-300', 'hover:border-purple-500', 'hover:bg-purple-50');
+            });
+
+            // Drag leave
+            uploadDropZone.addEventListener('dragleave', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                uploadDropZone.classList.remove('border-purple-500', 'bg-purple-100');
+                uploadDropZone.classList.add('border-purple-300', 'hover:border-purple-500', 'hover:bg-purple-50');
+            });
+
+            // Drop
+            uploadDropZone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                uploadDropZone.classList.remove('border-purple-500', 'bg-purple-100');
+                uploadDropZone.classList.add('border-purple-300', 'hover:border-purple-500', 'hover:bg-purple-50');
+                
+                const files = e.dataTransfer.files;
+                if (files.length > 0) {
+                    uploadFileInput.files = files;
+                    handleFileSelect({ target: { files: files } });
+                }
+            });
+        }
+
+        function handleFileSelect(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            // Validate file size (10MB max)
+            const maxSize = 10 * 1024 * 1024; // 10MB
+            if (file.size > maxSize) {
+                alert('File size exceeds 10MB limit');
+                uploadFileInput.value = '';
+                uploadFileInfo.classList.add('hidden');
+                return;
+            }
+
+            // Validate file type
+            const allowedTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'image/jpeg', 'image/png', 'image/gif'];
+            if (!allowedTypes.includes(file.type)) {
+                alert('Invalid file type. Allowed: PDF, DOC, DOCX, JPG, PNG, GIF');
+                uploadFileInput.value = '';
+                uploadFileInfo.classList.add('hidden');
+                return;
+            }
+
+            // Show file info
+            uploadFileName.textContent = file.name + ' (' + (file.size / 1024 / 1024).toFixed(2) + 'MB)';
+            uploadFileInfo.classList.remove('hidden');
+        }
+
+        // Handle upload form submission
+        document.getElementById('uploadForm')?.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const submitBtn = document.getElementById('uploadSubmitBtn');
+            const progressBar = document.getElementById('uploadProgress');
+            const progressBarInner = document.getElementById('uploadProgressBar');
+            
+            submitBtn.disabled = true;
+            progressBar.classList.remove('hidden');
+
+            const formData = new FormData(document.getElementById('uploadForm'));
+
+            try {
+                const response = await fetch(document.getElementById('uploadForm').action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                });
+
+                if (response.ok) {
+                    // Show success message
+                    document.getElementById('uploadSuccess').classList.remove('hidden');
+                    
+                    // After 2 seconds, close modal and refresh
+                    setTimeout(() => {
+                        closeUploadModal();
+                        location.reload();
+                    }, 2000);
+                } else {
+                    const data = await response.json();
+                    alert('Upload failed: ' + (data.message || 'Unknown error'));
+                    submitBtn.disabled = false;
+                    progressBar.classList.add('hidden');
+                }
+            } catch (error) {
+                console.error('Upload error:', error);
+                alert('Upload failed: ' + error.message);
+                submitBtn.disabled = false;
+                progressBar.classList.add('hidden');
             }
         });
     </script>

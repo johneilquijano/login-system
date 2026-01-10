@@ -105,7 +105,7 @@
 
                     <!-- Placeholder Sections -->
                     <h3 class="text-lg font-bold text-gray-900 mb-6">Available Features</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                         <!-- Employee Documents (Phase 2) -->
                         <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg hover:border-blue-200 transition">
                             <div class="bg-gradient-to-r from-blue-500 to-blue-600 px-6 py-5">
@@ -247,6 +247,39 @@
                                     </a>
                                     <a href="{{ route('inventory-requests.index') }}" class="inline-flex items-center justify-center rounded-lg bg-white border border-purple-200 text-purple-700 px-4 py-2.5 text-sm font-semibold hover:bg-purple-50 transition">
                                         View Requests
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Vehicles (Coming Soon) -->
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg hover:border-cyan-200 transition">
+                            <div class="bg-gradient-to-r from-cyan-500 to-cyan-600 px-6 py-5">
+                                <h3 class="text-lg font-bold text-white flex items-center space-x-2">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                                    </svg>
+                                    <span>Vehicles</span>
+                                </h3>
+                                <p class="text-cyan-100 text-sm mt-1">Coming Soon</p>
+                            </div>
+
+                            <div class="px-6 py-6">
+                                <div class="text-center">
+                                    <div class="inline-flex items-center justify-center h-12 w-12 rounded-full bg-cyan-100 mb-4">
+                                        <svg class="w-6 h-6 text-cyan-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m0 0h6m-6-6H6m0 0H0"></path>
+                                        </svg>
+                                    </div>
+                                    <p class="text-gray-600 text-sm">
+                                        Vehicle maintenance tracking and management coming soon.
+                                    </p>
+                                </div>
+
+                                <!-- Disabled action -->
+                                <div class="mt-5">
+                                    <a href="{{ route('vehicles.index') }}" class="w-full inline-flex items-center justify-center rounded-lg bg-gray-100 text-gray-600 px-4 py-2.5 text-sm font-semibold cursor-not-allowed opacity-60">
+                                        Coming Soon
                                     </a>
                                 </div>
                             </div>

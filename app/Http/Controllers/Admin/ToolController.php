@@ -45,11 +45,18 @@ class ToolController extends Controller
         // Filter by status
         if ($status) {
             if ($status === 'available') {
+                // Available if no maintenance AND has remaining quantity
                 $query->where('is_maintenance', false)
-                      ->whereDoesntHave('checkouts', function ($q) {
-                          $q->whereNull('returned_at');
+                      ->where(function ($q) {
+                          $q->whereRaw('quantity > (
+                              SELECT COUNT(*) FROM tool_checkouts 
+                              WHERE tool_id = tools.id 
+                              AND returned_at IS NULL 
+                              AND (action_type = "checkout" OR action_type IS NULL)
+                          )');
                       });
             } elseif ($status === 'checked_out') {
+                // Has active checkouts
                 $query->whereHas('checkouts', function ($q) {
                     $q->whereNull('returned_at');
                 });
@@ -76,6 +83,14 @@ class ToolController extends Controller
     }
 
     /**
+     * Show create tool form
+     */
+    public function create()
+    {
+        return view('admin.tools.create');
+    }
+
+    /**
      * Store a new tool
      */
     public function store(Request $request)
@@ -88,6 +103,7 @@ class ToolController extends Controller
                 'name' => 'required|string|max:255',
                 'category' => 'required|string|max:100',
                 'condition' => 'required|in:good,fair,needs_repair',
+                'quantity' => 'required|integer|min:1|max:10000',
                 'description' => 'nullable|string',
                 'notes' => 'nullable|string',
                 'serial_number' => 'nullable|unique:tools,serial_number',
@@ -157,6 +173,20 @@ class ToolController extends Controller
     }
 
     /**
+     * Show edit tool form
+     */
+    public function edit(Tool $tool)
+    {
+        $user = Auth::user();
+
+        if ($tool->org_id !== $user->org_id) {
+            abort(403, 'Unauthorized');
+        }
+
+        return view('admin.tools.edit', ['tool' => $tool]);
+    }
+
+    /**
      * Update a tool
      */
     public function update(Tool $tool, Request $request)
@@ -172,6 +202,7 @@ class ToolController extends Controller
                 'name' => 'required|string|max:255',
                 'category' => 'required|string|max:100',
                 'condition' => 'required|in:good,fair,needs_repair',
+                'quantity' => 'required|integer|min:1|max:10000',
                 'description' => 'nullable|string',
                 'notes' => 'nullable|string',
                 'serial_number' => 'nullable|unique:tools,serial_number,' . $tool->id,

@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\InventoryRequest;
+use App\Models\OrderingTask;
+use App\Models\OrderingTaskItem;
 use App\Models\User;
 use App\Events\InventoryRequestApproved;
 use App\Events\InventoryRequestDenied;
@@ -120,6 +122,9 @@ class InventoryRequestController extends Controller
             'admin_notes' => $validated['admin_notes'],
         ]);
 
+        // Create ordering task items for each approved request item
+        $this->createOrderingTaskItems($inventoryRequest);
+
         // Send notification to employee
         $inventoryRequest->user->notify(new InventoryRequestApprovedNotification($inventoryRequest));
 
@@ -128,6 +133,53 @@ class InventoryRequestController extends Controller
 
         return redirect()->route('admin.inventory-requests.show', $inventoryRequest)
             ->with('success', 'Request approved successfully');
+    }
+
+    /**
+     * Create ordering task items for approved request
+     */
+    private function createOrderingTaskItems(InventoryRequest $inventoryRequest)
+    {
+        try {
+            // Get or create open ordering task for organization
+            $orderingTask = OrderingTask::forOrganization($inventoryRequest->org_id)
+                ->where('status', 'open')
+                ->first();
+
+            if (!$orderingTask) {
+                $orderingTask = OrderingTask::create([
+                    'org_id' => $inventoryRequest->org_id,
+                    'status' => 'open',
+                    'opened_at' => now(),
+                ]);
+                \Log::info("Created new OrderingTask #{$orderingTask->id} for org {$inventoryRequest->org_id}");
+            } else {
+                \Log::info("Using existing OrderingTask #{$orderingTask->id} for org {$inventoryRequest->org_id}");
+            }
+
+            // Create ordering task item for each inventory request item
+            foreach ($inventoryRequest->items as $item) {
+                \Log::info("Creating OrderingTaskItem for request item #{$item->id}: {$item->item_name}");
+                
+                OrderingTaskItem::create([
+                    'org_id' => $inventoryRequest->org_id,
+                    'ordering_task_id' => $orderingTask->id,
+                    'inventory_request_id' => $inventoryRequest->id,
+                    'inventory_request_item_id' => $item->id,
+                    'item_name' => $item->item_name,
+                    'job_number' => !empty($item->job_number) ? $item->job_number : 'N/A',
+                    'model_number' => !empty($item->model_number) ? $item->model_number : 'N/A',
+                    'quantity_approved' => $item->quantity,
+                    'notes' => $item->notes,
+                    'status' => 'pending',
+                ]);
+            }
+            
+            \Log::info("Successfully created ordering task items for request #{$inventoryRequest->id}");
+        } catch (\Exception $e) {
+            \Log::error("Error creating ordering task items: " . $e->getMessage());
+            throw $e;
+        }
     }
 
     /**
