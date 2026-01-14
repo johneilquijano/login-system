@@ -10,8 +10,10 @@ use App\Http\Controllers\ToolController;
 use App\Http\Controllers\ToolCheckoutController;
 use App\Http\Controllers\InventoryRequestController;
 use App\Http\Controllers\VehicleController;
+use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\DocumentController as AdminDocumentController;
+use App\Http\Controllers\Admin\FeedbackController as AdminFeedbackController;
 use App\Http\Controllers\Admin\ToolController as AdminToolController;
 use App\Http\Controllers\Admin\InventoryRequestController as AdminInventoryRequestController;
 use App\Http\Controllers\Admin\VehicleController as AdminVehicleController;
@@ -112,6 +114,9 @@ Route::middleware(['auth', 'employee', 'organization'])->group(function () {
     Route::post('/notifications/{id}/mark-as-read', [NotificationController::class, 'markAsRead'])->name('notifications.markAsRead');
     Route::post('/notifications/mark-all-as-read', [NotificationController::class, 'markAllAsRead'])->name('notifications.markAllAsRead');
     Route::delete('/notifications/{id}', [NotificationController::class, 'delete'])->name('notifications.delete');
+
+    // Feedback
+    Route::post('/feedback', [FeedbackController::class, 'store'])->name('feedback.store');
 });
 
 // Admin Routes (Protected)
@@ -165,6 +170,13 @@ Route::middleware(['auth', 'admin', 'organization'])->prefix('admin')->name('adm
 
     // Vehicles
     Route::get('/vehicles', [AdminVehicleController::class, 'index'])->name('vehicles.index');
+
+    // Feedback Inbox
+    Route::get('/feedback', [AdminFeedbackController::class, 'index'])->name('feedback.index');
+    Route::get('/feedback/{feedback}', [AdminFeedbackController::class, 'show'])->name('feedback.show');
+    Route::post('/feedback/{feedback}/status', [AdminFeedbackController::class, 'updateStatus'])->name('feedback.updateStatus');
+    Route::post('/feedback/{feedback}/notes', [AdminFeedbackController::class, 'updateNotes'])->name('feedback.updateNotes');
+    Route::delete('/feedback/{feedback}', [AdminFeedbackController::class, 'destroy'])->name('feedback.destroy');
 
     // Direct Access Token
     Route::get('/direct-access', [DirectAccessController::class, 'show'])->name('direct-access.show');
