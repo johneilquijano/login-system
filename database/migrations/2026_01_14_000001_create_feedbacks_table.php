@@ -56,6 +56,11 @@ return new class extends Migration
             $table->string('screenshot_url')->nullable();
             $table->boolean('screenshot_captured')->default(false);
             
+            // Page-relative coordinates and route name
+            $table->integer('page_x')->nullable();
+            $table->integer('page_y')->nullable();
+            $table->string('route_name')->nullable();
+            
             $table->timestamps();
             
             // Indexes for common queries
