@@ -7,8 +7,8 @@
             <div class="flex-1 overflow-auto">
                 <!-- Header -->
                 <x-employee-header 
-                    title="Edit Request" 
-                    subtitle="Update request #{{ str_pad($inventoryRequest->id, 4, '0', STR_PAD_LEFT) }}" 
+                    title="Edit Inventory Request" 
+                    subtitle="Update request #{{ str_pad($inventoryRequest->id, 4, '0', STR_PAD_LEFT) }} - All details on one page" 
                 />
 
                 <!-- Main Content -->
@@ -29,7 +29,10 @@
 
                             <!-- Request Details Section -->
                             <div class="mb-8">
-                                <h3 class="text-lg font-bold text-gray-900 mb-6">Request Details</h3>
+                                <h3 class="text-lg font-bold text-gray-900 mb-6 flex items-center">
+                                    <span class="flex items-center justify-center w-8 h-8 rounded-full bg-blue-100 text-blue-600 font-semibold text-sm mr-3">1</span>
+                                    Request Details
+                                </h3>
                                 
                                 <div class="grid grid-cols-2 gap-6 mb-6">
                                     <!-- Request Title -->
@@ -101,7 +104,10 @@
                             <!-- Items Section -->
                             <div class="mb-8">
                                 <div class="flex items-center justify-between mb-6">
-                                    <h3 class="text-lg font-bold text-gray-900">Request Items</h3>
+                                    <h3 class="text-lg font-bold text-gray-900 flex items-center">
+                                        <span class="flex items-center justify-center w-8 h-8 rounded-full bg-blue-100 text-blue-600 font-semibold text-sm mr-3">2</span>
+                                        Request Items
+                                    </h3>
                                     <button 
                                         type="button" 
                                         onclick="addEditItem()"
@@ -142,7 +148,7 @@
     <script>
         let itemCount = 0;
 
-        function addEditItem(itemId = null, itemName = '', category = '', quantity = 1, notes = '') {
+        function addEditItem(itemId = null, itemName = '', jobNumber = '', modelNumber = '', quantity = 1, notes = '') {
             const container = document.getElementById('itemsContainer');
             const itemRow = document.createElement('div');
             itemRow.className = 'p-4 border border-gray-200 rounded-lg bg-gray-50 item-row';
@@ -173,15 +179,29 @@
                         />
                     </div>
 
-                    <!-- Category -->
+                    <!-- Job Needed For -->
                     <div>
-                        <label class="block text-sm font-semibold text-gray-900 mb-2">Category</label>
+                        <label class="block text-sm font-semibold text-gray-900 mb-2">Job Needed For *</label>
                         <input 
                             type="text" 
-                            name="items[${itemCount}][category]" 
-                            value="${category}"
+                            name="items[${itemCount}][job_number]" 
+                            value="${jobNumber}"
                             class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
-                            placeholder="e.g., Equipment"
+                            placeholder="e.g., JOB-001 or reference"
+                            required
+                        />
+                    </div>
+
+                    <!-- Model Number -->
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-900 mb-2">Model Number *</label>
+                        <input 
+                            type="text" 
+                            name="items[${itemCount}][model_number]" 
+                            value="${modelNumber}"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+                            placeholder="e.g., MODEL-2024 or model reference"
+                            required
                         />
                     </div>
 
@@ -200,7 +220,7 @@
 
                     <!-- Notes -->
                     <div class="col-span-2">
-                        <label class="block text-sm font-semibold text-gray-900 mb-2">Notes</label>
+                        <label class="block text-sm font-semibold text-gray-900 mb-2">Item Notes</label>
                         <textarea 
                             name="items[${itemCount}][notes]" 
                             rows="2"
@@ -225,7 +245,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             const existingItems = {!! json_encode($inventoryRequest->items) !!};
             existingItems.forEach((item, index) => {
-                addEditItem(item.id, item.item_name, item.category, item.quantity, item.notes);
+                addEditItem(item.id, item.item_name, item.job_number, item.model_number, item.quantity, item.notes);
             });
         });
     </script>

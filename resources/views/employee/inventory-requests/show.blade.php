@@ -114,7 +114,8 @@
                                         <thead class="bg-gray-100 border-b border-gray-200">
                                             <tr>
                                                 <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">Item</th>
-                                                <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">Category</th>
+                                                <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">Job Needed For</th>
+                                                <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">Model</th>
                                                 <th class="px-4 py-3 text-center text-sm font-semibold text-gray-700">Qty</th>
                                                 <th class="px-4 py-3 text-center text-sm font-semibold text-gray-700">Fulfilled</th>
                                                 <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">Notes</th>
@@ -124,7 +125,8 @@
                                             @foreach($inventoryRequest->items as $item)
                                             <tr class="border-b border-gray-200 hover:bg-gray-50">
                                                 <td class="px-4 py-3 text-sm font-medium text-gray-900">{{ $item->item_name }}</td>
-                                                <td class="px-4 py-3 text-sm text-gray-600">{{ $item->category ?? '-' }}</td>
+                                                <td class="px-4 py-3 text-sm text-gray-600">{{ $item->job_number ?? '-' }}</td>
+                                                <td class="px-4 py-3 text-sm text-gray-600">{{ $item->model_number ?? '-' }}</td>
                                                 <td class="px-4 py-3 text-sm text-gray-900 font-semibold text-center">{{ $item->quantity }}</td>
                                                 <td class="px-4 py-3 text-sm text-gray-900 font-semibold text-center">
                                                     {{ $item->fulfilled_quantity ?? 0 }}

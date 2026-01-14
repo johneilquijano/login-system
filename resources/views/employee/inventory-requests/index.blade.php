@@ -382,14 +382,27 @@
                         />
                     </div>
 
-                    <!-- Category -->
+                    <!-- Job Needed For -->
                     <div>
-                        <label class="block text-sm font-semibold text-gray-900 mb-2">Category</label>
+                        <label class="block text-sm font-semibold text-gray-900 mb-2">Job Needed For *</label>
                         <input 
                             type="text" 
-                            name="items[${itemCount}][category]" 
+                            name="items[${itemCount}][job_number]" 
                             class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
-                            placeholder="e.g., Equipment"
+                            placeholder="e.g., JOB-001 or reference"
+                            required
+                        />
+                    </div>
+
+                    <!-- Model Number -->
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-900 mb-2">Model Number *</label>
+                        <input 
+                            type="text" 
+                            name="items[${itemCount}][model_number]" 
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+                            placeholder="e.g., MODEL-2024 or model reference"
+                            required
                         />
                     </div>
 
@@ -432,10 +445,10 @@
         function viewRequestItems(requestId) {
             const request = {!! json_encode($requests) !!}.find(r => r.id === requestId);
             if (request && request.items.length > 0) {
-                let html = '<table class="w-full"><thead class="bg-gray-100 border-b border-gray-200"><tr><th class="px-4 py-2 text-left text-sm font-semibold text-gray-900">Item</th><th class="px-4 py-2 text-left text-sm font-semibold text-gray-900">Category</th><th class="px-4 py-2 text-left text-sm font-semibold text-gray-900">Quantity</th><th class="px-4 py-2 text-left text-sm font-semibold text-gray-900">Notes</th></tr></thead><tbody>';
+                let html = '<table class="w-full"><thead class="bg-gray-100 border-b border-gray-200"><tr><th class="px-4 py-2 text-left text-sm font-semibold text-gray-900">Item</th><th class="px-4 py-2 text-left text-sm font-semibold text-gray-900">Job</th><th class="px-4 py-2 text-left text-sm font-semibold text-gray-900">Model</th><th class="px-4 py-2 text-left text-sm font-semibold text-gray-900">Qty</th><th class="px-4 py-2 text-left text-sm font-semibold text-gray-900">Notes</th></tr></thead><tbody>';
                 
                 request.items.forEach(item => {
-                    html += `<tr class="border-b border-gray-200 hover:bg-gray-50"><td class="px-4 py-3 text-sm text-gray-900">${item.item_name}</td><td class="px-4 py-3 text-sm text-gray-600">${item.category || '-'}</td><td class="px-4 py-3 text-sm text-gray-900 font-semibold">${item.quantity}</td><td class="px-4 py-3 text-sm text-gray-600">${item.notes || '-'}</td></tr>`;
+                    html += `<tr class="border-b border-gray-200 hover:bg-gray-50"><td class="px-4 py-3 text-sm text-gray-900">${item.item_name}</td><td class="px-4 py-3 text-sm text-gray-600">${item.job_number || '-'}</td><td class="px-4 py-3 text-sm text-gray-600">${item.model_number || '-'}</td><td class="px-4 py-3 text-sm text-gray-900 font-semibold">${item.quantity}</td><td class="px-4 py-3 text-sm text-gray-600">${item.notes || '-'}</td></tr>`;
                 });
                 
                 html += '</tbody></table>';

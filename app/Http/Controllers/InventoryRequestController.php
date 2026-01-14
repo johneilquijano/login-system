@@ -51,7 +51,8 @@ class InventoryRequestController extends Controller
             'status' => 'required|in:draft,submitted',
             'items' => 'required|array|min:1',
             'items.*.item_name' => 'required|string|max:255',
-            'items.*.category' => 'nullable|string|max:255',
+            'items.*.job_number' => 'required|string|max:255',
+            'items.*.model_number' => 'required|string|max:255',
             'items.*.quantity' => 'required|integer|min:1',
             'items.*.notes' => 'nullable|string|max:500',
         ]);
@@ -74,7 +75,8 @@ class InventoryRequestController extends Controller
             InventoryRequestItem::create([
                 'inventory_request_id' => $inventoryRequest->id,
                 'item_name' => $item['item_name'],
-                'category' => $item['category'],
+                'job_number' => $item['job_number'],
+                'model_number' => $item['model_number'],
                 'quantity' => $item['quantity'],
                 'notes' => $item['notes'],
             ]);
@@ -148,7 +150,8 @@ class InventoryRequestController extends Controller
             'needed_by_date' => 'nullable|date|after:today',
             'items' => 'required|array|min:1',
             'items.*.item_name' => 'required|string|max:255',
-            'items.*.category' => 'nullable|string|max:255',
+            'items.*.job_number' => 'required|string|max:255',
+            'items.*.model_number' => 'required|string|max:255',
             'items.*.quantity' => 'required|integer|min:1',
             'items.*.notes' => 'nullable|string|max:500',
         ]);
@@ -168,7 +171,8 @@ class InventoryRequestController extends Controller
             InventoryRequestItem::create([
                 'inventory_request_id' => $inventoryRequest->id,
                 'item_name' => $item['item_name'],
-                'category' => $item['category'],
+                'job_number' => $item['job_number'],
+                'model_number' => $item['model_number'],
                 'quantity' => $item['quantity'],
                 'notes' => $item['notes'],
             ]);
