@@ -1,7 +1,11 @@
 <x-layout>
     <div class="min-h-screen bg-gray-50">
         <div class="flex flex-row h-screen">
-            <x-admin-sidebar />
+            @if(Auth::user()->is_super_admin)
+                <x-super-admin-sidebar />
+            @else
+                <x-admin-sidebar />
+            @endif
 
             <!-- Main Content Area -->
             <div class="flex-1 overflow-auto">
@@ -14,7 +18,7 @@
                 <!-- Main Content -->
                 <div class="p-8">
                     <!-- Back Button -->
-                    <a href="{{ route('admin.feedback.index') }}" class="inline-flex items-center text-blue-600 hover:text-blue-800 font-semibold mb-6">
+                    <a href="{{ Auth::user()->is_super_admin ? route('super-admin.feedback.index') : route('admin.feedback.index') }}" class="inline-flex items-center text-blue-600 hover:text-blue-800 font-semibold mb-6">
                         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
                         </svg>
@@ -270,7 +274,6 @@
                                 <div class="space-y-2">
                                     @if($feedback->url_path && $feedback->page_x !== null && $feedback->page_y !== null)
                                     <a href="{{ $feedback->url_path }}?feedback_id={{ $feedback->id }}&page_x={{ $feedback->page_x }}&page_y={{ $feedback->page_y }}" 
-                                       target="_blank" 
                                        class="block w-full px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition text-center">
                                         👁 Open Page & Highlight
                                     </a>
@@ -295,9 +298,11 @@
 
     <script>
         const feedbackId = {{ $feedback->id }};
+        const isSuperAdmin = {{ Auth::user()->is_super_admin ? 'true' : 'false' }};
+        const baseUrl = isSuperAdmin ? '/super-admin/feedback' : '/admin/feedback';
 
         function updateStatus(status) {
-            fetch(`/admin/feedback/${feedbackId}/status`, {
+            fetch(`${baseUrl}/${feedbackId}/status`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -318,7 +323,7 @@
             e.preventDefault();
             const notes = document.getElementById('adminNotes').value;
 
-            fetch(`/admin/feedback/${feedbackId}/notes`, {
+            fetch(`${baseUrl}/${feedbackId}/notes`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -340,7 +345,7 @@
         function deleteFeedback() {
             if (!confirm('Are you sure you want to delete this feedback?')) return;
 
-            fetch(`/admin/feedback/${feedbackId}`, {
+            fetch(`${baseUrl}/${feedbackId}`, {
                 method: 'DELETE',
                 headers: {
                     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
@@ -349,7 +354,7 @@
             .then(r => r.json())
             .then(result => {
                 if (result.success) {
-                    window.location.href = '{{ route("admin.feedback.index") }}';
+                    window.location.href = '{{ Auth::user()->is_super_admin ? route("super-admin.feedback.index") : route("admin.feedback.index") }}';
                 }
             })
             .catch(e => console.error(e));

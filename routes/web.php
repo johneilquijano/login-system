@@ -171,13 +171,6 @@ Route::middleware(['auth', 'admin', 'organization'])->prefix('admin')->name('adm
     // Vehicles
     Route::get('/vehicles', [AdminVehicleController::class, 'index'])->name('vehicles.index');
 
-    // Feedback Inbox
-    Route::get('/feedback', [AdminFeedbackController::class, 'index'])->name('feedback.index');
-    Route::get('/feedback/{feedback}', [AdminFeedbackController::class, 'show'])->name('feedback.show');
-    Route::post('/feedback/{feedback}/status', [AdminFeedbackController::class, 'updateStatus'])->name('feedback.updateStatus');
-    Route::post('/feedback/{feedback}/notes', [AdminFeedbackController::class, 'updateNotes'])->name('feedback.updateNotes');
-    Route::delete('/feedback/{feedback}', [AdminFeedbackController::class, 'destroy'])->name('feedback.destroy');
-
     // Direct Access Token
     Route::get('/direct-access', [DirectAccessController::class, 'show'])->name('direct-access.show');
     Route::post('/direct-access/regenerate', [DirectAccessController::class, 'regenerate'])->name('direct-access.regenerate');
@@ -208,4 +201,16 @@ Route::middleware(['auth', 'super-admin'])->prefix('super-admin')->name('super-a
     Route::post('/users/{user}/reset-password', [SuperAdminUserController::class, 'resetPassword'])->name('users.resetPassword');
     Route::post('/users/{user}/disable', [SuperAdminUserController::class, 'disable'])->name('users.disable');
     Route::post('/users/{user}/enable', [SuperAdminUserController::class, 'enable'])->name('users.enable');
+
+    // Feedback Inbox (Super Admin Only - Global across all orgs)
+    Route::get('/feedback', [AdminFeedbackController::class, 'index'])->name('feedback.index');
+    Route::get('/feedback/{feedback}', [AdminFeedbackController::class, 'show'])->name('feedback.show');
+    Route::post('/feedback/{feedback}/status', [AdminFeedbackController::class, 'updateStatus'])->name('feedback.updateStatus');
+    Route::post('/feedback/{feedback}/notes', [AdminFeedbackController::class, 'updateNotes'])->name('feedback.updateNotes');
+    Route::delete('/feedback/{feedback}', [AdminFeedbackController::class, 'destroy'])->name('feedback.destroy');
+});
+
+// Employee & Admin "My Feedback" Route (Authenticated Users)
+Route::middleware(['auth', 'organization'])->group(function () {
+    Route::get('/my-feedback', [FeedbackController::class, 'myFeedback'])->name('feedback.my');
 });

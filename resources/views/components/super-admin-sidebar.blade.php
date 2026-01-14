@@ -34,6 +34,18 @@
             </svg>
             Users
         </a>
+
+        <div class="pt-4">
+            <p class="px-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">System</p>
+        </div>
+
+        <a href="{{ route('super-admin.feedback.index') }}" 
+            class="block px-4 py-2 rounded-lg {{ request()->routeIs('super-admin.feedback.*') ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-gray-800' }} transition">
+            <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            Feedback Inbox
+        </a>
     </nav>
 
     <!-- Sidebar Footer -->

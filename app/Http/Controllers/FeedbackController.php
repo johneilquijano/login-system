@@ -77,4 +77,38 @@ class FeedbackController extends Controller
             'feedback_id' => $feedback->id,
         ]);
     }
+
+    /**
+     * Display user's own feedback ("My Feedback" page)
+     * Available to Admin and Employee roles
+     */
+    public function myFeedback(Request $request)
+    {
+        $userId = Auth::id();
+        $query = Feedback::where('user_id', $userId)
+            ->orderByRecent();
+
+        // Apply filters
+        if ($request->filled('status')) {
+            $query->byStatus($request->status);
+        }
+
+        if ($request->filled('category')) {
+            $query->byCategory($request->category);
+        }
+
+        // Get statistics for current user's feedback
+        $stats = [
+            'total' => Feedback::where('user_id', $userId)->count(),
+            'new' => Feedback::where('user_id', $userId)->byStatus('new')->count(),
+            'in_review' => Feedback::where('user_id', $userId)->byStatus('in_review')->count(),
+            'fixed' => Feedback::where('user_id', $userId)->byStatus('fixed')->count(),
+            'ignored' => Feedback::where('user_id', $userId)->byStatus('ignored')->count(),
+        ];
+
+        // Paginate
+        $feedbacks = $query->paginate(15);
+
+        return view('feedback.my-feedback', compact('feedbacks', 'stats'));
+    }
 }

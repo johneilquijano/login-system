@@ -1,7 +1,11 @@
 <x-layout>
     <div class="min-h-screen bg-gray-50">
         <div class="flex flex-row h-screen">
-            <x-admin-sidebar />
+            @if(Auth::user()->is_super_admin)
+                <x-super-admin-sidebar />
+            @else
+                <x-admin-sidebar />
+            @endif
 
             <!-- Main Content Area -->
             <div class="flex-1 overflow-auto">
@@ -41,7 +45,7 @@
                     <div class="bg-white rounded-lg shadow border border-gray-200 p-6 mb-8">
                         <h3 class="text-lg font-bold text-gray-900 mb-4">Filters</h3>
                         
-                        <form method="GET" action="{{ route('admin.feedback.index') }}" class="grid grid-cols-5 gap-3 items-end">
+                        <form method="GET" action="{{ route('super-admin.feedback.index') }}" class="grid grid-cols-5 gap-3 items-end">
                             <!-- Status -->
                             <div>
                                 <label class="block text-sm font-semibold text-gray-900 mb-2">Status</label>
@@ -91,7 +95,7 @@
 
                             <!-- Clear Filters -->
                             <div>
-                                <a href="{{ route('admin.feedback.index') }}" class="block w-full px-4 py-2 bg-red-100 hover:bg-red-200 text-red-700 font-semibold rounded-lg transition text-center text-sm flex items-center justify-center gap-2">
+                                <a href="{{ route('super-admin.feedback.index') }}" class="block w-full px-4 py-2 bg-red-100 hover:bg-red-200 text-red-700 font-semibold rounded-lg transition text-center text-sm flex items-center justify-center gap-2">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                                     </svg>
@@ -186,7 +190,7 @@
                                         <p class="text-xs text-gray-500">{{ $feedback->created_at->format('H:i') }}</p>
                                     </td>
                                     <td class="px-6 py-4 text-center">
-                                        <a href="{{ route('admin.feedback.show', $feedback) }}" class="text-blue-600 hover:text-blue-800 font-semibold text-sm">
+                                        <a href="{{ route('super-admin.feedback.show', $feedback) }}" class="text-blue-600 hover:text-blue-800 font-semibold text-sm">
                                             View
                                         </a>
                                     </td>

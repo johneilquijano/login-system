@@ -85,15 +85,15 @@
         <!-- System Section Divider -->
         <div class="px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider mt-4">System</div>
 
-        <a href="{{ route('admin.feedback.index') }}" @class([
+        <a href="{{ route('feedback.my') }}" @class([
             'w-full flex items-center px-6 py-3 border-l-4 transition',
-            'border-purple-600 bg-purple-50 text-purple-700 font-semibold' => request()->routeIs('admin.feedback.*'),
-            'border-transparent hover:border-gray-300 text-gray-700 hover:bg-gray-50' => !request()->routeIs('admin.feedback.*')
+            'border-purple-600 bg-purple-50 text-purple-700 font-semibold' => request()->routeIs('feedback.my'),
+            'border-transparent hover:border-gray-300 text-gray-700 hover:bg-gray-50' => !request()->routeIs('feedback.my')
         ])>
             <svg class="w-5 h-5 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
             </svg>
-            Feedback Inbox
+            My Feedback
         </a>
 
         <a href="{{ route('notifications.index') }}" @class([

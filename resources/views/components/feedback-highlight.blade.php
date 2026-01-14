@@ -6,6 +6,7 @@
     const feedbackId = urlParams.get('feedback_id');
     const pageX = parseInt(urlParams.get('page_x'), 10);
     const pageY = parseInt(urlParams.get('page_y'), 10);
+    const isSuperAdmin = {{ Auth::check() && Auth::user()->is_super_admin ? 'true' : 'false' }};
 
     if (feedbackId && !isNaN(pageX) && !isNaN(pageY)) {
         // Wait for DOM to be fully loaded
@@ -68,10 +69,11 @@
         closeButton.onclick = () => {
             // Get the feedback ID from URL and navigate back
             const fbId = new URLSearchParams(window.location.search).get('feedback_id');
+            const baseUrl = isSuperAdmin ? '/super-admin/feedback' : '/admin/feedback';
             if (fbId) {
-                window.location.href = `/admin/feedback/${fbId}`;
+                window.location.href = `${baseUrl}/${fbId}`;
             } else {
-                window.location.href = '/admin/feedback';
+                window.location.href = baseUrl;
             }
         };
 
@@ -92,13 +94,14 @@
             });
         }, 300);
 
-        // Create animated pin at click location
+        // Create animated pin at click location (40px below the element)
         const pin = document.createElement('div');
         pin.id = 'feedback-highlight-pin';
+        const pinOffsetY = pageY + 40; // Position 40px below the clicked element
         pin.style.cssText = `
             position: absolute;
             left: ${pageX}px;
-            top: ${pageY}px;
+            top: ${pinOffsetY}px;
             width: 40px;
             height: 40px;
             margin-left: -20px;
