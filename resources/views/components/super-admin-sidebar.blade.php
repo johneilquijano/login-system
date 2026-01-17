@@ -1,4 +1,4 @@
-<div class="w-64 bg-gray-900 text-white flex flex-col">
+<div class="hidden lg:flex lg:w-64 bg-gray-900 text-white flex-col">
     <!-- Sidebar Header -->
     <div class="p-6 border-b border-gray-800">
         <h1 class="text-xl font-bold">System Admin</h1>

@@ -12,7 +12,7 @@
                 />
 
                 <!-- Main Content -->
-                <div class="p-8">
+                <div class="p-4 md:p-6">
                     <div class="max-w-2xl mx-auto">
                         <div class="bg-white rounded-lg shadow-md border border-gray-200 p-8">
                             <form method="POST" action="{{ route('documents.store') }}" enctype="multipart/form-data" class="space-y-6">

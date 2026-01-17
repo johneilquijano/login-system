@@ -1,22 +1,25 @@
 <x-layout>
     <div class="min-h-screen bg-gray-50">
-        <div class="flex h-screen">
+        <div class="flex h-screen flex-col lg:flex-row">
             <x-super-admin-sidebar />
 
             <!-- Main Content Area -->
-            <div class="flex-1 overflow-auto">
-                <!-- Top Header -->
-                <div class="bg-white shadow">
+            <div class="flex-1 overflow-auto flex flex-col">
+                <!-- Mobile/Tablet Header -->
+                <x-super-admin-header title="Manage Users" />
+
+                <!-- Desktop Header -->
+                <div class="hidden lg:block bg-white shadow">
                     <div class="px-8 py-4 flex justify-between items-center">
                         <h2 class="text-2xl font-bold text-gray-900">Manage Users</h2>
                         <div class="text-sm text-gray-600">
-                            All System Users
+                            Super Admin Users
                         </div>
                     </div>
                 </div>
 
                 <!-- Main Content -->
-                <div class="p-8">
+                <div class="p-4 md:p-6 flex-1">
                     <div class="flex items-center justify-between mb-6">
                         <h3 class="text-lg font-semibold text-gray-900">Users</h3>
                         <a href="{{ route('super-admin.users.create') }}" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition text-sm">
@@ -33,22 +36,22 @@
                     @endif
 
                     <!-- Search and Filter -->
-                    <div class="bg-white rounded-lg shadow p-6 mb-6">
-                        <form id="filter-form" method="GET" action="{{ route('super-admin.users.index') }}" class="flex gap-4 items-center flex-wrap">
-                            <div class="flex items-center gap-2">
-                                <input 
-                                    type="text" 
-                                    name="search" 
-                                    id="search-input"
-                                    placeholder="Search by name or email..." 
-                                    value="{{ request('search') }}"
-                                    class="w-80 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 mr-8"
-                                >
+                    <div class="bg-white rounded-lg shadow p-4 md:p-6 mb-6">
+                        <form id="filter-form" method="GET" action="{{ route('super-admin.users.index') }}" class="flex flex-col gap-3 md:gap-4">
+                            <input 
+                                type="text" 
+                                name="search" 
+                                id="search-input"
+                                placeholder="Search by name or email..." 
+                                value="{{ request('search') }}"
+                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                            >
 
+                            <div class="flex flex-col sm:flex-row gap-3 md:gap-4 items-start sm:items-center">
                                 <select 
                                     name="organization" 
                                     id="organization-filter"
-                                    class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    class="w-full sm:w-auto px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
                                 >
                                     <option value="">All Organizations</option>
                                     @foreach($organizations as $org)
@@ -59,22 +62,26 @@
                                 <select 
                                     name="role" 
                                     id="role-filter"
-                                    class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    class="w-full sm:w-auto px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
                                 >
                                     <option value="">All Roles</option>
                                     <option value="admin" @if(request('role') === 'admin') selected @endif>Admin</option>
                                     <option value="employee" @if(request('role') === 'employee') selected @endif>Employee</option>
                                 </select>
 
-                                <button type="button" id="btn-active" data-active-value="1" class="px-4 py-2 rounded-lg border font-medium text-sm @if(request('status') === 'active') bg-green-600 text-white border-green-600 @else bg-white text-gray-700 @endif">Active</button>
-                                <button type="button" id="btn-disabled" data-active-value="0" class="px-4 py-2 rounded-lg border font-medium text-sm @if(request('status') === 'disabled') bg-red-600 text-white border-red-600 @else bg-white text-gray-700 @endif">Disabled</button>
+                                <div class="flex gap-2 flex-wrap">
+                                    <button type="button" id="btn-active" data-active-value="1" class="px-3 md:px-4 py-2 rounded-lg border font-medium text-xs md:text-sm @if(request('status') === 'active') bg-green-600 text-white border-green-600 @else bg-white text-gray-700 @endif">Active</button>
+                                    <button type="button" id="btn-disabled" data-active-value="0" class="px-3 md:px-4 py-2 rounded-lg border font-medium text-xs md:text-sm @if(request('status') === 'disabled') bg-red-600 text-white border-red-600 @else bg-white text-gray-700 @endif">Disabled</button>
+                                </div>
                             </div>
                         </form>
                     </div>
 
                     <!-- Users Table -->
                     <div id="users-container" class="bg-white rounded-lg shadow overflow-visible">
-                        @include('super-admin.users._table', ['users' => $users, 'organizations' => $organizations])
+                        <div class="overflow-x-auto -mx-4 md:mx-0 px-4 md:px-0">
+                            @include('super-admin.users._table', ['users' => $users, 'organizations' => $organizations])
+                        </div>
                     </div>
                 </div>
             </div>

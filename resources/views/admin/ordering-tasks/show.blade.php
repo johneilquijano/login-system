@@ -12,7 +12,7 @@
                 />
 
                 <!-- Main Content -->
-                <div class="p-8">
+                <div class="p-4 md:p-6">
                     <!-- Back Button -->
                     <div class="mb-6">
                         <a href="{{ route('admin.ordering-tasks.index') }}"

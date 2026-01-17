@@ -12,15 +12,15 @@
                 />
 
                 <!-- Main Content -->
-                <div class="p-8">
+                <div class="p-4 md:p-6">
                     <!-- Document Details Card -->
-                    <div class="bg-white rounded-2xl border border-gray-200 p-8 shadow-lg mb-8">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="bg-white rounded-2xl border border-gray-200 p-4 md:p-6 shadow-lg mb-6">
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6 lg:gap-8">
                             <!-- Left Column - Document Info -->
                             <div>
-                                <h3 class="text-2xl font-bold text-gray-900 mb-6">{{ $document->title }}</h3>
+                                <h3 class="text-xl md:text-2xl font-bold text-gray-900 mb-4 md:mb-6">{{ $document->title }}</h3>
                                 
-                                <div class="space-y-4">
+                                <div class="space-y-3 md:space-y-4">
                                     <!-- File Type -->
                                     <div>
                                         <label class="block text-sm font-semibold text-gray-700 mb-1">File Type</label>
@@ -55,7 +55,7 @@
 
                             <!-- Right Column - Status & Actions -->
                             <div>
-                                <div class="bg-gray-50 rounded-xl p-6 space-y-6">
+                                <div class="bg-gray-50 rounded-xl p-4 md:p-6 space-y-4 md:space-y-6">
                                     <!-- Status -->
                                     <div>
                                         <label class="block text-sm font-semibold text-gray-700 mb-2">Status</label>
@@ -104,9 +104,9 @@
                                     </div>
 
                                     <!-- Actions -->
-                                    <div class="pt-4 space-y-3 border-t border-gray-200">
+                                    <div class="pt-4 space-y-2 md:space-y-3 border-t border-gray-200">
                                         @if(!$document->signed_at)
-                                        <a href="{{ route('documents.sign', $document) }}" class="w-full block text-center bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-700 hover:to-emerald-600 text-white font-semibold py-3 px-4 rounded-xl transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
+                                        <a href="{{ route('documents.sign', $document) }}" class="w-full block text-center bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-700 hover:to-emerald-600 text-white font-semibold py-2 md:py-3 px-3 md:px-4 rounded-xl transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 text-sm md:text-base">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 inline mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                                 <path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
                                             </svg>
@@ -119,7 +119,7 @@
                                             $isPdf = strtolower(pathinfo($document->file_path, PATHINFO_EXTENSION)) === 'pdf';
                                         @endphp
 
-                                        <a href="{{ route('documents.download', $document) }}" class="w-full block text-center bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 text-white font-semibold py-3 px-4 rounded-xl transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
+                                        <a href="{{ route('documents.download', $document) }}" class="w-full block text-center bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 text-white font-semibold py-2 md:py-3 px-3 md:px-4 rounded-xl transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 text-sm md:text-base">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 inline mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                                 <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                                             </svg>
@@ -136,7 +136,7 @@
                                         </div>
                                         @endif
 
-                                        <a href="{{ route('documents.index') }}" class="w-full block text-center bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-3 px-4 rounded-xl transition-all duration-300">
+                                        <a href="{{ route('documents.index') }}" class="w-full block text-center bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 md:py-3 px-3 md:px-4 rounded-xl transition-all duration-300 text-sm md:text-base">
                                             Back to Documents
                                         </a>
                                     </div>
@@ -146,8 +146,8 @@
                     </div>
 
                     <!-- Document Preview -->
-                    <div class="bg-white rounded-2xl border border-gray-200 p-8 shadow-lg">
-                        <h4 class="text-xl font-bold text-gray-900 mb-6">Document Content</h4>
+                    <div class="bg-white rounded-2xl border border-gray-200 p-4 md:p-6 shadow-lg">
+                        <h4 class="text-lg md:text-xl font-bold text-gray-900 mb-4 md:mb-6">Document Content</h4>
                         
                         @php
                             $mimeType = $document->mime_type;
@@ -156,22 +156,22 @@
 
                         @if(in_array($extension, ['jpg', 'jpeg', 'png', 'gif']))
                         <!-- Image Preview -->
-                        <div class="flex justify-center">
+                        <div class="flex justify-center overflow-x-auto -mx-4 md:mx-0 px-4 md:px-0">
                             <img src="{{ route('documents.download', $document) }}" alt="{{ $document->title }}" class="max-w-full max-h-96 rounded-lg border border-gray-200">
                         </div>
 
                         @elseif($extension === 'pdf')
                         <!-- PDF Preview with PDF.js -->
-                        <div class="space-y-4">
-                            <div class="flex items-center justify-between bg-gray-100 p-4 rounded-lg">
-                                <div class="flex items-center gap-4">
-                                    <button id="prevPage" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition">← Previous</button>
-                                    <span id="pageInfo" class="text-gray-700 font-semibold">Page <span id="pageNum">1</span> of <span id="pageCount">--</span></span>
-                                    <button id="nextPage" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition">Next →</button>
+                        <div class="space-y-3 md:space-y-4">
+                            <div class="flex flex-col md:flex-row items-center justify-between bg-gray-100 p-3 md:p-4 rounded-lg gap-2 md:gap-4">
+                                <div class="flex flex-wrap items-center justify-center md:justify-start gap-2 md:gap-4 w-full md:w-auto">
+                                    <button id="prevPage" class="px-3 md:px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition text-sm md:text-base">← Previous</button>
+                                    <span id="pageInfo" class="text-gray-700 font-semibold text-sm md:text-base">Page <span id="pageNum">1</span> of <span id="pageCount">--</span></span>
+                                    <button id="nextPage" class="px-3 md:px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition text-sm md:text-base">Next →</button>
                                 </div>
-                                <a href="{{ route('documents.download', $document) }}" class="px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white font-semibold rounded-lg transition">Download</a>
+                                <a href="{{ route('documents.download', $document) }}" class="px-3 md:px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white font-semibold rounded-lg transition w-full md:w-auto text-center text-sm md:text-base">Download</a>
                             </div>
-                            <div class="flex justify-center bg-gray-100 p-4 rounded-lg" style="min-height: 600px;">
+                            <div class="flex justify-center bg-gray-100 p-3 md:p-4 rounded-lg overflow-x-auto" style="min-height: 400px; md: min-height: 600px;">
                                 <canvas id="pdfCanvas" style="max-width: 100%; border: 1px solid #e5e7eb; border-radius: 0.5rem;"></canvas>
                             </div>
                         </div>
@@ -251,24 +251,24 @@
 
                         @elseif(in_array($extension, ['doc', 'docx']))
                         <!-- Word Document Preview Placeholder -->
-                        <div class="bg-gray-50 rounded-lg p-12 text-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-16 h-16 text-blue-500 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <div class="bg-gray-50 rounded-lg p-6 md:p-12 text-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-12 md:w-16 h-12 md:h-16 text-blue-500 mx-auto mb-3 md:mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
                             </svg>
-                            <p class="text-gray-600 mb-4">Word documents cannot be previewed in the browser</p>
-                            <a href="{{ route('documents.download', $document) }}" class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg transition">
+                            <p class="text-gray-600 mb-3 md:mb-4 text-sm md:text-base">Word documents cannot be previewed in the browser</p>
+                            <a href="{{ route('documents.download', $document) }}" class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 md:px-6 rounded-lg transition text-sm md:text-base">
                                 Download Document to View
                             </a>
                         </div>
 
                         @else
                         <!-- Unknown File Type -->
-                        <div class="bg-gray-50 rounded-lg p-12 text-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-16 h-16 text-gray-400 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <div class="bg-gray-50 rounded-lg p-6 md:p-12 text-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-12 md:w-16 h-12 md:h-16 text-gray-400 mx-auto mb-3 md:mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
                             </svg>
-                            <p class="text-gray-600 mb-4">This file type cannot be previewed in the browser</p>
-                            <a href="{{ route('documents.download', $document) }}" class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg transition">
+                            <p class="text-gray-600 mb-3 md:mb-4 text-sm md:text-base">This file type cannot be previewed in the browser</p>
+                            <a href="{{ route('documents.download', $document) }}" class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 md:px-6 rounded-lg transition text-sm md:text-base">
                                 Download File to View
                             </a>
                         </div>

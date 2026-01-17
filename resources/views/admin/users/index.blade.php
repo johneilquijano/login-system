@@ -12,10 +12,10 @@
                 />
 
                 <!-- Main Content -->
-                <div class="p-8">
-                    <div class="flex items-center justify-between mb-6">
+                <div class="p-4 md:p-6">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
                         <h3 class="text-lg font-semibold text-gray-900">Users</h3>
-                        <a href="{{ route('admin.users.create') }}" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition text-sm">
+                        <a href="{{ route('admin.users.create') }}" class="w-full sm:w-auto text-center bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition text-sm">
                             Create User
                         </a>
                     </div>
@@ -29,28 +29,30 @@
                     @endif
 
                     <!-- Search and Filter -->
-                    <div class="bg-white rounded-lg shadow p-6 mb-6">
-                        <form method="GET" action="{{ route('admin.users.index') }}" class="flex gap-4 items-center flex-wrap">
-                            <div class="flex items-center gap-2">
+                    <div class="bg-white rounded-lg shadow p-4 md:p-6 mb-6">
+                        <form method="GET" action="{{ route('admin.users.index') }}">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 items-end">
                                 <input 
                                     type="text" 
                                     name="search" 
                                     placeholder="Search by name or email..." 
                                     value="{{ request('search') }}"
-                                    class="w-80 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 mr-8"
+                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 >
 
                                 <select 
                                     name="role" 
-                                    class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 >
                                     <option value="">All Roles</option>
                                     <option value="employee" {{ request('role') === 'employee' ? 'selected' : '' }}>Employee</option>
                                     <option value="admin" {{ request('role') === 'admin' ? 'selected' : '' }}>Admin</option>
                                 </select>
 
-                                <button type="button" id="btn-active" data-active-value="1" class="px-4 py-2 rounded-lg border font-medium text-sm {{ request('active') === '1' ? 'bg-green-600 text-white border-green-600' : 'bg-white text-gray-700' }}">Active</button>
-                                <button type="button" id="btn-disabled" data-active-value="0" class="px-4 py-2 rounded-lg border font-medium text-sm {{ request('active') === '0' ? 'bg-red-600 text-white border-red-600' : 'bg-white text-gray-700' }}">Disabled</button>
+                                <div class="flex gap-2 col-span-1 sm:col-span-2 lg:col-span-2">
+                                    <button type="button" id="btn-active" data-active-value="1" class="flex-1 px-4 py-2 rounded-lg border font-medium text-sm {{ request('active') === '1' ? 'bg-green-600 text-white border-green-600' : 'bg-white text-gray-700' }} hover:bg-green-50 transition">Active</button>
+                                    <button type="button" id="btn-disabled" data-active-value="0" class="flex-1 px-4 py-2 rounded-lg border font-medium text-sm {{ request('active') === '0' ? 'bg-red-600 text-white border-red-600' : 'bg-white text-gray-700' }} hover:bg-red-50 transition">Disabled</button>
+                                </div>
                             </div>
                         </form>
                     </div>

@@ -12,7 +12,7 @@
                 />
 
                 <!-- Content -->
-                <div class="p-8">
+                <div class="p-4 md:p-8">
                     <!-- Success Message -->
                     @if (session('success'))
                     <div class="mb-6 p-4 bg-green-50 border-l-4 border-green-500 rounded-lg flex justify-between items-center">
@@ -27,16 +27,16 @@
 
                     <div class="max-w-3xl">
                         <!-- Main Card -->
-                        <div class="bg-white rounded-lg shadow-md border border-gray-200 p-8">
+                        <div class="bg-white rounded-lg shadow-md border border-gray-200 p-4 md:p-8">
                             <div class="mb-6">
                                 <h3 class="text-lg font-bold text-gray-900 mb-2">Your Direct Access Link</h3>
                                 <p class="text-gray-600">Use this link to quickly access your admin dashboard without logging in. This link is unique to you and your organization.</p>
                             </div>
 
                             <!-- Link Display -->
-                            <div class="bg-gray-50 rounded-lg p-6 mb-6 border border-gray-200">
+                            <div class="bg-gray-50 rounded-lg p-4 md:p-6 mb-6 border border-gray-200">
                                 <label class="block text-sm font-semibold text-gray-700 mb-2">Direct Access URL</label>
-                                <div class="flex gap-3">
+                                <div class="flex flex-col sm:flex-row gap-3">
                                     <input 
                                         type="text" 
                                         value="{{ $directAccessUrl }}" 
@@ -46,7 +46,7 @@
                                     />
                                     <button 
                                         onclick="copyToClipboard()"
-                                        class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition whitespace-nowrap"
+                                        class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 md:py-3 px-4 md:px-6 rounded-lg transition whitespace-nowrap w-full sm:w-auto"
                                     >
                                         Copy Link
                                     </button>
@@ -55,9 +55,9 @@
                             </div>
 
                             <!-- Token Display -->
-                            <div class="bg-blue-50 rounded-lg p-6 mb-6 border border-blue-200">
+                            <div class="bg-blue-50 rounded-lg p-4 md:p-6 mb-6 border border-blue-200">
                                 <label class="block text-sm font-semibold text-gray-700 mb-2">Access Token</label>
-                                <div class="flex gap-3">
+                                <div class="flex flex-col sm:flex-row gap-3">
                                     <input 
                                         type="text" 
                                         value="{{ $token }}" 
@@ -67,7 +67,7 @@
                                     />
                                     <button 
                                         onclick="copyToken()"
-                                        class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition whitespace-nowrap"
+                                        class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 md:py-3 px-4 md:px-6 rounded-lg transition whitespace-nowrap w-full sm:w-auto"
                                     >
                                         Copy Token
                                     </button>
@@ -76,8 +76,8 @@
                             </div>
 
                             <!-- Security Info -->
-                            <div class="bg-yellow-50 rounded-lg p-6 mb-6 border border-yellow-200">
-                                <div class="flex gap-3">
+                            <div class="bg-yellow-50 rounded-lg p-4 md:p-6 mb-6 border border-yellow-200">
+                                <div class="flex flex-col sm:flex-row gap-3">
                                     <svg class="w-5 h-5 text-yellow-600 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4v2m0-6a4 4 0 11-8 0 4 4 0 018 0z"></path>
                                     </svg>
@@ -102,7 +102,7 @@
                         </div>
 
                         <!-- How to Use -->
-                        <div class="mt-8 bg-white rounded-lg shadow-md border border-gray-200 p-8">
+                        <div class="mt-8 bg-white rounded-lg shadow-md border border-gray-200 p-4 md:p-8">
                             <h3 class="text-lg font-bold text-gray-900 mb-4">How to Use</h3>
                             <ol class="space-y-4 text-gray-700">
                                 <li class="flex gap-3">

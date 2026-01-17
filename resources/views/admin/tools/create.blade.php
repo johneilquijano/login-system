@@ -12,7 +12,7 @@
                 />
 
                 <!-- Main Content -->
-                <div class="p-8">
+                <div class="p-4 md:p-6">
                     <div class="max-w-2xl mx-auto">
                         <form action="{{ route('admin.tools.store') }}" method="POST" enctype="multipart/form-data" class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
                             @csrf

@@ -12,7 +12,7 @@
                 />
 
                 <!-- Content -->
-                <div class="p-8">
+                <div class="p-4 md:p-8">
                     <!-- Success Message -->
                     @if (session('success'))
                     <div class="mb-6 p-4 bg-green-50 border-l-4 border-green-500 rounded-lg flex justify-between items-center">
@@ -27,7 +27,7 @@
 
                     <div class="max-w-3xl">
                         <!-- Main Card -->
-                        <div class="bg-white rounded-lg shadow-md border border-gray-200 p-8">
+                        <div class="bg-white rounded-lg shadow-md border border-gray-200 p-4 md:p-8">
                             <div class="mb-8">
                                 <h3 class="text-lg font-bold text-gray-900 mb-2">API Token for AI Agents</h3>
                                 <p class="text-gray-600">Use this token to give AI agents (like ChatGPT) permanent access to your admin dashboard. This token never expires and is designed for automated/integration access.</p>
@@ -37,9 +37,9 @@
                                 <!-- Token Display Section -->
                                 <div class="space-y-6">
                                     <!-- Current Token -->
-                                    <div class="bg-blue-50 rounded-lg p-6 border border-blue-200">
+                                    <div class="bg-blue-50 rounded-lg p-4 md:p-6 border border-blue-200">
                                         <label class="block text-sm font-semibold text-gray-700 mb-2">Your API Token</label>
-                                        <div class="flex gap-3">
+                                        <div class="flex flex-col sm:flex-row gap-3">
                                             <input 
                                                 type="text" 
                                                 value="{{ $apiToken }}" 
@@ -49,7 +49,7 @@
                                             />
                                             <button 
                                                 onclick="copyApiToken()"
-                                                class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition whitespace-nowrap"
+                                                class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 md:py-3 px-4 md:px-6 rounded-lg transition whitespace-nowrap w-full sm:w-auto"
                                             >
                                                 Copy Token
                                             </button>
@@ -58,7 +58,7 @@
                                     </div>
 
                                     <!-- Token Metadata -->
-                                    <div class="bg-gray-50 rounded-lg p-6 border border-gray-200">
+                                    <div class="bg-gray-50 rounded-lg p-4 md:p-6 border border-gray-200">
                                         <h4 class="font-semibold text-gray-900 mb-4">Token Information</h4>
                                         <div class="space-y-3">
                                             <div>
@@ -79,7 +79,7 @@
                                     </div>
 
                                     <!-- Usage Instructions -->
-                                    <div class="bg-indigo-50 rounded-lg p-6 border border-indigo-200">
+                                    <div class="bg-indigo-50 rounded-lg p-4 md:p-6 border border-indigo-200">
                                         <h4 class="font-semibold text-gray-900 mb-4">How to Use This Token</h4>
                                         <div class="space-y-4 text-sm text-gray-700">
                                             <div>
@@ -103,8 +103,8 @@
                                     </div>
 
                                     <!-- Security Notice -->
-                                    <div class="bg-yellow-50 rounded-lg p-6 border border-yellow-200">
-                                        <div class="flex gap-3">
+                                    <div class="bg-yellow-50 rounded-lg p-4 md:p-6 border border-yellow-200">
+                                        <div class="flex flex-col sm:flex-row gap-3">
                                             <svg class="w-5 h-5 text-yellow-600 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
                                                 <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
                                             </svg>
@@ -118,16 +118,16 @@
                                     </div>
 
                                     <!-- Action Buttons -->
-                                    <div class="flex gap-3 pt-4">
-                                        <form method="POST" action="{{ route('admin.api-token.regenerate') }}" class="flex-1">
+                                    <div class="flex flex-col sm:flex-row gap-3 pt-4">
+                                        <form method="POST" action="{{ route('admin.api-token.regenerate') }}" class="w-full sm:flex-1">
                                             @csrf
-                                            <button type="submit" onclick="return confirm('This will generate a new token and invalidate the current one. Continue?')" class="w-full bg-yellow-600 hover:bg-yellow-700 text-white font-semibold py-3 px-4 rounded-lg transition">
+                                            <button type="submit" onclick="return confirm('This will generate a new token and invalidate the current one. Continue?')" class="w-full bg-yellow-600 hover:bg-yellow-700 text-white font-semibold py-2 md:py-3 px-4 rounded-lg transition">
                                                 Regenerate Token
                                             </button>
                                         </form>
-                                        <form method="POST" action="{{ route('admin.api-token.revoke') }}" class="flex-1">
+                                        <form method="POST" action="{{ route('admin.api-token.revoke') }}" class="w-full sm:flex-1">
                                             @csrf
-                                            <button type="submit" onclick="return confirm('This will revoke the token and any AI agents using it will lose access. Continue?')" class="w-full bg-red-600 hover:bg-red-700 text-white font-semibold py-3 px-4 rounded-lg transition">
+                                            <button type="submit" onclick="return confirm('This will revoke the token and any AI agents using it will lose access. Continue?')" class="w-full bg-red-600 hover:bg-red-700 text-white font-semibold py-2 md:py-3 px-4 rounded-lg transition">
                                                 Revoke Token
                                             </button>
                                         </form>
@@ -135,7 +135,7 @@
                                 </div>
                             @else
                                 <!-- No Token State -->
-                                <div class="bg-gray-50 rounded-lg p-8 border-2 border-dashed border-gray-300 text-center">
+                                <div class="bg-gray-50 rounded-lg p-4 md:p-8 border-2 border-dashed border-gray-300 text-center">
                                     <svg class="w-16 h-16 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
                                     </svg>
@@ -143,7 +143,7 @@
                                     <p class="text-sm text-gray-500 mb-6">Generate an API token to allow AI agents and automated tools to access your admin dashboard.</p>
                                     <form method="POST" action="{{ route('admin.api-token.generate') }}">
                                         @csrf
-                                        <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-8 rounded-lg transition">
+                                        <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 md:py-3 px-6 md:px-8 rounded-lg transition">
                                             Generate API Token
                                         </button>
                                     </form>

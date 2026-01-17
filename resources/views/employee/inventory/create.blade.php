@@ -12,7 +12,7 @@
                 />
 
                 <!-- Main Content -->
-                <div class="p-8">
+                <div class="p-4 md:p-6">
                     <!-- Form Card -->
                     <div class="bg-white rounded-lg shadow-md border border-gray-200 p-8 max-w-2xl">
                         <form method="POST" action="{{ route('inventory.store') }}">

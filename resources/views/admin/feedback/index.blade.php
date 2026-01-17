@@ -1,6 +1,6 @@
 <x-layout>
     <div class="min-h-screen bg-gray-50">
-        <div class="flex flex-row h-screen">
+        <div class="flex flex-col lg:flex-row h-screen">
             @if(Auth::user()->is_super_admin)
                 <x-super-admin-sidebar />
             @else
@@ -8,17 +8,21 @@
             @endif
 
             <!-- Main Content Area -->
-            <div class="flex-1 overflow-auto">
+            <div class="flex-1 overflow-auto flex flex-col">
                 <!-- Header -->
-                <x-employee-header 
-                    title="Feedback Inbox" 
-                    subtitle="Review and manage user feedback and bug reports" 
-                />
+                @if(Auth::user()->is_super_admin)
+                    <x-super-admin-header title="Feedback Inbox" />
+                @else
+                    <x-employee-header 
+                        title="Feedback Inbox" 
+                        subtitle="Review and manage user feedback and bug reports" 
+                    />
+                @endif
 
                 <!-- Main Content -->
-                <div class="p-8">
+                <div class="p-4 md:p-6 flex-1">
                     <!-- Statistics -->
-                    <div class="grid grid-cols-5 gap-4 mb-8">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
                         <div class="bg-white rounded-lg shadow border border-gray-200 p-4">
                             <p class="text-xs text-gray-600 uppercase tracking-wider font-semibold mb-1">Total</p>
                             <p class="text-3xl font-bold text-gray-900">{{ $stats['total'] }}</p>
@@ -45,7 +49,7 @@
                     <div class="bg-white rounded-lg shadow border border-gray-200 p-6 mb-8">
                         <h3 class="text-lg font-bold text-gray-900 mb-4">Filters</h3>
                         
-                        <form method="GET" action="{{ route('super-admin.feedback.index') }}" class="grid grid-cols-5 gap-3 items-end">
+                        <form method="GET" action="{{ route('super-admin.feedback.index') }}" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 items-end">
                             <!-- Status -->
                             <div>
                                 <label class="block text-sm font-semibold text-gray-900 mb-2">Status</label>
@@ -124,23 +128,24 @@
                     <!-- Feedback Table -->
                     @if($feedbacks->count() > 0)
                     <div class="bg-white rounded-lg shadow border border-gray-200 overflow-hidden">
-                        <table class="w-full">
-                            <thead class="bg-gray-100 border-b border-gray-200">
-                                <tr>
-                                    <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Status</th>
-                                    <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Category</th>
-                                    <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Severity</th>
-                                    <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Message</th>
-                                    <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Page</th>
-                                    <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Reporter</th>
-                                    <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Submitted</th>
-                                    <th class="px-6 py-3 text-center text-sm font-semibold text-gray-700">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach($feedbacks as $feedback)
-                                <tr class="border-b border-gray-200 hover:bg-gray-50 transition">
-                                    <td class="px-6 py-4">
+                        <div class="overflow-x-auto -mx-4 md:mx-0 px-4 md:px-0">
+                            <table class="w-full min-w-max md:min-w-full">
+                                <thead class="bg-gray-100 border-b border-gray-200 sticky top-0">
+                                    <tr>
+                                        <th class="px-4 md:px-6 py-3 text-left text-sm font-semibold text-gray-700 whitespace-nowrap">Status</th>
+                                        <th class="px-4 md:px-6 py-3 text-left text-sm font-semibold text-gray-700 whitespace-nowrap">Category</th>
+                                        <th class="px-4 md:px-6 py-3 text-left text-sm font-semibold text-gray-700 whitespace-nowrap">Severity</th>
+                                        <th class="px-4 md:px-6 py-3 text-left text-sm font-semibold text-gray-700 whitespace-nowrap">Message</th>
+                                        <th class="px-4 md:px-6 py-3 text-left text-sm font-semibold text-gray-700 whitespace-nowrap">Page</th>
+                                        <th class="px-4 md:px-6 py-3 text-left text-sm font-semibold text-gray-700 whitespace-nowrap">Reporter</th>
+                                        <th class="px-4 md:px-6 py-3 text-left text-sm font-semibold text-gray-700 whitespace-nowrap">Submitted</th>
+                                        <th class="px-4 md:px-6 py-3 text-center text-sm font-semibold text-gray-700 whitespace-nowrap">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($feedbacks as $feedback)
+                                    <tr class="border-b border-gray-200 hover:bg-gray-50 transition">
+                                        <td class="px-4 md:px-6 py-4 whitespace-nowrap">
                                         <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold
                                             @if($feedback->status === 'new')
                                                 bg-yellow-100 text-yellow-800
@@ -154,12 +159,12 @@
                                             {{ $feedback->status_label }}
                                         </span>
                                     </td>
-                                    <td class="px-6 py-4">
+                                    <td class="px-4 md:px-6 py-4 whitespace-nowrap">
                                         <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-purple-100 text-purple-800">
                                             {{ $feedback->category_label }}
                                         </span>
                                     </td>
-                                    <td class="px-6 py-4">
+                                    <td class="px-4 md:px-6 py-4 whitespace-nowrap">
                                         @if($feedback->severity)
                                         <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold
                                             @if($feedback->severity === 'high')
@@ -175,33 +180,34 @@
                                         <span class="text-xs text-gray-500">-</span>
                                         @endif
                                     </td>
-                                    <td class="px-6 py-4">
+                                    <td class="px-4 md:px-6 py-4 whitespace-nowrap">
                                         <p class="text-sm text-gray-900 max-w-xs truncate">{{ $feedback->message }}</p>
                                     </td>
-                                    <td class="px-6 py-4">
+                                    <td class="px-4 md:px-6 py-4 whitespace-nowrap">
                                         <p class="text-sm text-gray-600 max-w-xs truncate">{{ $feedback->url_path }}</p>
                                     </td>
-                                    <td class="px-6 py-4">
+                                    <td class="px-4 md:px-6 py-4 whitespace-nowrap">
                                         <p class="text-sm text-gray-900">{{ $feedback->user->name }}</p>
                                         <p class="text-xs text-gray-600">{{ $feedback->user_role }}</p>
                                     </td>
-                                    <td class="px-6 py-4">
+                                    <td class="px-4 md:px-6 py-4 whitespace-nowrap">
                                         <p class="text-sm text-gray-600">{{ $feedback->created_at->format('M d, Y') }}</p>
                                         <p class="text-xs text-gray-500">{{ $feedback->created_at->format('H:i') }}</p>
                                     </td>
-                                    <td class="px-6 py-4 text-center">
+                                    <td class="px-4 md:px-6 py-4 whitespace-nowrap text-center">
                                         <a href="{{ route('super-admin.feedback.show', $feedback) }}" class="text-blue-600 hover:text-blue-800 font-semibold text-sm">
                                             View
                                         </a>
                                     </td>
                                 </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
 
                     <!-- Pagination -->
-                    <div class="mt-8">
+                    <div class="mt-8 px-4 md:px-0">
                         {{ $feedbacks->links() }}
                     </div>
                     @else

@@ -23,6 +23,11 @@
         <!-- Feedback Highlight Component (for admin review) -->
         <x-feedback-highlight />
 
+        <!-- Mobile Drawer Navigation -->
+        @auth
+            <x-mobile-drawer />
+        @endauth
+
         <!-- Feedback Widget -->
         @auth
             <x-feedback-widget />

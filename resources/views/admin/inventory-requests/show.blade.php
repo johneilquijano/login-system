@@ -12,7 +12,7 @@
                 />
 
                 <!-- Main Content -->
-                <div class="p-8">
+                <div class="p-4 md:p-6">
                     <!-- Success/Error Messages -->
                     @if (session('success'))
                     <div class="mb-6 p-4 bg-green-50 border-l-4 border-green-500 rounded-lg shadow-sm">
@@ -34,14 +34,14 @@
                         Back to Requests
                     </a>
 
-                    <div class="grid grid-cols-3 gap-8">
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8">
                         <!-- Main Content -->
-                        <div class="col-span-2 space-y-6">
+                        <div class="lg:col-span-2 space-y-6">
                             <!-- Request Information Card -->
-                            <div class="bg-white rounded-lg shadow-md border border-gray-200 p-6">
-                                <div class="flex items-center justify-between mb-6">
-                                    <h3 class="text-xl font-bold text-gray-900">{{ $inventoryRequest->request_title }}</h3>
-                                    <span class="inline-block px-4 py-2 rounded-full text-sm font-semibold 
+                            <div class="bg-white rounded-lg shadow-md border border-gray-200 p-4 md:p-6">
+                                <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-6">
+                                    <h3 class="text-lg md:text-xl font-bold text-gray-900">{{ $inventoryRequest->request_title }}</h3>
+                                    <span class="inline-block px-4 py-2 rounded-full text-sm font-semibold whitespace-nowrap
                                         @if($inventoryRequest->status === 'submitted')
                                             bg-yellow-100 text-yellow-800
                                         @elseif($inventoryRequest->status === 'approved')
@@ -58,15 +58,15 @@
                                 </div>
 
                                 <!-- Request Details Grid -->
-                                <div class="grid grid-cols-2 gap-6 mb-6">
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6 mb-6">
                                     <div>
                                         <p class="text-sm text-gray-600 mb-1">Employee</p>
-                                        <p class="text-lg font-semibold text-gray-900">{{ $inventoryRequest->user->name }}</p>
+                                        <p class="text-base md:text-lg font-semibold text-gray-900">{{ $inventoryRequest->user->name }}</p>
                                     </div>
 
                                     <div>
                                         <p class="text-sm text-gray-600 mb-1">Priority</p>
-                                        <p class="text-lg font-semibold">
+                                        <p class="text-base md:text-lg font-semibold">
                                             <span class="inline-block px-3 py-1 rounded-full text-sm
                                                 @if($inventoryRequest->priority === 'urgent')
                                                     bg-red-100 text-red-800
@@ -80,14 +80,14 @@
 
                                     <div>
                                         <p class="text-sm text-gray-600 mb-1">Submitted</p>
-                                        <p class="text-lg font-semibold text-gray-900">
+                                        <p class="text-base md:text-lg font-semibold text-gray-900 break-words">
                                             {{ $inventoryRequest->submitted_at ? $inventoryRequest->submitted_at->format('M d, Y H:i') : 'Not submitted' }}
                                         </p>
                                     </div>
 
                                     <div>
                                         <p class="text-sm text-gray-600 mb-1">Needed By</p>
-                                        <p class="text-lg font-semibold text-gray-900">
+                                        <p class="text-base md:text-lg font-semibold text-gray-900 break-words">
                                             {{ $inventoryRequest->needed_by_date ? $inventoryRequest->needed_by_date->format('M d, Y') : 'Not specified' }}
                                             @if($inventoryRequest->needed_by_date && $inventoryRequest->needed_by_date < now())
                                                 <span class="ml-2 inline-block px-2 py-1 bg-red-100 text-red-800 text-xs rounded font-semibold">Overdue</span>
@@ -100,37 +100,37 @@
                                 @if($inventoryRequest->reason)
                                 <div class="border-t border-gray-200 pt-6">
                                     <p class="text-sm text-gray-600 mb-2">Reason</p>
-                                    <p class="text-gray-900">{{ $inventoryRequest->reason }}</p>
+                                    <p class="text-gray-900 break-words">{{ $inventoryRequest->reason }}</p>
                                 </div>
                                 @endif
                             </div>
 
                             <!-- Requested Items Card -->
-                            <div class="bg-white rounded-lg shadow-md border border-gray-200 p-6">
+                            <div class="bg-white rounded-lg shadow-md border border-gray-200 p-4 md:p-6">
                                 <h3 class="text-lg font-bold text-gray-900 mb-4">Requested Items</h3>
                                 
                                 @if($inventoryRequest->items->count() > 0)
-                                <div class="overflow-x-auto">
-                                    <table class="w-full">
-                                        <thead class="bg-gray-100 border-b border-gray-200">
+                                <div class="overflow-x-auto -mx-4 md:mx-0 px-4 md:px-0">
+                                    <table class="w-full min-w-max md:min-w-full">
+                                        <thead class="bg-gray-100 border-b border-gray-200 sticky top-0">
                                             <tr>
-                                                <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">Item</th>
-                                                <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">Job Needed For</th>
-                                                <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">Model</th>
-                                                <th class="px-4 py-3 text-center text-sm font-semibold text-gray-700">Qty</th>
-                                                <th class="px-4 py-3 text-center text-sm font-semibold text-gray-700">Fulfilled</th>
-                                                <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">Notes</th>
+                                                <th class="px-4 md:px-6 py-3 text-left text-sm font-semibold text-gray-700 whitespace-nowrap">Item</th>
+                                                <th class="px-4 md:px-6 py-3 text-left text-sm font-semibold text-gray-700 whitespace-nowrap">Job Needed For</th>
+                                                <th class="px-4 md:px-6 py-3 text-left text-sm font-semibold text-gray-700 whitespace-nowrap">Model</th>
+                                                <th class="px-4 md:px-6 py-3 text-center text-sm font-semibold text-gray-700 whitespace-nowrap">Qty</th>
+                                                <th class="px-4 md:px-6 py-3 text-center text-sm font-semibold text-gray-700 whitespace-nowrap">Fulfilled</th>
+                                                <th class="px-4 md:px-6 py-3 text-left text-sm font-semibold text-gray-700 whitespace-nowrap">Notes</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             @foreach($inventoryRequest->items as $item)
                                             <tr class="border-b border-gray-200 hover:bg-gray-50">
-                                                <td class="px-4 py-3 text-sm font-medium text-gray-900">{{ $item->item_name }}</td>
-                                                <td class="px-4 py-3 text-sm text-gray-600">{{ $item->job_number ?? '-' }}</td>
-                                                <td class="px-4 py-3 text-sm text-gray-600">{{ $item->model_number ?? '-' }}</td>
-                                                <td class="px-4 py-3 text-sm text-gray-900 font-semibold text-center">{{ $item->quantity }}</td>
-                                                <td class="px-4 py-3 text-sm text-gray-900 font-semibold text-center">{{ $item->fulfilled_quantity ?? 0 }}</td>
-                                                <td class="px-4 py-3 text-sm text-gray-600">{{ $item->notes ?? '-' }}</td>
+                                                <td class="px-4 md:px-6 py-3 text-sm font-medium text-gray-900 whitespace-nowrap">{{ $item->item_name }}</td>
+                                                <td class="px-4 md:px-6 py-3 text-sm text-gray-600 whitespace-nowrap">{{ $item->job_number ?? '-' }}</td>
+                                                <td class="px-4 md:px-6 py-3 text-sm text-gray-600 whitespace-nowrap">{{ $item->model_number ?? '-' }}</td>
+                                                <td class="px-4 md:px-6 py-3 text-sm text-gray-900 font-semibold text-center whitespace-nowrap">{{ $item->quantity }}</td>
+                                                <td class="px-4 md:px-6 py-3 text-sm text-gray-900 font-semibold text-center whitespace-nowrap">{{ $item->fulfilled_quantity ?? 0 }}</td>
+                                                <td class="px-4 md:px-6 py-3 text-sm text-gray-600 whitespace-nowrap">{{ $item->notes ?? '-' }}</td>
                                             </tr>
                                             @endforeach
                                         </tbody>
@@ -143,12 +143,24 @@
 
                             <!-- Admin Notes Card -->
                             @if($inventoryRequest->admin_notes)
-                            <div class="bg-blue-50 rounded-lg shadow-md border border-blue-200 p-6">
+                            <div class="bg-blue-50 rounded-lg shadow-md border border-blue-200 p-4 md:p-6">
                                 <h3 class="text-lg font-bold text-gray-900 mb-4">Admin Notes</h3>
-                                <p class="text-gray-900 whitespace-pre-wrap">{{ $inventoryRequest->admin_notes }}</p>
+                                <p class="text-gray-900 whitespace-pre-wrap break-words">{{ $inventoryRequest->admin_notes }}</p>
                             </div>
                             @endif
 
+                            <!-- Denial Reason (if denied) -->
+                            @if($inventoryRequest->status === 'denied' && $inventoryRequest->denied_reason)
+                            <div class="bg-red-50 rounded-lg shadow-md border border-red-200 p-4 md:p-6">
+                                <h3 class="text-lg font-bold text-gray-900 mb-4">Reason for Denial</h3>
+                                <p class="text-gray-900 break-words">{{ $inventoryRequest->denied_reason }}</p>
+                            </div>
+                            @endif
+
+                            <!-- Timeline -->
+                            <div class="bg-white rounded-lg shadow-md border border-gray-200 p-4 md:p-6">
+                                <h3 class="text-lg font-bold text-gray-900 mb-6">Request Timeline</h3>
+                                <div class="space-y-4">
                             <!-- Denial Reason (if denied) -->
                             @if($inventoryRequest->status === 'denied' && $inventoryRequest->denied_reason)
                             <div class="bg-red-50 rounded-lg shadow-md border border-red-200 p-6">
@@ -274,8 +286,8 @@
                         </div>
 
                         <!-- Sidebar: Actions -->
-                        <div class="col-span-1">
-                            <div class="bg-white rounded-lg shadow-md border border-gray-200 p-6 sticky top-24">
+                        <div class="lg:col-span-1">
+                            <div class="bg-white rounded-lg shadow-md border border-gray-200 p-4 md:p-6 lg:sticky lg:top-24">
                                 <h3 class="text-lg font-bold text-gray-900 mb-4">Admin Actions</h3>
                                 
                                 <div class="space-y-3">

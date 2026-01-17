@@ -6,28 +6,17 @@
             <!-- Main Content Area -->
             <div class="flex-1 overflow-auto">
                 <!-- Header -->
-                <header class="sticky top-0 z-40 bg-white shadow-sm border-b" style="border-bottom-color: #ccc;">
-                    <div class="flex items-center justify-between px-8 py-4">
-                        <div>
-                            <h2 class="text-2xl font-bold text-gray-900">Dashboard</h2>
-                            <p class="text-sm text-gray-600 mt-1">Welcome back, {{ Auth::user()->name }}</p>
-                        </div>
-                        <div class="flex items-center space-x-6">
-                            <x-notification-bell />
-                            <div class="text-right">
-                                <p class="text-sm font-medium text-gray-900">{{ Auth::user()->name }}</p>
-                                <p class="text-xs text-gray-600">{{ ucfirst(Auth::user()->role) }} Account</p>
-                            </div>
-                        </div>
-                    </div>
-                </header>
+                <x-employee-header 
+                    title="Dashboard"
+                    subtitle="Welcome back, {{ Auth::user()->name }}"
+                />
 
                 <!-- Main Content -->
-                <div class="p-8">
-                    <!-- Organization Info Banner -->
-                    <div class="mb-8 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-lg shadow-md p-6 text-white">
-                        <h1 class="text-3xl font-bold">Welcome back, {{ Auth::user()->name }}</h1>
-                        <p class="mt-2 text-blue-100">Organization ID: {{ Auth::user()->org_id ?? 'Not assigned' }}</p>
+                <div class="p-4 md:p-6">
+                    <!-- Welcome Banner -->
+                    <div class="mb-6 md:mb-8">
+                        <h1 class="text-2xl md:text-3xl font-bold text-gray-900">Welcome back, {{ Auth::user()->name }}</h1>
+                        <p class="mt-2 text-sm md:text-base text-muted-foreground">Organization: {{ Auth::user()->organization->name ?? 'Not assigned' }}</p>
                     </div>
 
                     <!-- Success Message -->
@@ -95,9 +84,9 @@
                     </div>
 
                     <!-- Welcome Message -->
-                    <div class="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-lg border border-blue-100 p-8 mb-8">
-                        <h2 class="text-2xl font-bold text-gray-900 mb-4">Welcome to Your Workspace</h2>
-                        <p class="text-gray-700 leading-relaxed">
+                    <div class="rounded-lg border border-border bg-surface p-6 md:p-8 mb-8">
+                        <h2 class="text-xl md:text-2xl font-bold text-gray-900 mb-3">Welcome to Your Workspace</h2>
+                        <p class="text-sm md:text-base text-muted-foreground leading-relaxed">
                             This is your personal employee dashboard. Here you can access important documents, check out tools, and submit inventory requests. 
                             All sections are organized for easy access and quick management of your work-related needs.
                         </p>

@@ -21,7 +21,7 @@
                 </div>
 
                 <!-- Main Content -->
-                <div class="p-8">
+                <div class="p-4 md:p-6">
                     <!-- Document Details Card -->
                     <div class="bg-white rounded-2xl border border-gray-200 p-8 shadow-lg mb-8">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">

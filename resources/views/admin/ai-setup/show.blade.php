@@ -12,11 +12,11 @@
                 />
 
                 <!-- Content -->
-                <div class="p-8">
+                <div class="p-4 md:p-8">
                     <div class="max-w-4xl">
                         <!-- Info Banner -->
                         <div class="mb-6 p-4 bg-blue-50 border-l-4 border-blue-500 rounded-lg">
-                            <div class="flex gap-3">
+                            <div class="flex flex-col sm:flex-row gap-3">
                                 <svg class="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
                                     <path fill-rule="evenodd" d="M18 5v8a2 2 0 01-2 2h-5l-5 4v-4H4a2 2 0 01-2-2V5a2 2 0 012-2h12a2 2 0 012 2zm-11-1a1 1 0 11-2 0 1 1 0 012 0z" clip-rule="evenodd" />
                                 </svg>
@@ -39,9 +39,9 @@
                                 </div>
                             </div>
 
-                            <div class="bg-blue-50 rounded-lg p-6 border border-blue-200">
+                            <div class="bg-blue-50 rounded-lg p-4 md:p-6 border border-blue-200">
                                 <label class="block text-sm font-semibold text-gray-700 mb-2">API Token</label>
-                                <div class="flex gap-3">
+                                <div class="flex flex-col sm:flex-row gap-3">
                                     <input 
                                         type="text" 
                                         value="{{ $apiToken }}" 
@@ -51,7 +51,7 @@
                                     />
                                     <button 
                                         onclick="copyApiToken()"
-                                        class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition whitespace-nowrap"
+                                        class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 md:py-3 px-4 md:px-6 rounded-lg transition whitespace-nowrap w-full sm:w-auto"
                                     >
                                         Copy Token
                                     </button>
@@ -61,8 +61,8 @@
                         </div>
 
                         <!-- Step 2: System Prompt -->
-                        <div class="bg-white rounded-lg shadow-md border border-gray-200 p-8 mb-6">
-                            <div class="flex items-start gap-4 mb-4">
+                        <div class="bg-white rounded-lg shadow-md border border-gray-200 p-4 md:p-8 mb-6">
+                            <div class="flex flex-col sm:flex-row items-start gap-3 md:gap-4 mb-4">
                                 <div class="flex-shrink-0 w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
                                     <span class="text-blue-600 font-bold text-sm">2</span>
                                 </div>
@@ -72,7 +72,7 @@
                                 </div>
                             </div>
 
-                            <div class="bg-gray-50 rounded-lg p-6 border border-gray-200">
+                            <div class="bg-gray-50 rounded-lg p-4 md:p-6 border border-gray-200">
                                 <label class="block text-sm font-semibold text-gray-700 mb-2">System Prompt (Ready to Paste into ChatGPT)</label>
                                 <textarea 
                                     id="systemPrompt"
@@ -82,7 +82,7 @@
                                 >{{ $systemPrompt }}</textarea>
                                 <button 
                                     onclick="copySystemPrompt()"
-                                    class="mt-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition"
+                                    class="mt-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 md:py-3 px-4 md:px-6 rounded-lg transition"
                                 >
                                     Copy Full Prompt
                                 </button>
@@ -91,8 +91,8 @@
                         </div>
 
                         <!-- Step 3: Setup in ChatGPT -->
-                        <div class="bg-white rounded-lg shadow-md border border-gray-200 p-8 mb-6">
-                            <div class="flex items-start gap-4 mb-6">
+                        <div class="bg-white rounded-lg shadow-md border border-gray-200 p-4 md:p-8 mb-6">
+                            <div class="flex flex-col sm:flex-row items-start gap-3 md:gap-4 mb-6">
                                 <div class="flex-shrink-0 w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
                                     <span class="text-blue-600 font-bold text-sm">3</span>
                                 </div>
@@ -102,7 +102,7 @@
                                 </div>
                             </div>
 
-                            <ol class="space-y-3 text-sm text-gray-700 bg-gray-50 rounded-lg p-6 border border-gray-200">
+                            <ol class="space-y-3 text-sm text-gray-700 bg-gray-50 rounded-lg p-4 md:p-6 border border-gray-200">
                                 <li class="flex gap-3">
                                     <span class="font-semibold text-blue-600">1.</span>
                                     <span>Open <a href="https://chatgpt.com" target="_blank" class="text-blue-600 hover:text-blue-700 font-semibold">ChatGPT</a> in a new tab</span>
@@ -160,7 +160,7 @@
                         </div>
 
                         <!-- Example Requests -->
-                        <div class="bg-white rounded-lg shadow-md border border-gray-200 p-8">
+                        <div class="bg-white rounded-lg shadow-md border border-gray-200 p-4 md:p-8">
                             <h3 class="text-lg font-bold text-gray-900 mb-4">Example Questions to Ask Your AI Agent</h3>
                             <ul class="space-y-2 text-sm text-gray-700">
                                 <li class="flex gap-2">

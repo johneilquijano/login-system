@@ -12,31 +12,31 @@
                 />
 
                 <!-- Main Content -->
-                <div class="p-8">
+                <div class="p-4 md:p-6">
                     <!-- Tabs and Search Bar -->
-                    <div class="mb-8 flex items-center justify-between gap-6">
+                    <div class="mb-6 md:mb-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
                         <!-- Tabs -->
-                        <div class="flex gap-2 border-b border-gray-200">
+                        <div class="flex gap-1 md:gap-2 border-b border-gray-200 w-full md:w-auto overflow-x-auto">
                             <a href="{{ route('tools.index', ['tab' => 'available', 'search' => $search]) }}" 
-                               class="px-6 py-3 font-semibold text-sm transition-all {{ $tab === 'available' ? 'text-blue-600 border-b-2 border-blue-600' : 'text-gray-600 hover:text-gray-900' }}">
+                               class="px-3 md:px-6 py-2 md:py-3 font-semibold text-xs md:text-sm transition-all whitespace-nowrap {{ $tab === 'available' ? 'text-blue-600 border-b-2 border-blue-600' : 'text-gray-600 hover:text-gray-900' }}">
                                 Available Tools
                             </a>
                             <a href="{{ route('tools.index', ['tab' => 'checked_out', 'search' => $search]) }}" 
-                               class="px-6 py-3 font-semibold text-sm transition-all {{ $tab === 'checked_out' ? 'text-blue-600 border-b-2 border-blue-600' : 'text-gray-600 hover:text-gray-900' }}">
+                               class="px-3 md:px-6 py-2 md:py-3 font-semibold text-xs md:text-sm transition-all whitespace-nowrap {{ $tab === 'checked_out' ? 'text-blue-600 border-b-2 border-blue-600' : 'text-gray-600 hover:text-gray-900' }}">
                                 My Checked-Out Items
                             </a>
                             <a href="{{ route('tools.index', ['tab' => 'history', 'search' => $search]) }}" 
-                               class="px-6 py-3 font-semibold text-sm transition-all {{ $tab === 'history' ? 'text-blue-600 border-b-2 border-blue-600' : 'text-gray-600 hover:text-gray-900' }}">
+                               class="px-3 md:px-6 py-2 md:py-3 font-semibold text-xs md:text-sm transition-all whitespace-nowrap {{ $tab === 'history' ? 'text-blue-600 border-b-2 border-blue-600' : 'text-gray-600 hover:text-gray-900' }}">
                                 My History
                             </a>
                         </div>
 
                         <!-- Search Bar -->
-                        <div class="flex-shrink-0 w-80">
+                        <div class="flex-shrink-0 w-full md:w-80">
                             <form method="GET" action="{{ route('tools.index') }}" class="flex">
                                 <input type="hidden" name="tab" value="{{ $tab }}">
                                 <div class="relative w-full">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 md:w-5 h-4 md:h-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                                     </svg>
                                     <input 
@@ -44,7 +44,7 @@
                                         name="search" 
                                         placeholder="Search tools..." 
                                         value="{{ $search }}"
-                                        class="w-full pl-10 pr-4 py-2.5 bg-gray-50 border border-gray-300 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all">
+                                        class="w-full pl-10 pr-3 md:pr-4 py-2 md:py-2.5 bg-gray-50 border border-gray-300 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-sm md:text-base">
                                 </div>
                             </form>
                         </div>
@@ -52,13 +52,13 @@
 
                     <!-- Available Tools Tab -->
                     @if($tab === 'available')
-                    <div class="bg-white rounded-2xl border border-gray-200 p-8 shadow-lg">
+                    <div class="bg-white rounded-2xl border border-gray-200 p-4 md:p-6 shadow-lg">
                         @if($items->count() > 0)
-                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
                             @foreach($items as $tool)
-                            <div class="bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-lg transition-all duration-300 hover:border-blue-300">
+                            <div class="bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-lg transition-all duration-300 hover:border-blue-300 flex flex-col">
                                 <!-- Tool Image -->
-                                <div class="w-full h-48 bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center overflow-hidden">
+                                <div class="w-full h-40 sm:h-48 bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center overflow-hidden">
                                     @if($tool->image_path)
                                         <img src="{{ asset($tool->image_path) }}" alt="{{ $tool->name }}" class="w-full h-full object-cover">
                                     @else
@@ -107,11 +107,11 @@
                             @endforeach
                         </div>
                         @else
-                        <div class="text-center py-16">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-16 h-16 text-gray-400 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <div class="text-center py-12 md:py-16">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-12 md:w-16 h-12 md:h-16 text-gray-400 mx-auto mb-3 md:mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
                             </svg>
-                            <p class="text-gray-900 font-semibold text-lg">No tools available</p>
+                            <p class="text-gray-900 font-semibold text-base md:text-lg">No tools available</p>
                             <p class="text-gray-600 text-sm mt-2">Check back later for available tools</p>
                         </div>
                         @endif
@@ -124,9 +124,9 @@
                         @if($items->count() > 0)
                         <div class="divide-y divide-gray-200">
                             @foreach($items as $checkout)
-                            <div class="p-6 flex items-center justify-between hover:bg-gray-50 transition-all">
+                            <div class="p-3 md:p-6 flex flex-col md:flex-row md:items-center justify-between gap-3 md:gap-4 hover:bg-gray-50 transition-all">
                                 <!-- Left: Item Image -->
-                                <div class="flex-shrink-0 w-16 h-16 bg-gradient-to-br from-gray-100 to-gray-200 rounded-lg flex items-center justify-center overflow-hidden">
+                                <div class="flex-shrink-0 w-14 h-14 md:w-16 md:h-16 bg-gradient-to-br from-gray-100 to-gray-200 rounded-lg flex items-center justify-center overflow-hidden">
                                     @if($checkout->tool && $checkout->tool->image_path)
                                         <img src="{{ asset($checkout->tool->image_path) }}" alt="{{ $checkout->tool_name }}" class="w-full h-full object-cover">
                                     @else
@@ -137,27 +137,27 @@
                                 </div>
 
                                 <!-- Middle: Tool Info -->
-                                <div class="flex-1 ml-6">
-                                    <h3 class="text-lg font-bold text-gray-900">{{ $checkout->tool_name ?? ($checkout->tool->name ?? 'Tool') }}</h3>
-                                    <p class="text-sm text-gray-600 mt-1">
+                                <div class="flex-1 ml-0 md:ml-6">
+                                    <h3 class="text-base md:text-lg font-bold text-gray-900">{{ $checkout->tool_name ?? ($checkout->tool->name ?? 'Tool') }}</h3>
+                                    <p class="text-xs md:text-sm text-gray-600 mt-1">
                                         Checked out on: <span class="font-semibold text-gray-900">{{ $checkout->checked_out_at ? $checkout->checked_out_at->format('M d, Y \a\t H:i') : $checkout->created_at->format('M d, Y \a\t H:i') }}</span>
                                     </p>
                                 </div>
 
                                 <!-- Right: Return Button -->
                                 <button onclick="returnTool('{{ $checkout->id }}', '{{ $checkout->tool_name ?? ($checkout->tool->name ?? 'Tool') }}')" 
-                                        class="ml-4 bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-700 hover:to-emerald-600 text-white font-semibold py-2.5 px-6 rounded-lg transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
+                                        class="w-full md:w-auto ml-0 md:ml-4 bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-700 hover:to-emerald-600 text-white font-semibold py-2 md:py-2.5 px-3 md:px-6 rounded-lg transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 text-sm md:text-base">
                                     Return Item
                                 </button>
                             </div>
                             @endforeach
                         </div>
                         @else
-                        <div class="text-center py-16">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-16 h-16 text-gray-400 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <div class="text-center py-12 md:py-16">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-12 md:w-16 h-12 md:h-16 text-gray-400 mx-auto mb-3 md:mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
-                            <p class="text-gray-900 font-semibold text-lg">No checked-out items</p>
+                            <p class="text-gray-900 font-semibold text-base md:text-lg">No checked-out items</p>
                             <p class="text-gray-600 text-sm mt-2">You haven't checked out any tools yet</p>
                         </div>
                         @endif
@@ -168,24 +168,24 @@
                     @if($tab === 'history')
                     <div class="bg-white rounded-2xl border border-gray-200 shadow-lg">
                         @if($items->count() > 0)
-                        <div class="overflow-x-auto">
-                            <table class="w-full">
-                                <thead class="bg-gray-50 border-b border-gray-200">
+                        <div class="overflow-x-auto -mx-4 md:mx-0 px-4 md:px-0">
+                            <table class="w-full min-w-max md:min-w-full">
+                                <thead class="bg-gray-50 border-b border-gray-200 sticky top-0">
                                     <tr>
-                                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wide">Tool</th>
-                                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wide">Action</th>
-                                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wide">Date & Time</th>
-                                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wide">Condition</th>
-                                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wide">Duration</th>
+                                        <th class="px-4 md:px-6 py-3 md:py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wide whitespace-nowrap">Tool</th>
+                                        <th class="px-4 md:px-6 py-3 md:py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wide whitespace-nowrap">Action</th>
+                                        <th class="px-4 md:px-6 py-3 md:py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wide whitespace-nowrap">Date & Time</th>
+                                        <th class="px-4 md:px-6 py-3 md:py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wide whitespace-nowrap">Condition</th>
+                                        <th class="px-4 md:px-6 py-3 md:py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wide whitespace-nowrap">Duration</th>
                                     </tr>
                                 </thead>
                                 <tbody class="divide-y divide-gray-200">
                                     @foreach($items as $checkout)
                                     <tr class="hover:bg-gray-50 transition-all">
                                         <!-- Tool Name & Image -->
-                                        <td class="px-6 py-4">
-                                            <div class="flex items-center gap-3">
-                                                <div class="flex-shrink-0 w-12 h-12 bg-gradient-to-br from-gray-100 to-gray-200 rounded-lg flex items-center justify-center overflow-hidden">
+                                        <td class="px-4 md:px-6 py-3 md:py-4 whitespace-nowrap">
+                                            <div class="flex items-center gap-2 md:gap-3">
+                                                <div class="flex-shrink-0 w-10 h-10 md:w-12 md:h-12 bg-gradient-to-br from-gray-100 to-gray-200 rounded-lg flex items-center justify-center overflow-hidden">
                                                     @if($checkout->tool && $checkout->tool->image_path)
                                                         <img src="{{ asset($checkout->tool->image_path) }}" alt="{{ $checkout->tool_name }}" class="w-full h-full object-cover">
                                                     @else
@@ -195,31 +195,31 @@
                                                     @endif
                                                 </div>
                                                 <div>
-                                                    <p class="text-sm font-semibold text-gray-900">{{ $checkout->tool_name ?? ($checkout->tool->name ?? 'Tool') }}</p>
-                                                    <p class="text-xs text-gray-500">{{ $checkout->tool->category ?? 'N/A' }}</p>
+                                                    <p class="text-xs md:text-sm font-semibold text-gray-900 whitespace-nowrap">{{ $checkout->tool_name ?? ($checkout->tool->name ?? 'Tool') }}</p>
+                                                    <p class="text-xs text-gray-500 whitespace-nowrap hidden md:block">{{ $checkout->tool->category ?? 'N/A' }}</p>
                                                 </div>
                                             </div>
                                         </td>
 
                                         <!-- Action Badge -->
-                                        <td class="px-6 py-4">
+                                        <td class="px-4 md:px-6 py-3 md:py-4 whitespace-nowrap">
                                             <div class="flex gap-2">
-                                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $checkout->returned_at ? 'bg-blue-100 text-blue-800' : 'bg-yellow-100 text-yellow-800' }}">
+                                                <span class="inline-flex items-center px-2 md:px-2.5 py-0.5 rounded-full text-xs font-medium {{ $checkout->returned_at ? 'bg-blue-100 text-blue-800' : 'bg-yellow-100 text-yellow-800' }}">
                                                     {{ $checkout->returned_at ? 'Returned' : 'Checked Out' }}
                                                 </span>
                                             </div>
                                         </td>
 
                                         <!-- Checkout Date & Time -->
-                                        <td class="px-6 py-4">
-                                            <p class="text-sm text-gray-900">{{ $checkout->checked_out_at ? $checkout->checked_out_at->format('M d, Y') : $checkout->created_at->format('M d, Y') }}</p>
+                                        <td class="px-4 md:px-6 py-3 md:py-4 whitespace-nowrap">
+                                            <p class="text-xs md:text-sm text-gray-900">{{ $checkout->checked_out_at ? $checkout->checked_out_at->format('M d, Y') : $checkout->created_at->format('M d, Y') }}</p>
                                             <p class="text-xs text-gray-500">{{ $checkout->checked_out_at ? $checkout->checked_out_at->format('H:i A') : $checkout->created_at->format('H:i A') }}</p>
                                         </td>
 
                                         <!-- Condition -->
-                                        <td class="px-6 py-4">
+                                        <td class="px-4 md:px-6 py-3 md:py-4 whitespace-nowrap">
                                             @if($checkout->tool)
-                                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 
+                                                <span class="inline-flex items-center px-2 md:px-2.5 py-0.5 rounded-full text-xs font-medium 
                                                     @if($checkout->tool->condition === 'good') bg-green-100 text-green-800
                                                     @elseif($checkout->tool->condition === 'fair') bg-yellow-100 text-yellow-800
                                                     @else bg-orange-100 text-orange-800 @endif">
@@ -231,12 +231,12 @@
                                         </td>
 
                                         <!-- Duration -->
-                                        <td class="px-6 py-4">
+                                        <td class="px-4 md:px-6 py-3 md:py-4 whitespace-nowrap">
                                             @if($checkout->returned_at && $checkout->checked_out_at)
-                                                <p class="text-sm text-gray-900">{{ $checkout->checked_out_at->diffInDays($checkout->returned_at) }} day(s)</p>
+                                                <p class="text-xs md:text-sm text-gray-900">{{ $checkout->checked_out_at->diffInDays($checkout->returned_at) }} day(s)</p>
                                                 <p class="text-xs text-gray-500">{{ $checkout->returned_at->format('M d, Y H:i A') }}</p>
                                             @else
-                                                <p class="text-sm text-gray-900">Still checked out</p>
+                                                <p class="text-xs md:text-sm text-gray-900">Still checked out</p>
                                                 <p class="text-xs text-gray-500">{{ $checkout->checked_out_at ? $checkout->checked_out_at->diffForHumans() : 'N/A' }}</p>
                                             @endif
                                         </td>
@@ -246,11 +246,11 @@
                             </table>
                         </div>
                         @else
-                        <div class="text-center py-16">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-16 h-16 text-gray-400 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <div class="text-center py-12 md:py-16">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-12 md:w-16 h-12 md:h-16 text-gray-400 mx-auto mb-3 md:mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
-                            <p class="text-gray-900 font-semibold text-lg">No history yet</p>
+                            <p class="text-gray-900 font-semibold text-base md:text-lg">No history yet</p>
                             <p class="text-gray-600 text-sm mt-2">You haven't checked out any tools</p>
                         </div>
                         @endif

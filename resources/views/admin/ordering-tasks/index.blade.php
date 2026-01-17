@@ -12,7 +12,7 @@
                 />
 
                 <!-- Main Content -->
-                <div class="p-8">
+                <div class="p-4 md:p-6">
                     <!-- Tabs -->
                     <div class="mb-8 border-b border-gray-200">
                         <div class="flex gap-8">

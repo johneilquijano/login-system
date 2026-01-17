@@ -12,7 +12,7 @@
                 />
 
                 <!-- Main Content -->
-                <div class="p-8">
+                <div class="p-4 md:p-6">
                     <!-- Success Message -->
                     @if (session('success'))
                     <div class="mb-6 p-4 bg-emerald-50 border border-emerald-200 rounded-xl flex justify-between items-center shadow-md animate-in fade-in slide-in-from-top">
@@ -31,12 +31,12 @@
                     <!-- Documents Section -->
                     <div class="bg-white rounded-2xl border border-gray-200 p-8 shadow-lg">
                         <!-- Section Title with Upload Button -->
-                        <div class="flex items-center justify-between mb-8">
+                        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
                             <div>
                                 <h3 class="text-2xl font-bold text-gray-900">My Documents</h3>
                                 <p class="text-sm text-gray-600 mt-2">{{ $documents->total() }} document{{ $documents->total() !== 1 ? 's' : '' }} in your collection</p>
                             </div>
-                            <a href="{{ route('documents.upload') }}" class="bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300 text-sm flex items-center gap-2 shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
+                            <a href="{{ route('documents.upload') }}" class="w-full sm:w-auto bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300 text-sm flex items-center justify-center gap-2 shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
                                 </svg>
@@ -44,11 +44,11 @@
                             </a>
                         </div>
 
-                        <!-- Search, Filter, and Sort Controls (Single Row) -->
+                        <!-- Search, Filter, and Sort Controls -->
                         <div class="mb-8">
-                            <form id="document-filter-form" method="GET" action="{{ route('documents.index') }}" class="flex gap-3 items-end">
+                            <form id="document-filter-form" method="GET" action="{{ route('documents.index') }}" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 items-end">
                                 <!-- Search Bar -->
-                                <div class="flex-1 min-w-0">
+                                <div class="col-span-1 sm:col-span-2 lg:col-span-1">
                                     <label class="block text-sm font-semibold text-gray-700 mb-2">Search</label>
                                     <div class="relative">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -75,7 +75,7 @@
                                 </div>
                                 
                                 <!-- Signature Filter -->
-                                <div class="w-48">
+                                <div>
                                     <label class="block text-sm font-semibold text-gray-700 mb-2">Signature</label>
                                     <select id="signatureFilter" name="signature" class="w-full px-4 py-2.5 bg-gray-50 border border-gray-300 rounded-xl text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all appearance-none cursor-pointer filter-select">
                                         <option value="">All</option>
@@ -85,7 +85,7 @@
                                 </div>
 
                                 <!-- Status Filter -->
-                                <div class="w-48">
+                                <div>
                                     <label class="block text-sm font-semibold text-gray-700 mb-2">Status</label>
                                     <select id="statusFilter" name="status" class="w-full px-4 py-2.5 bg-gray-50 border border-gray-300 rounded-xl text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all appearance-none cursor-pointer filter-select">
                                         <option value="">All Status</option>
@@ -97,7 +97,7 @@
                                 </div>                                
 
                                 <!-- Sort -->
-                                <div class="w-48">
+                                <div>
                                     <label class="block text-sm font-semibold text-gray-700 mb-2">Sort</label>
                                     <select id="sortFilter" name="sort" class="w-full px-4 py-2.5 bg-gray-50 border border-gray-300 rounded-xl text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all appearance-none cursor-pointer filter-select">
                                         <option value="newest" {{ request('sort', 'newest') === 'newest' ? 'selected' : '' }}>Newest First</option>
@@ -108,7 +108,7 @@
                                 </div>
 
                                 <!-- Reset Button -->
-                                <div>
+                                <div class="col-span-1 sm:col-span-2 lg:col-span-1">
                                     <label class="block text-sm font-semibold text-gray-700 mb-2">&nbsp;</label>
                                     <button type="button" onclick="resetFilters()" class="w-full bg-red-100 hover:bg-red-200 text-red-700 hover:text-red-900 font-semibold py-2.5 px-4 rounded-xl transition-all flex items-center justify-center gap-2 border border-red-200 hover:border-red-300">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -122,43 +122,43 @@
 
                         <!-- Documents Table -->
                         @if($documents->count() > 0)
-                        <div class="overflow-x-auto">
-                            <table class="w-full">
-                                <thead class="bg-gray-50 border-b border-gray-200">
+                        <div class="overflow-x-auto -mx-8 md:mx-0 px-8 md:px-0">
+                            <table class="w-full min-w-max md:min-w-full">
+                                <thead class="bg-gray-50 border-b border-gray-200 sticky top-0">
                                     <tr>
-                                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Document Name</th>
-                                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Type</th>
-                                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Uploaded On</th>
-                                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Signature</th>
-                                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Status</th>
-                                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Actions</th>
+                                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider whitespace-nowrap">Document Name</th>
+                                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider whitespace-nowrap">Type</th>
+                                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider whitespace-nowrap">Uploaded On</th>
+                                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider whitespace-nowrap">Signature</th>
+                                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider whitespace-nowrap">Status</th>
+                                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider whitespace-nowrap">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody class="divide-y divide-gray-200">
                                     @foreach($documents as $doc)
                                     <tr class="hover:bg-gray-50 transition-all duration-200 border-b border-gray-200">
-                                        <td class="px-6 py-4 text-sm">
+                                        <td class="px-6 py-4 text-sm whitespace-nowrap">
                                             <a href="{{ route('documents.show', $doc) }}" class="text-blue-600 hover:text-blue-800 font-semibold hover:underline truncate block">
                                                 {{ $doc->title }}
                                             </a>
                                         </td>
-                                        <td class="px-6 py-4 text-sm text-gray-700">
+                                        <td class="px-6 py-4 text-sm text-gray-700 whitespace-nowrap">
                                             <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-purple-100 text-purple-700 border border-purple-200">
                                                 {{ $doc->formatted_type }}
                                             </span>
                                         </td>
-                                        <td class="px-6 py-4 text-sm text-gray-700">
+                                        <td class="px-6 py-4 text-sm text-gray-700 whitespace-nowrap">
                                             <span class="text-xs">{{ $doc->created_at->format('M d, Y') }}</span><br>
                                             <span class="text-xs text-gray-500">{{ $doc->created_at->format('H:i') }}</span>
                                         </td>
-                                        <td class="px-6 py-4 text-sm">
+                                        <td class="px-6 py-4 text-sm whitespace-nowrap">
                                             @if(!$doc->signed_at)
                                             <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-yellow-100 text-yellow-700 border border-yellow-200">Pending</span>
                                             @else
                                             <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-700 border border-emerald-200">Signed</span>
                                             @endif
                                         </td>
-                                        <td class="px-6 py-4 text-sm">
+                                        <td class="px-6 py-4 text-sm whitespace-nowrap">
                                             <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold 
                                                 @if($doc->status === 'approved')
                                                     bg-emerald-100 text-emerald-700 border border-emerald-200
@@ -172,7 +172,7 @@
                                                 {{ ucfirst(str_replace('_', ' ', $doc->status)) }}
                                             </span>
                                         </td>
-                                        <td class="px-6 py-4 text-sm flex gap-2">
+                                        <td class="px-6 py-4 text-sm flex gap-2 whitespace-nowrap">
                                             <a href="{{ route('documents.show', $doc) }}" class="bg-blue-100 hover:bg-blue-200 text-blue-700 hover:text-blue-900 font-semibold py-2 px-2.5 rounded-lg transition-all text-xs border border-blue-200 hover:border-blue-300 flex items-center justify-center" title="Preview document">
                                                 <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                                     <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -208,7 +208,7 @@
                         </div>
 
                         <!-- Pagination -->
-                        <div class="mt-8 flex justify-center">
+                        <div class="mt-8 flex justify-center px-4 md:px-0">
                             <div class="text-gray-700 text-sm">
                                 {{ $documents->links() }}
                             </div>

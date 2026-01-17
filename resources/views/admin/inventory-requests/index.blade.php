@@ -12,12 +12,12 @@
                 />
 
                 <!-- Main Content -->
-                <div class="p-8">
+                <div class="p-4 md:p-6">
                     <!-- Filters Section -->
-                    <div class="bg-white rounded-lg shadow-md border border-gray-200 p-6 mb-8">
+                    <div class="bg-white rounded-lg shadow-md border border-gray-200 p-4 md:p-6 mb-8">
                         <h3 class="text-lg font-bold text-gray-900 mb-4">Filters</h3>
                         
-                        <form method="GET" action="{{ route('admin.inventory-requests.index') }}" id="filterForm" class="grid grid-cols-7 gap-3 items-end">
+                        <form method="GET" action="{{ route('admin.inventory-requests.index') }}" id="filterForm" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-7 gap-3 items-end">
                             <!-- Status Filter -->
                             <div>
                                 <label class="block text-sm font-semibold text-gray-900 mb-2">Status</label>
@@ -85,67 +85,69 @@
                     <!-- Requests Table -->
                     @if($requests->count() > 0)
                     <div class="bg-white rounded-lg shadow-md border border-gray-200 overflow-hidden">
-                        <table class="w-full">
-                            <thead class="bg-gray-100 border-b border-gray-200">
-                                <tr>
-                                    <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Request #</th>
-                                    <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Employee</th>
-                                    <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Title</th>
-                                    <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Submitted</th>
-                                    <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Needed By</th>
-                                    <th class="px-6 py-3 text-center text-sm font-semibold text-gray-700">Priority</th>
-                                    <th class="px-6 py-3 text-center text-sm font-semibold text-gray-700">Status</th>
-                                    <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach($requests as $request)
-                                <tr class="border-b border-gray-200 hover:bg-gray-50 transition">
-                                    <td class="px-6 py-4 text-sm font-medium text-gray-900">#{{ str_pad($request->id, 4, '0', STR_PAD_LEFT) }}</td>
-                                    <td class="px-6 py-4 text-sm text-gray-900">{{ $request->user->name }}</td>
-                                    <td class="px-6 py-4 text-sm text-gray-900">{{ $request->request_title }}</td>
-                                    <td class="px-6 py-4 text-sm text-gray-600">{{ $request->submitted_at ? $request->submitted_at->format('M d, Y') : '-' }}</td>
-                                    <td class="px-6 py-4 text-sm text-gray-600">
-                                        {{ $request->needed_by_date ? $request->needed_by_date->format('M d, Y') : '-' }}
-                                        @if($request->needed_by_date && $request->needed_by_date < now() && $request->status !== 'fulfilled' && $request->status !== 'denied')
-                                            <span class="ml-2 inline-block px-2 py-1 bg-red-100 text-red-800 text-xs rounded font-semibold">Overdue</span>
-                                        @endif
-                                    </td>
-                                    <td class="px-6 py-4 text-center text-sm">
-                                        <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold
-                                            @if($request->priority === 'urgent')
-                                                bg-red-100 text-red-800
-                                            @else
-                                                bg-blue-100 text-blue-800
-                                            @endif">
-                                            {{ ucfirst($request->priority) }}
-                                        </span>
-                                    </td>
-                                    <td class="px-6 py-4 text-center text-sm">
-                                        <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold 
-                                            @if($request->status === 'submitted')
-                                                bg-yellow-100 text-yellow-800
-                                            @elseif($request->status === 'approved')
-                                                bg-blue-100 text-blue-800
-                                            @elseif($request->status === 'denied')
-                                                bg-red-100 text-red-800
-                                            @elseif($request->status === 'fulfilled')
-                                                bg-green-100 text-green-800
-                                            @else
-                                                bg-gray-100 text-gray-800
-                                            @endif">
-                                            {{ ucfirst(str_replace('_', ' ', $request->status)) }}
-                                        </span>
-                                    </td>
-                                    <td class="px-6 py-4 text-sm space-x-2">
-                                        <a href="{{ route('admin.inventory-requests.show', $request) }}" class="text-blue-600 hover:text-blue-800 font-semibold">
-                                            View
-                                        </a>
-                                    </td>
-                                </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
+                        <div class="overflow-x-auto -mx-4 md:mx-0 px-4 md:px-0">
+                            <table class="w-full min-w-max md:min-w-full">
+                                <thead class="bg-gray-100 border-b border-gray-200 sticky top-0">
+                                    <tr>
+                                        <th class="px-4 md:px-6 py-3 text-left text-sm font-semibold text-gray-700 whitespace-nowrap">Request #</th>
+                                        <th class="px-4 md:px-6 py-3 text-left text-sm font-semibold text-gray-700 whitespace-nowrap">Employee</th>
+                                        <th class="px-4 md:px-6 py-3 text-left text-sm font-semibold text-gray-700 whitespace-nowrap">Title</th>
+                                        <th class="px-4 md:px-6 py-3 text-left text-sm font-semibold text-gray-700 whitespace-nowrap">Submitted</th>
+                                        <th class="px-4 md:px-6 py-3 text-left text-sm font-semibold text-gray-700 whitespace-nowrap">Needed By</th>
+                                        <th class="px-4 md:px-6 py-3 text-center text-sm font-semibold text-gray-700 whitespace-nowrap">Priority</th>
+                                        <th class="px-4 md:px-6 py-3 text-center text-sm font-semibold text-gray-700 whitespace-nowrap">Status</th>
+                                        <th class="px-4 md:px-6 py-3 text-left text-sm font-semibold text-gray-700 whitespace-nowrap">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($requests as $request)
+                                    <tr class="border-b border-gray-200 hover:bg-gray-50 transition">
+                                        <td class="px-4 md:px-6 py-4 text-sm font-medium text-gray-900 whitespace-nowrap">#{{ str_pad($request->id, 4, '0', STR_PAD_LEFT) }}</td>
+                                        <td class="px-4 md:px-6 py-4 text-sm text-gray-900 whitespace-nowrap">{{ $request->user->name }}</td>
+                                        <td class="px-4 md:px-6 py-4 text-sm text-gray-900 whitespace-nowrap">{{ $request->request_title }}</td>
+                                        <td class="px-4 md:px-6 py-4 text-sm text-gray-600 whitespace-nowrap">{{ $request->submitted_at ? $request->submitted_at->format('M d, Y') : '-' }}</td>
+                                        <td class="px-4 md:px-6 py-4 text-sm text-gray-600 whitespace-nowrap">
+                                            {{ $request->needed_by_date ? $request->needed_by_date->format('M d, Y') : '-' }}
+                                            @if($request->needed_by_date && $request->needed_by_date < now() && $request->status !== 'fulfilled' && $request->status !== 'denied')
+                                                <span class="ml-2 inline-block px-2 py-1 bg-red-100 text-red-800 text-xs rounded font-semibold">Overdue</span>
+                                            @endif
+                                        </td>
+                                        <td class="px-4 md:px-6 py-4 text-center text-sm whitespace-nowrap">
+                                            <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold
+                                                @if($request->priority === 'urgent')
+                                                    bg-red-100 text-red-800
+                                                @else
+                                                    bg-blue-100 text-blue-800
+                                                @endif">
+                                                {{ ucfirst($request->priority) }}
+                                            </span>
+                                        </td>
+                                        <td class="px-4 md:px-6 py-4 text-center text-sm whitespace-nowrap">
+                                            <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold 
+                                                @if($request->status === 'submitted')
+                                                    bg-yellow-100 text-yellow-800
+                                                @elseif($request->status === 'approved')
+                                                    bg-blue-100 text-blue-800
+                                                @elseif($request->status === 'denied')
+                                                    bg-red-100 text-red-800
+                                                @elseif($request->status === 'fulfilled')
+                                                    bg-green-100 text-green-800
+                                                @else
+                                                    bg-gray-100 text-gray-800
+                                                @endif">
+                                                {{ ucfirst(str_replace('_', ' ', $request->status)) }}
+                                            </span>
+                                        </td>
+                                        <td class="px-4 md:px-6 py-4 text-sm space-x-2 whitespace-nowrap">
+                                            <a href="{{ route('admin.inventory-requests.show', $request) }}" class="text-blue-600 hover:text-blue-800 font-semibold">
+                                                View
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
 
                     <!-- Pagination -->

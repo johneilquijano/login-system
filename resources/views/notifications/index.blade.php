@@ -10,57 +10,47 @@
             <!-- Main Content Area -->
             <div class="flex-1 overflow-auto">
                 <!-- Header -->
-                <header class="sticky top-0 z-40 bg-white shadow-sm border-b" style="border-bottom-color: #ccc;">
-                    <div class="flex items-center justify-between px-8 py-4">
-                        <div>
-                            <h2 class="text-2xl font-bold text-gray-900">Notifications</h2>
-                            <p class="text-sm text-gray-600 mt-1">
-                                @if($status === 'unread')
-                                    Unread messages
-                                @elseif($status === 'read')
-                                    Read messages
-                                @else
-                                    All notifications
-                                @endif
-                            </p>
-                        </div>
-                    </div>
-                </header>
+                <x-employee-header 
+                    title="Notifications"
+                    subtitle="Stay updated with all your notifications"
+                />
 
                 <!-- Content -->
-                <div class="p-8">
+                <div class="p-4 md:p-6">
                     <!-- Filters -->
-                    <div class="mb-6 flex flex-wrap gap-3">
-                        <div class="flex gap-2">
+                    <div class="mb-6 space-y-3 lg:space-y-0 lg:flex lg:justify-between lg:items-center lg:gap-4">
+                        <!-- Status Filters -->
+                        <div class="grid grid-cols-3 gap-2 lg:flex lg:gap-2">
                             <a href="{{ route('notifications.index') }}" 
-                               class="px-4 py-2 rounded-lg font-medium transition {{ $status === 'all' ? 'bg-blue-600 text-white' : 'bg-white border border-gray-200 text-gray-700 hover:border-gray-300' }}">
+                               class="px-3 py-1 rounded-lg font-medium text-sm transition text-center lg:text-left {{ $status === 'all' ? 'bg-blue-600 text-white' : 'bg-white border border-gray-200 text-gray-700 hover:border-gray-300' }}">
                                 All
                             </a>
                             <a href="{{ route('notifications.index', ['status' => 'unread']) }}" 
-                               class="px-4 py-2 rounded-lg font-medium transition {{ $status === 'unread' ? 'bg-blue-600 text-white' : 'bg-white border border-gray-200 text-gray-700 hover:border-gray-300' }}">
+                               class="px-3 py-1 rounded-lg font-medium text-sm transition text-center lg:text-left {{ $status === 'unread' ? 'bg-blue-600 text-white' : 'bg-white border border-gray-200 text-gray-700 hover:border-gray-300' }}">
                                 Unread ({{ $unreadCount }})
                             </a>
                             <a href="{{ route('notifications.index', ['status' => 'read']) }}" 
-                               class="px-4 py-2 rounded-lg font-medium transition {{ $status === 'read' ? 'bg-blue-600 text-white' : 'bg-white border border-gray-200 text-gray-700 hover:border-gray-300' }}">
+                               class="px-3 py-1 rounded-lg font-medium text-sm transition text-center lg:text-left {{ $status === 'read' ? 'bg-blue-600 text-white' : 'bg-white border border-gray-200 text-gray-700 hover:border-gray-300' }}">
                                 Read
                             </a>
                         </div>
 
-                        <div class="flex gap-2">
+                        <!-- Type Filters -->
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-2 lg:flex lg:gap-2">
                             <a href="{{ route('notifications.index') }}" 
-                               class="px-4 py-2 rounded-lg font-medium transition {{ !$type ? 'bg-gray-600 text-white' : 'bg-white border border-gray-200 text-gray-700 hover:border-gray-300' }}">
+                               class="px-3 py-1 rounded-lg font-medium text-sm transition text-center lg:text-left {{ !$type ? 'bg-gray-600 text-white' : 'bg-white border border-gray-200 text-gray-700 hover:border-gray-300' }}">
                                 All Types
                             </a>
                             <a href="{{ route('notifications.index', array_merge(request()->query(), ['type' => 'documents'])) }}" 
-                               class="px-4 py-2 rounded-lg font-medium transition {{ $type === 'documents' ? 'bg-blue-600 text-white' : 'bg-white border border-gray-200 text-gray-700 hover:border-gray-300' }}">
+                               class="px-3 py-1 rounded-lg font-medium text-sm transition text-center lg:text-left {{ $type === 'documents' ? 'bg-blue-600 text-white' : 'bg-white border border-gray-200 text-gray-700 hover:border-gray-300' }}">
                                 Documents
                             </a>
                             <a href="{{ route('notifications.index', array_merge(request()->query(), ['type' => 'tools'])) }}" 
-                               class="px-4 py-2 rounded-lg font-medium transition {{ $type === 'tools' ? 'bg-green-600 text-white' : 'bg-white border border-gray-200 text-gray-700 hover:border-gray-300' }}">
+                               class="px-3 py-1 rounded-lg font-medium text-sm transition text-center lg:text-left {{ $type === 'tools' ? 'bg-green-600 text-white' : 'bg-white border border-gray-200 text-gray-700 hover:border-gray-300' }}">
                                 Tools
                             </a>
                             <a href="{{ route('notifications.index', array_merge(request()->query(), ['type' => 'inventory_requests'])) }}" 
-                               class="px-4 py-2 rounded-lg font-medium transition {{ $type === 'inventory_requests' ? 'bg-purple-600 text-white' : 'bg-white border border-gray-200 text-gray-700 hover:border-gray-300' }}">
+                               class="px-3 py-1 rounded-lg font-medium text-sm transition text-center lg:text-left {{ $type === 'inventory_requests' ? 'bg-purple-600 text-white' : 'bg-white border border-gray-200 text-gray-700 hover:border-gray-300' }}">
                                 Inventory
                             </a>
                         </div>
@@ -71,7 +61,7 @@
                         <div class="space-y-3">
                             @foreach($notifications as $notification)
                                 <div class="bg-white rounded-lg border {{ $notification->isUnread() ? 'border-blue-200 bg-blue-50' : 'border-gray-200' }} p-4 hover:shadow-md transition cursor-pointer" onclick="window.location.href = '{{ $notification->link_url ?? '#' }}'">
-                                    <div class="flex items-start justify-between">
+                                    <div class="flex flex-col sm:flex-row items-start justify-between gap-3">
                                         <div class="flex-1">
                                             <div class="flex items-center gap-2">
                                                 <h3 class="font-semibold text-gray-900">{{ $notification->title }}</h3>
@@ -86,7 +76,7 @@
                                             </div>
                                         </div>
                                         
-                                        <div class="flex gap-2 ml-4">
+                                        <div class="flex flex-col sm:flex-row gap-2 w-full sm:w-auto sm:ml-4">
                                             @if($notification->isUnread())
                                                 <button class="text-blue-600 hover:text-blue-700 text-sm font-medium" onclick="markAsRead(event, {{ $notification->id }})">
                                                     Mark as read
@@ -102,7 +92,7 @@
                         </div>
 
                         <!-- Pagination -->
-                        <div class="mt-6">
+                        <div class="mt-6 px-4 md:px-0">
                             {{ $notifications->links() }}
                         </div>
                     @else

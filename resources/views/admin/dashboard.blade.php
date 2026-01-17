@@ -12,7 +12,7 @@
                 />
 
                 <!-- Main Content -->
-                <div class="p-8">
+                <div class="p-4 md:p-6">
                     <!-- Welcome Banner -->
                     <div class="mb-8 bg-gradient-to-r from-purple-600 to-indigo-600 rounded-lg shadow-md p-6 text-white">
                         <h1 class="text-3xl font-bold">Welcome back, {{ Auth::user()->name }}</h1>

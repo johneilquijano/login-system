@@ -1,12 +1,15 @@
 <x-layout>
     <div class="min-h-screen bg-gray-50">
-        <div class="flex h-screen">
+        <div class="flex h-screen flex-col lg:flex-row">
             <x-super-admin-sidebar />
 
             <!-- Main Content Area -->
-            <div class="flex-1 overflow-auto">
-                <!-- Top Header -->
-                <div class="bg-white shadow">
+            <div class="flex-1 overflow-auto flex flex-col">
+                <!-- Mobile/Tablet Header -->
+                <x-super-admin-header title="System Overview" />
+
+                <!-- Desktop Header -->
+                <div class="hidden lg:block bg-white shadow">
                     <div class="px-8 py-4 flex justify-between items-center">
                         <h2 class="text-2xl font-bold text-gray-900">System Overview</h2>
                         <div class="text-sm text-gray-600">
@@ -16,7 +19,7 @@
                 </div>
 
                 <!-- Main Content -->
-                <div class="p-8">
+                <div class="p-4 md:p-6 flex-1">
                     <!-- Statistics Cards -->
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                         <!-- Total Organizations -->

@@ -16,26 +16,26 @@
                 />
 
                 <!-- Main Content -->
-                <div class="p-8">
+                <div class="p-4 md:p-6">
                     <!-- Statistics Row -->
-                    <div class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-8">
-                        <div class="bg-white rounded-lg shadow-sm p-4 border border-gray-100">
+                    <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
+                        <div class="bg-white rounded-lg shadow-sm p-4 border border-gray-100 text-center">
                             <p class="text-gray-600 text-sm font-medium">Total Submitted</p>
                             <p class="text-3xl font-bold text-gray-900 mt-2">{{ $stats['total'] }}</p>
                         </div>
-                        <div class="bg-white rounded-lg shadow-sm p-4 border border-gray-100">
+                        <div class="bg-white rounded-lg shadow-sm p-4 border border-gray-100 text-center">
                             <p class="text-gray-600 text-sm font-medium">New</p>
                             <p class="text-3xl font-bold text-blue-600 mt-2">{{ $stats['new'] }}</p>
                         </div>
-                        <div class="bg-white rounded-lg shadow-sm p-4 border border-gray-100">
+                        <div class="bg-white rounded-lg shadow-sm p-4 border border-gray-100 text-center">
                             <p class="text-gray-600 text-sm font-medium">In Review</p>
                             <p class="text-3xl font-bold text-amber-600 mt-2">{{ $stats['in_review'] }}</p>
                         </div>
-                        <div class="bg-white rounded-lg shadow-sm p-4 border border-gray-100">
+                        <div class="bg-white rounded-lg shadow-sm p-4 border border-gray-100 text-center">
                             <p class="text-gray-600 text-sm font-medium">Fixed</p>
                             <p class="text-3xl font-bold text-green-600 mt-2">{{ $stats['fixed'] }}</p>
                         </div>
-                        <div class="bg-white rounded-lg shadow-sm p-4 border border-gray-100">
+                        <div class="bg-white rounded-lg shadow-sm p-4 border border-gray-100 text-center">
                             <p class="text-gray-600 text-sm font-medium">Ignored</p>
                             <p class="text-3xl font-bold text-gray-600 mt-2">{{ $stats['ignored'] }}</p>
                         </div>
@@ -44,9 +44,9 @@
                     <!-- Filters -->
                     <div class="bg-white rounded-lg shadow-sm border border-gray-100 p-6 mb-6">
                         <h3 class="text-lg font-semibold text-gray-900 mb-4">Filters</h3>
-                        <form action="{{ route('feedback.my') }}" method="GET" class="flex flex-wrap gap-4">
+                        <form action="{{ route('feedback.my') }}" method="GET" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 items-end">
                             <!-- Status Filter -->
-                            <div class="flex-1 min-w-max">
+                            <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Status</label>
                                 <select name="status" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:border-indigo-600 focus:ring-indigo-500">
                                     <option value="">All Statuses</option>
@@ -58,7 +58,7 @@
                             </div>
 
                             <!-- Category Filter -->
-                            <div class="flex-1 min-w-max">
+                            <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Type</label>
                                 <select name="category" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:border-indigo-600 focus:ring-indigo-500">
                                     <option value="">All Types</option>
@@ -69,8 +69,8 @@
                             </div>
 
                             <!-- Submit Button -->
-                            <div class="flex items-end">
-                                <button type="submit" class="px-6 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-medium transition">
+                            <div class="col-span-1 sm:col-span-2 lg:col-span-1">
+                                <button type="submit" class="w-full px-6 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-medium transition">
                                     Filter
                                 </button>
                             </div>
@@ -80,21 +80,22 @@
                     <!-- Feedback Table -->
                     @if($feedbacks->count() > 0)
                         <div class="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden">
-                            <table class="w-full">
-                                <thead class="bg-gray-50 border-b border-gray-200">
-                                    <tr>
-                                        <th class="px-6 py-4 text-left text-sm font-semibold text-gray-900">Type</th>
-                                        <th class="px-6 py-4 text-left text-sm font-semibold text-gray-900">Message</th>
-                                        <th class="px-6 py-4 text-left text-sm font-semibold text-gray-900">Status</th>
-                                        <th class="px-6 py-4 text-left text-sm font-semibold text-gray-900">Priority</th>
-                                        <th class="px-6 py-4 text-left text-sm font-semibold text-gray-900">Created</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="divide-y divide-gray-200">
-                                    @foreach($feedbacks as $feedback)
-                                        <tr class="hover:bg-gray-50 transition">
-                                            <!-- Type Badge -->
-                                            <td class="px-6 py-4">
+                            <div class="overflow-x-auto -mx-4 md:mx-0 px-4 md:px-0">
+                                <table class="w-full min-w-max md:min-w-full">
+                                    <thead class="bg-gray-50 border-b border-gray-200 sticky top-0">
+                                        <tr>
+                                            <th class="px-4 md:px-6 py-4 text-left text-sm font-semibold text-gray-900 whitespace-nowrap">Type</th>
+                                            <th class="px-4 md:px-6 py-4 text-left text-sm font-semibold text-gray-900 whitespace-nowrap">Message</th>
+                                            <th class="px-4 md:px-6 py-4 text-left text-sm font-semibold text-gray-900 whitespace-nowrap">Status</th>
+                                            <th class="px-4 md:px-6 py-4 text-left text-sm font-semibold text-gray-900 whitespace-nowrap">Priority</th>
+                                            <th class="px-4 md:px-6 py-4 text-left text-sm font-semibold text-gray-900 whitespace-nowrap">Created</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="divide-y divide-gray-200">
+                                        @foreach($feedbacks as $feedback)
+                                            <tr class="hover:bg-gray-50 transition">
+                                                <!-- Type Badge -->
+                                                <td class="px-4 md:px-6 py-4 whitespace-nowrap">
                                                 @php
                                                     $typeColors = [
                                                         'bug' => ['bg' => 'bg-red-100', 'text' => 'text-red-800'],
@@ -108,13 +109,13 @@
                                                 </span>
                                             </td>
 
-                                            <!-- Message Preview -->
-                                            <td class="px-6 py-4">
-                                                <p class="text-sm text-gray-900 max-w-xs truncate">{{ Str::limit($feedback->message, 50) }}</p>
-                                            </td>
+                                                <!-- Message Preview -->
+                                                <td class="px-4 md:px-6 py-4 whitespace-nowrap">
+                                                    <p class="text-sm text-gray-900 max-w-xs truncate">{{ Str::limit($feedback->message, 50) }}</p>
+                                                </td>
 
-                                            <!-- Status Badge -->
-                                            <td class="px-6 py-4">
+                                                <!-- Status Badge -->
+                                                <td class="px-4 md:px-6 py-4 whitespace-nowrap">
                                                 @php
                                                     $statusColors = [
                                                         'new' => ['bg' => 'bg-blue-100', 'text' => 'text-blue-800'],
@@ -129,8 +130,8 @@
                                                 </span>
                                             </td>
 
-                                            <!-- Priority -->
-                                            <td class="px-6 py-4">
+                                                <!-- Priority -->
+                                                <td class="px-4 md:px-6 py-4 whitespace-nowrap">
                                                 @if($feedback->severity)
                                                     @php
                                                         $severityColors = [
@@ -148,19 +149,20 @@
                                                 @endif
                                             </td>
 
-                                            <!-- Created Date -->
-                                            <td class="px-6 py-4">
-                                                <p class="text-sm text-gray-600">{{ $feedback->created_at->format('M d, Y') }}</p>
-                                                <p class="text-xs text-gray-500">{{ $feedback->created_at->format('H:i') }}</p>
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
+                                                <!-- Created Date -->
+                                                <td class="px-4 md:px-6 py-4 whitespace-nowrap">
+                                                    <p class="text-sm text-gray-600">{{ $feedback->created_at->format('M d, Y') }}</p>
+                                                    <p class="text-xs text-gray-500">{{ $feedback->created_at->format('H:i') }}</p>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
 
                         <!-- Pagination -->
-                        <div class="mt-6">
+                        <div class="mt-6 px-4 md:px-0">
                             {{ $feedbacks->links() }}
                         </div>
                     @else

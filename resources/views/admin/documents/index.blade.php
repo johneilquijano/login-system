@@ -12,7 +12,7 @@
                 />
 
                 <!-- Main Content -->
-                <div class="p-8">
+                <div class="p-4 md:p-6">
                     <!-- Success Message -->
                     @if (session('success'))
                     <div class="mb-6 p-4 bg-emerald-50 border border-emerald-200 rounded-xl flex justify-between items-center shadow-md animate-in fade-in slide-in-from-top">
@@ -29,21 +29,21 @@
                     @endif
 
                     <!-- Documents Section -->
-                    <div class="bg-white rounded-2xl border border-gray-200 p-8 shadow-lg">
-                        <!-- Section Title with Assign Button -->
-                        <div class="flex items-center justify-between mb-8">
-                            <div>
-                                <h3 class="text-2xl font-bold text-gray-900">All Documents</h3>
+                    <div class="bg-white rounded-2xl border border-gray-200 p-4 md:p-8 shadow-lg">
+                        <!-- Section Title with Buttons -->
+                        <div class="mb-6 md:mb-8">
+                            <div class="mb-4 md:mb-6">
+                                <h3 class="text-xl md:text-2xl font-bold text-gray-900">All Documents</h3>
                                 <p class="text-sm text-gray-600 mt-2">{{ $documents->total() }} document{{ $documents->total() !== 1 ? 's' : '' }} in your organization</p>
                             </div>
-                            <div class="flex gap-3">
-                                <button onclick="openUploadModal()" class="bg-gradient-to-r from-purple-600 to-purple-500 hover:from-purple-700 hover:to-purple-600 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300 text-sm flex items-center gap-2 shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
+                            <div class="flex flex-col sm:flex-row gap-2 md:gap-3">
+                                <button onclick="openUploadModal()" class="bg-gradient-to-r from-purple-600 to-purple-500 hover:from-purple-700 hover:to-purple-600 text-white font-semibold py-2 md:py-3 px-4 md:px-6 rounded-xl transition-all duration-300 text-sm flex items-center justify-center gap-2 shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10" />
                                     </svg>
                                     <span>Upload Document</span>
                                 </button>
-                                <button onclick="openAssignModal()" class="bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300 text-sm flex items-center gap-2 shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
+                                <button onclick="openAssignModal()" class="bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 text-white font-semibold py-2 md:py-3 px-4 md:px-6 rounded-xl transition-all duration-300 text-sm flex items-center justify-center gap-2 shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
                                     </svg>
@@ -52,11 +52,11 @@
                             </div>
                         </div>
 
-                        <!-- Search, Filter, and Sort Controls (Single Row) -->
-                        <div class="mb-8">
-                            <form id="document-filter-form" method="GET" action="{{ route('admin.documents.index') }}" class="flex gap-3 items-end">
+                        <!-- Search, Filter, and Sort Controls (Responsive) -->
+                        <div class="mb-6 md:mb-8">
+                            <form id="document-filter-form" method="GET" action="{{ route('admin.documents.index') }}" class="flex flex-col gap-3">
                                 <!-- Search Bar -->
-                                <div class="flex-1 min-w-0">
+                                <div class="w-full">
                                     <label class="block text-sm font-semibold text-gray-700 mb-2">Search</label>
                                     <div class="relative">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -82,76 +82,79 @@
                                     </div>
                                 </div>
                                 
-                                <!-- Signature Filter -->
-                                <div class="w-48">
-                                    <label class="block text-sm font-semibold text-gray-700 mb-2">Signature</label>
-                                    <select id="signatureFilter" name="signature" class="w-full px-4 py-2.5 bg-gray-50 border border-gray-300 rounded-xl text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all appearance-none cursor-pointer filter-select">
-                                        <option value="">All</option>
-                                        <option value="needs_signature" {{ request('signature') === 'needs_signature' ? 'selected' : '' }}>Needs Signature</option>
-                                        <option value="signed" {{ request('signature') === 'signed' ? 'selected' : '' }}>Signed</option>
-                                    </select>
-                                </div>
+                                <!-- Filter Row (Wraps on smaller screens) -->
+                                <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                                    <!-- Signature Filter -->
+                                    <div>
+                                        <label class="block text-sm font-semibold text-gray-700 mb-2">Signature</label>
+                                        <select id="signatureFilter" name="signature" class="w-full px-3 md:px-4 py-2.5 bg-gray-50 border border-gray-300 rounded-xl text-gray-900 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all appearance-none cursor-pointer filter-select">
+                                            <option value="">All</option>
+                                            <option value="needs_signature" {{ request('signature') === 'needs_signature' ? 'selected' : '' }}>Needs Sig</option>
+                                            <option value="signed" {{ request('signature') === 'signed' ? 'selected' : '' }}>Signed</option>
+                                        </select>
+                                    </div>
 
-                                <!-- Status Filter -->
-                                <div class="w-48">
-                                    <label class="block text-sm font-semibold text-gray-700 mb-2">Status</label>
-                                    <select id="statusFilter" name="status" class="w-full px-4 py-2.5 bg-gray-50 border border-gray-300 rounded-xl text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all appearance-none cursor-pointer filter-select">
-                                        <option value="">All Status</option>
-                                        <option value="draft" {{ request('status') === 'draft' ? 'selected' : '' }}>Draft</option>
-                                        <option value="pending_review" {{ request('status') === 'pending_review' ? 'selected' : '' }}>Pending Review</option>
-                                        <option value="approved" {{ request('status') === 'approved' ? 'selected' : '' }}>Approved</option>
-                                        <option value="rejected" {{ request('status') === 'rejected' ? 'selected' : '' }}>Rejected</option>
-                                    </select>
-                                </div>                                
+                                    <!-- Status Filter -->
+                                    <div>
+                                        <label class="block text-sm font-semibold text-gray-700 mb-2">Status</label>
+                                        <select id="statusFilter" name="status" class="w-full px-3 md:px-4 py-2.5 bg-gray-50 border border-gray-300 rounded-xl text-gray-900 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all appearance-none cursor-pointer filter-select">
+                                            <option value="">All Status</option>
+                                            <option value="draft" {{ request('status') === 'draft' ? 'selected' : '' }}>Draft</option>
+                                            <option value="pending_review" {{ request('status') === 'pending_review' ? 'selected' : '' }}>Pending</option>
+                                            <option value="approved" {{ request('status') === 'approved' ? 'selected' : '' }}>Approved</option>
+                                            <option value="rejected" {{ request('status') === 'rejected' ? 'selected' : '' }}>Rejected</option>
+                                        </select>
+                                    </div>                                
 
-                                <!-- Sort -->
-                                <div class="w-48">
-                                    <label class="block text-sm font-semibold text-gray-700 mb-2">Sort</label>
-                                    <select id="sortFilter" name="sort" class="w-full px-4 py-2.5 bg-gray-50 border border-gray-300 rounded-xl text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all appearance-none cursor-pointer filter-select">
-                                        <option value="newest" {{ request('sort', 'newest') === 'newest' ? 'selected' : '' }}>Newest First</option>
-                                        <option value="oldest" {{ request('sort') === 'oldest' ? 'selected' : '' }}>Oldest First</option>
-                                        <option value="name_asc" {{ request('sort') === 'name_asc' ? 'selected' : '' }}>Name (A-Z)</option>
-                                        <option value="name_desc" {{ request('sort') === 'name_desc' ? 'selected' : '' }}>Name (Z-A)</option>
-                                    </select>
-                                </div>
+                                    <!-- Sort -->
+                                    <div>
+                                        <label class="block text-sm font-semibold text-gray-700 mb-2">Sort</label>
+                                        <select id="sortFilter" name="sort" class="w-full px-3 md:px-4 py-2.5 bg-gray-50 border border-gray-300 rounded-xl text-gray-900 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all appearance-none cursor-pointer filter-select">
+                                            <option value="newest" {{ request('sort', 'newest') === 'newest' ? 'selected' : '' }}>Newest</option>
+                                            <option value="oldest" {{ request('sort') === 'oldest' ? 'selected' : '' }}>Oldest</option>
+                                            <option value="name_asc" {{ request('sort') === 'name_asc' ? 'selected' : '' }}>A-Z</option>
+                                            <option value="name_desc" {{ request('sort') === 'name_desc' ? 'selected' : '' }}>Z-A</option>
+                                        </select>
+                                    </div>
 
-                                <!-- Reset Button -->
-                                <div>
-                                    <label class="block text-sm font-semibold text-gray-700 mb-2">&nbsp;</label>
-                                    <button type="button" onclick="resetFilters()" class="w-full bg-red-100 hover:bg-red-200 text-red-700 hover:text-red-900 font-semibold py-2.5 px-4 rounded-xl transition-all flex items-center justify-center gap-2 border border-red-200 hover:border-red-300">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                                        </svg>
-                                        <span>Reset</span>
-                                    </button>
+                                    <!-- Reset Button -->
+                                    <div>
+                                        <label class="block text-sm font-semibold text-gray-700 mb-2">&nbsp;</label>
+                                        <button type="button" onclick="resetFilters()" class="w-full bg-red-100 hover:bg-red-200 text-red-700 hover:text-red-900 font-semibold py-2.5 px-3 md:px-4 rounded-xl transition-all flex items-center justify-center gap-1 md:gap-2 border border-red-200 hover:border-red-300 text-xs md:text-sm">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                                            </svg>
+                                            <span>Reset</span>
+                                        </button>
+                                    </div>
                                 </div>
                             </form>
                         </div>
 
                         <!-- Documents Table -->
                         @if($documents->count() > 0)
-                        <div class="overflow-x-auto">
-                            <table class="w-full">
-                                <thead class="bg-gray-50 border-b border-gray-200">
+                        <div class="overflow-x-auto -mx-4 md:mx-0">
+                            <table class="w-full min-w-max md:min-w-full">
+                                <thead class="bg-gray-50 border-b border-gray-200 sticky top-0">
                                     <tr>
-                                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Document Name</th>
-                                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Assigned To</th>
-                                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Type</th>
-                                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Date</th>
-                                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Signature</th>
-                                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Status</th>
-                                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Actions</th>
+                                        <th class="px-4 md:px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider whitespace-nowrap">Document Name</th>
+                                        <th class="px-4 md:px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider whitespace-nowrap">Assigned To</th>
+                                        <th class="px-4 md:px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider whitespace-nowrap">Type</th>
+                                        <th class="px-4 md:px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider whitespace-nowrap">Date</th>
+                                        <th class="px-4 md:px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider whitespace-nowrap">Signature</th>
+                                        <th class="px-4 md:px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider whitespace-nowrap">Status</th>
+                                        <th class="px-4 md:px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider whitespace-nowrap">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody class="divide-y divide-gray-200">
                                     @foreach($documents as $doc)
                                     <tr class="hover:bg-gray-50 transition-all duration-200">
-                                        <td class="px-6 py-4 text-sm">
-                                            <a href="{{ route('admin.documents.show', $doc) }}" class="text-blue-600 hover:text-blue-800 font-semibold hover:underline truncate block">
+                                        <td class="px-4 md:px-6 py-4 text-sm whitespace-nowrap">
+                                            <a href="{{ route('admin.documents.show', $doc) }}" class="text-blue-600 hover:text-blue-800 font-semibold hover:underline">
                                                 {{ $doc->title }}
                                             </a>
                                         </td>
-                                        <td class="px-6 py-4 text-sm text-gray-700">
+                                        <td class="px-4 md:px-6 py-4 text-sm text-gray-700 whitespace-nowrap">
                                             @if($doc->user)
                                                 <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-blue-100 text-blue-700 border border-blue-200">
                                                     {{ $doc->user->name }}
@@ -162,23 +165,22 @@
                                                 </button>
                                             @endif
                                         </td>
-                                        <td class="px-6 py-4 text-sm text-gray-700">
+                                        <td class="px-4 md:px-6 py-4 text-sm text-gray-700 whitespace-nowrap">
                                             <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-purple-100 text-purple-700 border border-purple-200">
                                                 {{ $doc->formatted_type }}
                                             </span>
                                         </td>
-                                        <td class="px-6 py-4 text-sm text-gray-700">
-                                            <span class="text-xs">{{ $doc->created_at->format('M d, Y') }}</span><br>
-                                            <span class="text-xs text-gray-500">{{ $doc->created_at->format('H:i') }}</span>
+                                        <td class="px-4 md:px-6 py-4 text-sm text-gray-700 whitespace-nowrap">
+                                            <span class="text-xs">{{ $doc->created_at->format('M d, Y H:i') }}</span>
                                         </td>
-                                        <td class="px-6 py-4 text-sm">
+                                        <td class="px-4 md:px-6 py-4 text-sm whitespace-nowrap">
                                             @if(!$doc->signed_at)
                                             <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-yellow-100 text-yellow-700 border border-yellow-200">Pending</span>
                                             @else
                                             <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-700 border border-emerald-200">Signed</span>
                                             @endif
                                         </td>
-                                        <td class="px-6 py-4 text-sm">
+                                        <td class="px-4 md:px-6 py-4 text-sm whitespace-nowrap">
                                             <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold 
                                                 @if($doc->status === 'approved')
                                                     bg-emerald-100 text-emerald-700 border border-emerald-200
@@ -192,7 +194,7 @@
                                                 {{ ucfirst(str_replace('_', ' ', $doc->status)) }}
                                             </span>
                                         </td>
-                                        <td class="px-6 py-4 text-sm flex gap-2">
+                                        <td class="px-4 md:px-6 py-4 text-sm flex gap-2 whitespace-nowrap">
                                             <a href="{{ route('admin.documents.show', $doc) }}" class="bg-blue-100 hover:bg-blue-200 text-blue-700 hover:text-blue-900 font-semibold py-1.5 px-3 rounded-lg transition-all text-xs border border-blue-200 hover:border-blue-300" title="Preview">
                                                 <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                                     <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />

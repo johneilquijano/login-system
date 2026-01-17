@@ -19,7 +19,7 @@
                 </div>
 
                 <!-- Main Content -->
-                <div class="p-8">
+                <div class="p-4 md:p-6">
                     <!-- Advanced Filters -->
                     <div class="mb-8 bg-white rounded-2xl border border-gray-200 p-6 shadow-lg">
                         <h3 class="text-lg font-semibold text-gray-900 mb-4">Filters</h3>

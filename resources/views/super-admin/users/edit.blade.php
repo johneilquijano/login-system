@@ -1,20 +1,23 @@
 <x-layout>
     <div class="min-h-screen bg-gray-50">
-        <div class="flex h-screen">
+        <div class="flex h-screen flex-col lg:flex-row">
             <x-super-admin-sidebar />
 
             <!-- Main Content Area -->
-            <div class="flex-1 overflow-auto">
-                <!-- Top Header -->
-                <div class="bg-white shadow">
+            <div class="flex-1 overflow-auto flex flex-col">
+                <!-- Mobile/Tablet Header -->
+                <x-super-admin-header title="Edit User" />
+
+                <!-- Desktop Header -->
+                <div class="hidden lg:block bg-white shadow">
                     <div class="px-8 py-4">
                         <h2 class="text-2xl font-bold text-gray-900">Edit User</h2>
                     </div>
                 </div>
 
                 <!-- Main Content -->
-                <div class="p-8">
-                    <div class="max-w-2xl bg-white rounded-lg shadow p-8">
+                <div class="p-4 md:p-6 flex-1">
+                    <div class="max-w-2xl bg-white rounded-lg shadow p-6 md:p-8">
                         <form method="POST" action="{{ route('super-admin.users.update', $user) }}">
                             @csrf
                             @method('PUT')
@@ -107,16 +110,16 @@
                             </div>
 
                             <!-- Buttons -->
-                            <div class="flex gap-4">
+                            <div class="flex flex-col sm:flex-row gap-3 sm:gap-4">
                                 <button 
                                     type="submit" 
-                                    class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg transition"
+                                    class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg transition text-sm"
                                 >
                                     Update User
                                 </button>
                                 <a 
                                     href="{{ route('super-admin.users.index') }}" 
-                                    class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-6 rounded-lg transition"
+                                    class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-6 rounded-lg transition text-sm text-center"
                                 >
                                     Cancel
                                 </a>

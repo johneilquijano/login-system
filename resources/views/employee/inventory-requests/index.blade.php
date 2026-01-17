@@ -12,7 +12,7 @@
                 />
 
                 <!-- Main Content -->
-                <div class="p-8">
+                <div class="p-4 md:p-6">
                     <!-- Success Message -->
                     @if (session('success'))
                     <div class="mb-6 p-4 bg-green-50 border-l-4 border-green-500 rounded-lg flex justify-between items-center shadow-sm">
@@ -40,20 +40,20 @@
                     @endif
 
                     <!-- Top Bar: Search, Filters, New Request Button -->
-                    <div class="mb-8 flex items-center justify-between gap-4">
-                        <div class="flex-1 flex gap-4">
+                    <div class="mb-6 md:mb-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-3 md:gap-4">
+                        <div class="flex-1 flex flex-col md:flex-row gap-2 md:gap-4 w-full md:w-auto">
                             <!-- Search -->
                             <input 
                                 type="text" 
                                 id="searchInput"
                                 placeholder="Search by request title..." 
-                                class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                class="flex-1 px-3 md:px-4 py-2 md:py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm md:text-base"
                             />
                             
                             <!-- Status Filter -->
                             <select 
                                 id="statusFilter"
-                                class="px-4 py-2 border border-gray-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                class="px-3 md:px-4 py-2 md:py-2.5 border border-gray-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm md:text-base"
                             >
                                 <option value="">All Statuses</option>
                                 <option value="draft">Draft</option>
@@ -68,14 +68,14 @@
                             <input 
                                 type="date" 
                                 id="dateFilter"
-                                class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                class="px-3 md:px-4 py-2 md:py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm md:text-base"
                             />
                         </div>
 
                         <!-- New Request Button -->
                         <button 
                             onclick="openNewRequestModal()"
-                            class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg transition"
+                            class="w-full md:w-auto bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 md:py-2.5 px-4 md:px-6 rounded-lg transition text-sm md:text-base"
                         >
                             <span class="mr-2">+</span> New Request
                         </button>
@@ -84,77 +84,79 @@
                     <!-- Requests Table/List -->
                     @if($requests->count() > 0)
                     <div class="bg-white rounded-lg shadow-md border border-gray-200 overflow-hidden">
-                        <table class="w-full">
-                            <thead class="bg-gray-100 border-b border-gray-200">
-                                <tr>
-                                    <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Request #</th>
-                                    <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Title</th>
-                                    <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Items</th>
-                                    <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Priority</th>
-                                    <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Status</th>
-                                    <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Submitted</th>
-                                    <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach($requests as $request)
-                                <tr class="border-b border-gray-200 hover:bg-gray-50 transition searchable-row" data-search="{{ strtolower($request->request_title) }}" data-status="{{ $request->status }}" data-date="{{ $request->created_at->format('Y-m-d') }}">
-                                    <td class="px-6 py-4 text-sm font-medium text-gray-900">#{{ str_pad($request->id, 4, '0', STR_PAD_LEFT) }}</td>
-                                    <td class="px-6 py-4 text-sm font-medium text-gray-900">{{ $request->request_title }}</td>
-                                    <td class="px-6 py-4 text-sm text-gray-600">
-                                        <button onclick="viewRequestItems({{ $request->id }})" class="text-blue-600 hover:text-blue-800 font-semibold">
-                                            {{ $request->items->count() }} item(s)
-                                        </button>
-                                    </td>
-                                    <td class="px-6 py-4 text-sm">
-                                        <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold
-                                            @if($request->priority === 'urgent')
-                                                bg-red-100 text-red-800
-                                            @else
-                                                bg-blue-100 text-blue-800
-                                            @endif">
-                                            {{ ucfirst($request->priority) }}
-                                        </span>
-                                    </td>
-                                    <td class="px-6 py-4 text-sm">
-                                        <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold 
+                        <div class="overflow-x-auto -mx-4 md:mx-0 px-4 md:px-0">
+                            <table class="w-full min-w-max md:min-w-full">
+                                <thead class="bg-gray-100 border-b border-gray-200 sticky top-0">
+                                    <tr>
+                                        <th class="px-4 md:px-6 py-3 text-left text-xs md:text-sm font-semibold text-gray-700 whitespace-nowrap">Request #</th>
+                                        <th class="px-4 md:px-6 py-3 text-left text-xs md:text-sm font-semibold text-gray-700 whitespace-nowrap">Title</th>
+                                        <th class="px-4 md:px-6 py-3 text-left text-xs md:text-sm font-semibold text-gray-700 whitespace-nowrap">Items</th>
+                                        <th class="px-4 md:px-6 py-3 text-left text-xs md:text-sm font-semibold text-gray-700 whitespace-nowrap">Priority</th>
+                                        <th class="px-4 md:px-6 py-3 text-left text-xs md:text-sm font-semibold text-gray-700 whitespace-nowrap">Status</th>
+                                        <th class="px-4 md:px-6 py-3 text-left text-xs md:text-sm font-semibold text-gray-700 whitespace-nowrap">Submitted</th>
+                                        <th class="px-4 md:px-6 py-3 text-left text-xs md:text-sm font-semibold text-gray-700 whitespace-nowrap">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($requests as $request)
+                                    <tr class="border-b border-gray-200 hover:bg-gray-50 transition searchable-row" data-search="{{ strtolower($request->request_title) }}" data-status="{{ $request->status }}" data-date="{{ $request->created_at->format('Y-m-d') }}">
+                                        <td class="px-4 md:px-6 py-3 md:py-4 text-xs md:text-sm font-medium text-gray-900 whitespace-nowrap">#{{ str_pad($request->id, 4, '0', STR_PAD_LEFT) }}</td>
+                                        <td class="px-4 md:px-6 py-3 md:py-4 text-xs md:text-sm font-medium text-gray-900 whitespace-nowrap">{{ $request->request_title }}</td>
+                                        <td class="px-4 md:px-6 py-3 md:py-4 text-xs md:text-sm text-gray-600 whitespace-nowrap">
+                                            <button onclick="viewRequestItems({{ $request->id }})" class="text-blue-600 hover:text-blue-800 font-semibold">
+                                                {{ $request->items->count() }} item(s)
+                                            </button>
+                                        </td>
+                                        <td class="px-4 md:px-6 py-3 md:py-4 text-xs whitespace-nowrap">
+                                            <span class="inline-block px-2 md:px-3 py-1 rounded-full text-xs font-semibold
+                                                @if($request->priority === 'urgent')
+                                                    bg-red-100 text-red-800
+                                                @else
+                                                    bg-blue-100 text-blue-800
+                                                @endif">
+                                                {{ ucfirst($request->priority) }}
+                                            </span>
+                                        </td>
+                                        <td class="px-4 md:px-6 py-3 md:py-4 text-xs whitespace-nowrap">
+                                            <span class="inline-block px-2 md:px-3 py-1 rounded-full text-xs font-semibold 
+                                                @if($request->status === 'draft')
+                                                    bg-gray-100 text-gray-800
+                                                @elseif($request->status === 'submitted')
+                                                    bg-yellow-100 text-yellow-800
+                                                @elseif($request->status === 'approved')
+                                                    bg-green-100 text-green-800
+                                                @elseif($request->status === 'denied')
+                                                    bg-red-100 text-red-800
+                                                @elseif($request->status === 'fulfilled')
+                                                    bg-indigo-100 text-indigo-800
+                                                @else
+                                                    bg-gray-100 text-gray-800
+                                                @endif">
+                                                {{ ucfirst(str_replace('_', ' ', $request->status)) }}
+                                            </span>
+                                        </td>
+                                        <td class="px-4 md:px-6 py-3 md:py-4 text-xs md:text-sm text-gray-600 whitespace-nowrap">
+                                            {{ $request->submitted_at ? $request->submitted_at->format('M d, Y') : 'Not submitted' }}
+                                        </td>
+                                        <td class="px-4 md:px-6 py-3 md:py-4 text-xs md:text-sm space-x-1 md:space-x-2 whitespace-nowrap">
+                                            <a href="{{ route('inventory-requests.show', $request) }}" class="text-blue-600 hover:text-blue-800 font-semibold">View</a>
+                                            
                                             @if($request->status === 'draft')
-                                                bg-gray-100 text-gray-800
-                                            @elseif($request->status === 'submitted')
-                                                bg-yellow-100 text-yellow-800
-                                            @elseif($request->status === 'approved')
-                                                bg-green-100 text-green-800
-                                            @elseif($request->status === 'denied')
-                                                bg-red-100 text-red-800
-                                            @elseif($request->status === 'fulfilled')
-                                                bg-indigo-100 text-indigo-800
-                                            @else
-                                                bg-gray-100 text-gray-800
-                                            @endif">
-                                            {{ ucfirst(str_replace('_', ' ', $request->status)) }}
-                                        </span>
-                                    </td>
-                                    <td class="px-6 py-4 text-sm text-gray-600">
-                                        {{ $request->submitted_at ? $request->submitted_at->format('M d, Y') : 'Not submitted' }}
-                                    </td>
-                                    <td class="px-6 py-4 text-sm space-x-2">
-                                        <a href="{{ route('inventory-requests.show', $request) }}" class="text-blue-600 hover:text-blue-800 font-semibold">View</a>
-                                        
-                                        @if($request->status === 'draft')
-                                            <a href="{{ route('inventory-requests.edit', $request) }}" class="text-indigo-600 hover:text-indigo-800 font-semibold">Edit</a>
-                                        @endif
+                                                <a href="{{ route('inventory-requests.edit', $request) }}" class="text-indigo-600 hover:text-indigo-800 font-semibold">Edit</a>
+                                            @endif
 
-                                        @if(in_array($request->status, ['draft', 'submitted']))
-                                            <form method="POST" action="{{ route('inventory-requests.cancel', $request) }}" style="display:inline;" onsubmit="return confirm('Are you sure you want to cancel this request?');">
-                                                @csrf
-                                                <button type="submit" class="text-red-600 hover:text-red-800 font-semibold">Cancel</button>
-                                            </form>
-                                        @endif
-                                    </td>
-                                </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
+                                            @if(in_array($request->status, ['draft', 'submitted']))
+                                                <form method="POST" action="{{ route('inventory-requests.cancel', $request) }}" style="display:inline;" onsubmit="return confirm('Are you sure you want to cancel this request?');">
+                                                    @csrf
+                                                    <button type="submit" class="text-red-600 hover:text-red-800 font-semibold">Cancel</button>
+                                                </form>
+                                            @endif
+                                        </td>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
 
                     <!-- Pagination -->
@@ -162,12 +164,12 @@
                         {{ $requests->links() }}
                     </div>
                     @else
-                    <div class="bg-white rounded-lg shadow-md border border-gray-200 p-12 text-center">
-                        <svg class="w-16 h-16 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="bg-white rounded-lg shadow-md border border-gray-200 p-8 md:p-12 text-center">
+                        <svg class="w-12 md:w-16 h-12 md:h-16 text-gray-400 mx-auto mb-3 md:mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                         </svg>
-                        <p class="text-gray-600 font-medium">No inventory requests yet</p>
-                        <button onclick="openNewRequestModal()" class="text-blue-600 hover:text-blue-800 font-semibold mt-2 inline-block">Create your first request</button>
+                        <p class="text-gray-600 font-medium text-base md:text-lg">No inventory requests yet</p>
+                        <button onclick="openNewRequestModal()" class="text-blue-600 hover:text-blue-800 font-semibold mt-3 inline-block text-sm md:text-base">Create your first request</button>
                     </div>
                     @endif
                 </div>
@@ -177,44 +179,44 @@
 
     <!-- New Request Modal -->
     <div id="newRequestModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 overflow-y-auto">
-        <div class="flex items-center justify-center min-h-screen px-4">
+        <div class="flex items-center justify-center min-h-screen px-3 md:px-4 py-4">
             <div class="bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
                 <!-- Modal Header -->
-                <div class="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
-                    <h3 class="text-xl font-bold text-gray-900">New Inventory Request</h3>
+                <div class="sticky top-0 bg-white border-b border-gray-200 px-4 md:px-6 py-3 md:py-4 flex items-center justify-between">
+                    <h3 class="text-lg md:text-xl font-bold text-gray-900">New Inventory Request</h3>
                     <button onclick="closeNewRequestModal()" class="text-gray-500 hover:text-gray-700 text-2xl font-bold">&times;</button>
                 </div>
 
                 <!-- Modal Content -->
-                <form id="newRequestForm" method="POST" action="{{ route('inventory-requests.store') }}" class="p-6">
+                <form id="newRequestForm" method="POST" action="{{ route('inventory-requests.store') }}" class="p-4 md:p-6">
                     @csrf
 
                     <!-- Request Details Section -->
-                    <div class="mb-8">
-                        <h4 class="text-lg font-semibold text-gray-900 mb-4">Request Details</h4>
+                    <div class="mb-6 md:mb-8">
+                        <h4 class="text-base md:text-lg font-semibold text-gray-900 mb-3 md:mb-4">Request Details</h4>
                         
-                        <div class="grid grid-cols-2 gap-4 mb-4">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4 mb-4">
                             <!-- Request Title -->
-                            <div class="col-span-2">
-                                <label for="request_title" class="block text-sm font-semibold text-gray-900 mb-2">Request Title *</label>
+                            <div class="col-span-1 md:col-span-2">
+                                <label for="request_title" class="block text-xs md:text-sm font-semibold text-gray-900 mb-2">Request Title *</label>
                                 <input 
                                     type="text" 
                                     id="request_title" 
                                     name="request_title" 
-                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+                                    class="w-full px-3 md:px-4 py-2 md:py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition text-sm md:text-base"
                                     placeholder="e.g., Office Equipment Request"
                                     required
                                 />
-                                <small class="text-gray-600">Briefly describe what you're requesting</small>
+                                <small class="text-gray-600 text-xs md:text-sm">Briefly describe what you're requesting</small>
                             </div>
 
                             <!-- Priority -->
                             <div>
-                                <label for="priority" class="block text-sm font-semibold text-gray-900 mb-2">Priority *</label>
+                                <label for="priority" class="block text-xs md:text-sm font-semibold text-gray-900 mb-2">Priority *</label>
                                 <select 
                                     id="priority" 
                                     name="priority"
-                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+                                    class="w-full px-3 md:px-4 py-2 md:py-3 border border-gray-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition text-sm md:text-base"
                                     required
                                 >
                                     <option value="">Select priority</option>
@@ -225,23 +227,23 @@
 
                             <!-- Needed By Date -->
                             <div>
-                                <label for="needed_by_date" class="block text-sm font-semibold text-gray-900 mb-2">Needed By Date</label>
+                                <label for="needed_by_date" class="block text-xs md:text-sm font-semibold text-gray-900 mb-2">Needed By Date</label>
                                 <input 
                                     type="date" 
                                     id="needed_by_date" 
                                     name="needed_by_date"
-                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+                                    class="w-full px-3 md:px-4 py-2 md:py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition text-sm md:text-base"
                                 />
                             </div>
 
                             <!-- Reason -->
-                            <div class="col-span-2">
-                                <label for="reason" class="block text-sm font-semibold text-gray-900 mb-2">Reason</label>
+                            <div class="col-span-1 md:col-span-2">
+                                <label for="reason" class="block text-xs md:text-sm font-semibold text-gray-900 mb-2">Reason</label>
                                 <textarea 
                                     id="reason" 
                                     name="reason" 
                                     rows="3"
-                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+                                    class="w-full px-3 md:px-4 py-2 md:py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition text-sm md:text-base"
                                     placeholder="Why do you need these items?"
                                 ></textarea>
                             </div>
@@ -249,26 +251,26 @@
                     </div>
 
                     <!-- Items Section -->
-                    <div class="mb-8">
-                        <div class="flex items-center justify-between mb-4">
-                            <h4 class="text-lg font-semibold text-gray-900">Items to Request</h4>
+                    <div class="mb-6 md:mb-8">
+                        <div class="flex flex-col md:flex-row items-start md:items-center justify-between mb-3 md:mb-4 gap-3">
+                            <h4 class="text-base md:text-lg font-semibold text-gray-900">Items to Request</h4>
                             <button 
                                 type="button" 
                                 onclick="addRequestItem()"
-                                class="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-lg transition text-sm"
+                                class="w-full md:w-auto bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-3 md:px-4 rounded-lg transition text-xs md:text-sm"
                             >
                                 + Add Item
                             </button>
                         </div>
 
-                        <div id="itemsContainer" class="space-y-4">
+                        <div id="itemsContainer" class="space-y-3 md:space-y-4">
                             <!-- Item rows will be added here -->
                         </div>
                     </div>
 
                     <!-- Status Selection -->
-                    <div class="mb-8 p-4 bg-blue-50 rounded-lg border border-blue-200">
-                        <label class="flex items-center gap-3 cursor-pointer">
+                    <div class="mb-6 md:mb-8 p-3 md:p-4 bg-blue-50 rounded-lg border border-blue-200">
+                        <label class="flex items-center gap-2 md:gap-3 cursor-pointer">
                             <input 
                                 type="radio" 
                                 id="status_draft" 
@@ -278,12 +280,12 @@
                                 class="w-4 h-4 text-blue-600"
                             />
                             <div>
-                                <p class="font-semibold text-gray-900">Save as Draft</p>
-                                <p class="text-sm text-gray-600">Continue editing later before submitting</p>
+                                <p class="font-semibold text-xs md:text-sm text-gray-900">Save as Draft</p>
+                                <p class="text-xs text-gray-600">Continue editing later before submitting</p>
                             </div>
                         </label>
 
-                        <label class="flex items-center gap-3 cursor-pointer mt-3">
+                        <label class="flex items-center gap-2 md:gap-3 cursor-pointer mt-2 md:mt-3">
                             <input 
                                 type="radio" 
                                 id="status_submitted" 
@@ -292,24 +294,24 @@
                                 class="w-4 h-4 text-blue-600"
                             />
                             <div>
-                                <p class="font-semibold text-gray-900">Submit Request</p>
-                                <p class="text-sm text-gray-600">Send to admin for review and approval</p>
+                                <p class="font-semibold text-xs md:text-sm text-gray-900">Submit Request</p>
+                                <p class="text-xs text-gray-600">Send to admin for review and approval</p>
                             </div>
                         </label>
                     </div>
 
                     <!-- Form Actions -->
-                    <div class="flex items-center gap-3 border-t border-gray-200 pt-6">
+                    <div class="flex flex-col md:flex-row gap-2 md:gap-3 border-t border-gray-200 pt-4 md:pt-6">
                         <button 
                             type="button" 
                             onclick="closeNewRequestModal()"
-                            class="px-6 py-3 border border-gray-300 text-gray-900 font-semibold rounded-lg hover:bg-gray-50 transition flex-1"
+                            class="w-full md:flex-1 px-4 md:px-6 py-2 md:py-3 border border-gray-300 text-gray-900 font-semibold rounded-lg hover:bg-gray-50 transition text-sm md:text-base"
                         >
                             Cancel
                         </button>
                         <button 
                             type="submit"
-                            class="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition flex-1"
+                            class="w-full md:flex-1 px-4 md:px-6 py-2 md:py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition text-sm md:text-base"
                         >
                             Create Request
                         </button>
@@ -321,16 +323,16 @@
 
     <!-- View Items Modal -->
     <div id="viewItemsModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 overflow-y-auto">
-        <div class="flex items-center justify-center min-h-screen px-4">
+        <div class="flex items-center justify-center min-h-screen px-3 md:px-4 py-4">
             <div class="bg-white rounded-lg shadow-xl max-w-2xl w-full">
                 <!-- Modal Header -->
-                <div class="border-b border-gray-200 px-6 py-4 flex items-center justify-between">
-                    <h3 class="text-xl font-bold text-gray-900">Request Items</h3>
+                <div class="border-b border-gray-200 px-4 md:px-6 py-3 md:py-4 flex items-center justify-between">
+                    <h3 class="text-lg md:text-xl font-bold text-gray-900">Request Items</h3>
                     <button onclick="closeViewItemsModal()" class="text-gray-500 hover:text-gray-700 text-2xl font-bold">&times;</button>
                 </div>
 
                 <!-- Modal Content -->
-                <div id="viewItemsContent" class="p-6">
+                <div id="viewItemsContent" class="p-4 md:p-6 overflow-x-auto">
                     <!-- Items will be loaded here -->
                 </div>
             </div>

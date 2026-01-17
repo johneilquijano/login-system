@@ -12,7 +12,7 @@
                 />
 
                 <!-- Main Content -->
-                <div class="p-8">
+                <div class="p-4 md:p-6">
                     <!-- Back Button -->
                     <a href="{{ route('inventory-requests.show', $inventoryRequest) }}" class="inline-flex items-center text-blue-600 hover:text-blue-800 font-semibold mb-6">
                         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">

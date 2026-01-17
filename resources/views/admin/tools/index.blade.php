@@ -19,7 +19,7 @@
                 </div>
 
                 <!-- Main Content -->
-                <div class="p-8">
+                <div class="p-4 md:p-6">
                     <!-- Filters -->
                     <div class="mb-8 bg-white rounded-2xl border border-gray-200 p-6 shadow-lg">
                         <form method="GET" action="{{ route('admin.tools.index') }}" id="filterForm" class="grid grid-cols-1 md:grid-cols-4 gap-4">
@@ -70,26 +70,26 @@
 
                     <!-- Tools Table -->
                     <div class="bg-white rounded-2xl border border-gray-200 shadow-lg overflow-hidden">
-                        <div class="overflow-x-auto">
-                            <table class="w-full">
-                                <thead class="bg-gray-50 border-b border-gray-200">
+                        <div class="overflow-x-auto -mx-4 md:mx-0 px-4 md:px-0">
+                            <table class="w-full min-w-max md:min-w-full">
+                                <thead class="bg-gray-50 border-b border-gray-200 sticky top-0">
                                     <tr>
-                                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wide">Image</th>
-                                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wide">Tool Name</th>
-                                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wide">Category</th>
-                                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wide">Status</th>
-                                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wide">Quantity</th>
-                                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wide">Assigned To</th>
-                                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wide">Due Date</th>
-                                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wide">Condition</th>
-                                        <th class="px-6 py-4 text-center text-xs font-semibold text-gray-700 uppercase tracking-wide">Actions</th>
+                                        <th class="px-4 md:px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wide whitespace-nowrap">Image</th>
+                                        <th class="px-4 md:px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wide whitespace-nowrap">Tool Name</th>
+                                        <th class="px-4 md:px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wide whitespace-nowrap">Category</th>
+                                        <th class="px-4 md:px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wide whitespace-nowrap">Status</th>
+                                        <th class="px-4 md:px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wide whitespace-nowrap">Quantity</th>
+                                        <th class="px-4 md:px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wide whitespace-nowrap">Assigned To</th>
+                                        <th class="px-4 md:px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wide whitespace-nowrap">Due Date</th>
+                                        <th class="px-4 md:px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wide whitespace-nowrap">Condition</th>
+                                        <th class="px-4 md:px-6 py-4 text-center text-xs font-semibold text-gray-700 uppercase tracking-wide whitespace-nowrap">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody class="divide-y divide-gray-200">
                                     @forelse($tools as $tool)
                                     <tr class="hover:bg-gray-50 transition-all">
                                         <!-- Image -->
-                                        <td class="px-6 py-4">
+                                        <td class="px-4 md:px-6 py-4">
                                             <div class="w-12 h-12 bg-gradient-to-br from-gray-100 to-gray-200 rounded-lg flex items-center justify-center overflow-hidden">
                                                 @if($tool->image_path)
                                                     <img src="{{ asset($tool->image_path) }}" alt="{{ $tool->name }}" class="w-full h-full object-cover">
@@ -102,20 +102,20 @@
                                         </td>
 
                                         <!-- Tool Name -->
-                                        <td class="px-6 py-4">
+                                        <td class="px-4 md:px-6 py-4 whitespace-nowrap">
                                             <p class="text-sm font-semibold text-gray-900">{{ $tool->name }}</p>
                                             <p class="text-xs text-gray-500">S/N: {{ $tool->serial_number ?? 'N/A' }}</p>
                                         </td>
 
                                         <!-- Category -->
-                                        <td class="px-6 py-4">
+                                        <td class="px-4 md:px-6 py-4 whitespace-nowrap">
                                             <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
                                                 {{ $tool->category }}
                                             </span>
                                         </td>
 
                                         <!-- Status -->
-                                        <td class="px-6 py-4">
+                                        <td class="px-4 md:px-6 py-4 whitespace-nowrap">
                                             @php
                                                 $status = $tool->getStatus();
                                                 $statusColor = $status === 'Available' ? 'bg-emerald-100 text-emerald-800' : ($status === 'Checked Out' ? 'bg-yellow-100 text-yellow-800' : 'bg-orange-100 text-orange-800');
@@ -126,7 +126,7 @@
                                         </td>
 
                                         <!-- Quantity -->
-                                        <td class="px-6 py-4">
+                                        <td class="px-4 md:px-6 py-4 whitespace-nowrap">
                                             @php
                                                 $available = $tool->getAvailableQuantity();
                                                 $total = $tool->quantity;
@@ -137,15 +137,15 @@
                                         </td>
 
                                         <!-- Assigned To -->
-                                        <td class="px-6 py-4">
+                                        <td class="px-4 md:px-6 py-4 whitespace-nowrap">
                                             @php
                                                 $activeCheckouts = $tool->getActiveCheckouts();
                                                 $checkoutCount = $activeCheckouts->count();
                                             @endphp
                                             @if($checkoutCount > 0)
                                                 <div class="flex items-center gap-2">
-                                                    <span class="text-sm font-semibold text-gray-900">{{ $checkoutCount }} active checkout{{ $checkoutCount > 1 ? 's' : '' }}</span>
-                                                    <button onclick="toggleCheckoutDetails('checkouts-{{ $tool->id }}')" class="text-blue-600 hover:text-blue-900 transition-colors" title="Expand">
+                                                    <span class="text-sm font-semibold text-gray-900">{{ $checkoutCount }} active</span>
+                                                    <button onclick="toggleCheckoutDetails('checkouts-{{ $tool->id }}')" class="text-blue-600 hover:text-blue-900 transition-colors flex-shrink-0" title="Expand">
                                                         <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                                                         </svg>
@@ -154,7 +154,7 @@
                                                 <!-- Expandable checkout details -->
                                                 <div id="checkouts-{{ $tool->id }}" class="hidden mt-3 pt-3 border-t border-gray-200 space-y-2">
                                                     @foreach($activeCheckouts as $checkout)
-                                                        <div class="text-sm text-gray-700 pl-4">
+                                                        <div class="text-sm text-gray-700 pl-4 whitespace-nowrap">
                                                             <p class="font-medium">{{ $checkout->user->full_name }}</p>
                                                             <p class="text-xs text-gray-500">Due: {{ $checkout->return_due_date?->format('M d, Y') ?? '—' }}</p>
                                                         </div>
@@ -166,7 +166,7 @@
                                         </td>
 
                                         <!-- Due Date -->
-                                        <td class="px-6 py-4">
+                                        <td class="px-4 md:px-6 py-4 whitespace-nowrap">
                                             @php
                                                 $earliestDue = $tool->getEarliestDueDate();
                                             @endphp
@@ -178,7 +178,7 @@
                                         </td>
 
                                         <!-- Condition -->
-                                        <td class="px-6 py-4">
+                                        <td class="px-4 md:px-6 py-4 whitespace-nowrap">
                                             @php
                                                 $conditionColor = $tool->condition === 'good' ? 'bg-green-100 text-green-800' : ($tool->condition === 'fair' ? 'bg-yellow-100 text-yellow-800' : 'bg-orange-100 text-orange-800');
                                             @endphp
@@ -188,7 +188,7 @@
                                         </td>
 
                                         <!-- Actions -->
-                                        <td class="px-6 py-4 text-center">
+                                        <td class="px-4 md:px-6 py-4 text-center whitespace-nowrap"
                                             <div class="flex gap-2 justify-center">
                                                 <button onclick="viewTool('{{ $tool->id }}')" class="text-blue-600 hover:text-blue-900 transition-colors" title="View">
                                                     <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">

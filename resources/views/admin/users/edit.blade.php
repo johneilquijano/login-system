@@ -12,7 +12,7 @@
                 />
 
                 <!-- Main Content -->
-                <div class="p-8">
+                <div class="p-4 md:p-6">
                     <div class="bg-white rounded-lg shadow max-w-2xl">
                         <form method="POST" action="{{ route('admin.users.update', $user) }}" class="p-8">
                             @csrf

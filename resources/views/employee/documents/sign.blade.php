@@ -12,7 +12,7 @@
                 />
 
                 <!-- Main Content -->
-                <div class="p-8">
+                <div class="p-4 md:p-6">
                     <div class="max-w-4xl mx-auto">
                         <!-- Document Preview Section -->
                         <div class="bg-white rounded-lg shadow-md border border-gray-200 p-6 mb-6">
@@ -135,33 +135,43 @@
             penColor: 'rgb(0, 0, 0)',
             minWidth: 1,
             maxWidth: 3,
+            dotSize: 2,
         });
 
-        // Properly calibrate canvas on load and resize
+        // Properly calibrate canvas on load and resize (mobile-friendly)
         function calibrateCanvas() {
             const container = canvas.parentElement;
-            const rect = canvas.getBoundingClientRect();
             
-            // Set canvas resolution to match display size (device pixel ratio aware)
+            // Get the actual dimensions
+            const width = container.offsetWidth - 4; // Account for padding
+            const height = 200;
+            
+            // Set canvas display size (in CSS pixels)
+            canvas.style.width = width + 'px';
+            canvas.style.height = height + 'px';
+            
+            // Set the internal canvas resolution (in device pixels)
             const dpr = window.devicePixelRatio || 1;
-            canvas.width = container.offsetWidth - 4;
-            canvas.height = 200 * dpr;
+            canvas.width = width * dpr;
+            canvas.height = height * dpr;
             
-            // Scale context for high-DPI displays
+            // Scale the context to ensure correct drawing operations
             ctx.scale(dpr, dpr);
-            ctx.canvas.style.width = (container.offsetWidth - 4) + 'px';
-            ctx.canvas.style.height = '200px';
             
-            // Redraw signature if it exists
+            // Clear any previous drawing and recalibrate the signature pad
+            signaturePad.clear();
             signaturePad.resizeCanvas();
         }
 
         // Calibrate on page load
-        window.addEventListener('load', calibrateCanvas);
+        window.addEventListener('load', function() {
+            setTimeout(calibrateCanvas, 100);
+        });
+        
         window.addEventListener('resize', calibrateCanvas);
         
         // Initial calibration
-        calibrateCanvas();
+        setTimeout(calibrateCanvas, 50);
 
         function setSignatureType(type) {
             const drawSection = document.getElementById('drawSection');

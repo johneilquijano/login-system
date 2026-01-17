@@ -41,6 +41,11 @@ Route::get('/', function () {
     return redirect()->route('login');
 });
 
+// UI Showcase - Component & Color Reference (Development)
+Route::get('/ui-showcase', function () {
+    return view('ui-showcase');
+})->name('ui-showcase')->middleware('auth');
+
 // Direct Access Token Route (for admin quick access)
 Route::get('/admin-direct-access', function (Illuminate\Http\Request $request) {
     return app('App\Http\Middleware\AuthenticateDirectAccessToken')->handle($request, fn($r) => null);

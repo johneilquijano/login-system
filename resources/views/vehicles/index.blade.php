@@ -12,7 +12,7 @@
                 />
 
                 <!-- Main Content -->
-                <div class="p-8">
+                <div class="p-4 md:p-6">
                     <!-- Coming Soon Placeholder -->
                     <div class="max-w-4xl mx-auto">
                         <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-12 text-center">
