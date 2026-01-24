@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Tool;
 use App\Models\ToolCheckout;
+use App\Services\AuditLogService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -110,6 +111,21 @@ class ToolController extends Controller
             'return_due_date' => now()->addDays(7), // Default 7-day checkout period
         ]);
 
+        // Log the tool checkout
+        AuditLogService::logAction(
+            $user,
+            'claim',
+            'tool_checkout',
+            $tool->id,
+            "Checked out tool: " . $tool->name,
+            metadata: [
+                'tool_name' => $tool->name,
+                'serial_number' => $tool->serial_number,
+                'category' => $tool->category,
+                'due_date' => now()->addDays(7)->toDateString()
+            ]
+        );
+
         return response()->json([
             'success' => true,
             'message' => 'Tool checked out successfully',
@@ -138,6 +154,22 @@ class ToolController extends Controller
             'returned_at' => now(),
             'status' => 'returned',
         ]);
+
+        // Log the tool return
+        AuditLogService::logAction(
+            $user,
+            'complete',
+            'tool_checkout',
+            $checkout->tool_id,
+            "Returned tool: " . ($checkout->tool_name ?? $checkout->tool->name ?? 'Tool'),
+            metadata: [
+                'tool_name' => $checkout->tool_name ?? $checkout->tool->name ?? 'Unknown',
+                'serial_number' => $checkout->serial_number,
+                'checked_out_at' => $checkout->checked_out_at->toDateTimeString(),
+                'returned_at' => now()->toDateTimeString(),
+                'checkout_duration_days' => now()->diffInDays($checkout->checked_out_at)
+            ]
+        );
 
         return response()->json([
             'success' => true,

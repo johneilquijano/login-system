@@ -46,6 +46,14 @@
             </svg>
             Feedback Inbox
         </a>
+
+        <a href="{{ route('super-admin.audit-logs.index') }}" 
+            class="block px-4 py-2 rounded-lg {{ request()->routeIs('super-admin.audit-logs.*') ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-gray-800' }} transition">
+            <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            Audit Logs
+        </a>
     </nav>
 
     <!-- Sidebar Footer -->

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Document;
+use App\Services\AuditLogService;
 use App\Services\DocumentSigningService;
 use App\Services\PdfSigningService;
 use Illuminate\Http\Request;
@@ -74,6 +75,22 @@ class DocumentController extends Controller
         if ($document->org_id !== Auth::user()->org_id || $document->user_id !== Auth::id()) {
             abort(403);
         }
+
+        // Log document download
+        AuditLogService::logAction(
+            Auth::user(),
+            'download',
+            'document',
+            $document->id,
+            "Downloaded document: " . $document->title,
+            metadata: [
+                'document_title' => $document->title,
+                'file_name' => $document->file_name,
+                'file_size' => $document->file_size,
+                'mime_type' => $document->mime_type
+            ]
+        );
+
         return Storage::disk('private')->download($document->file_path, $document->file_name);
     }
 
@@ -109,7 +126,7 @@ class DocumentController extends Controller
         $filePath = Storage::disk('private')->put('documents/' . Auth::user()->org_id, $request->file('document'));
         
         // Create document record
-        Document::create([
+        $document = Document::create([
             'org_id' => Auth::user()->org_id,
             'user_id' => Auth::id(),
             'title' => $validated['title'],
@@ -120,6 +137,13 @@ class DocumentController extends Controller
             'file_size' => $request->file('document')->getSize(),
             'status' => 'pending_review',
         ]);
+
+        // Log document upload
+        AuditLogService::logDocumentUpload(
+            Auth::user(),
+            $document->id,
+            $document->file_name
+        );
 
         return redirect()->route('documents.index')->with('success', 'Document uploaded successfully!');
     }
@@ -190,6 +214,13 @@ class DocumentController extends Controller
         }
 
         $document->update($updateData);
+
+        // Log document signing
+        AuditLogService::logDocumentSign(
+            Auth::user(),
+            $document->id,
+            $document->title
+        );
 
         return redirect()->route('documents.index')->with('success', 'Document signed successfully! Your certificate is ready for download.');
     }

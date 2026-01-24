@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Models\Document;
 use App\Models\User;
 use App\Models\AppNotification;
+use App\Services\AuditLogService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -123,6 +124,22 @@ class DocumentController extends Controller
             ]);
         }
 
+        // Log document upload and assignment
+        AuditLogService::logAction(
+            Auth::user(),
+            'upload',
+            'document',
+            null,
+            "Uploaded and assigned document: " . $validated['title'],
+            metadata: [
+                'document_title' => $validated['title'],
+                'file_name' => $request->file('document')->getClientOriginalName(),
+                'file_size' => $request->file('document')->getSize(),
+                'assigned_to_count' => count($validated['employee_ids']),
+                'employee_ids' => $validated['employee_ids']
+            ]
+        );
+
         return redirect()->route('admin.documents.index')->with('success', 'Document assigned to ' . count($validated['employee_ids']) . ' employee(s)!');
     }
 
@@ -155,6 +172,22 @@ class DocumentController extends Controller
             'file_size' => $request->file('document')->getSize(),
             'status' => 'draft',  // Draft status until assigned
         ]);
+
+        // Log document upload
+        AuditLogService::logAction(
+            Auth::user(),
+            'upload',
+            'document',
+            $document->id,
+            "Uploaded document: " . $validated['title'],
+            metadata: [
+                'document_title' => $validated['title'],
+                'file_name' => $request->file('document')->getClientOriginalName(),
+                'file_size' => $request->file('document')->getSize(),
+                'mime_type' => $request->file('document')->getClientMimeType(),
+                'status' => 'draft'
+            ]
+        );
 
         if ($request->wantsJson()) {
             return response()->json([
@@ -249,6 +282,22 @@ class DocumentController extends Controller
             'user_id' => $validated['user_id'],
             'status' => 'pending_review',
         ]);
+
+        // Log document assignment with employee details
+        AuditLogService::logAction(
+            Auth::user(),
+            'assign',
+            'document',
+            $document->id,
+            "Assigned document to employee: " . $employee->name,
+            metadata: [
+                'document_title' => $document->title,
+                'employee_id' => $employee->id,
+                'employee_name' => $employee->name,
+                'employee_email' => $employee->email,
+                'status' => 'pending_review'
+            ]
+        );
 
         // Create notification for the employee
         try {

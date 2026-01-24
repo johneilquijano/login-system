@@ -142,6 +142,14 @@
                                 <a href="{{ route('admin.inventory-requests.index', ['status' => 'submitted']) }}" class="w-full inline-block text-center px-4 py-2 bg-blue-600 text-white rounded font-semibold hover:bg-blue-700 transition text-sm">
                                     Review All Requests
                                 </a>
+
+                                <!-- Approve All CTA -->
+                                <form action="{{ route('admin.inventory-requests.approveAll') }}" method="POST" class="mt-2" onsubmit="return confirm('Are you sure you want to approve all submitted requests?');">
+                                    @csrf
+                                    <button type="submit" class="w-full px-4 py-2 bg-green-600 text-white rounded font-semibold hover:bg-green-700 transition text-sm">
+                                        Approve All Requests
+                                    </button>
+                                </form>
                             </div>
 
                             <!-- Tile B: Ordering Tasks -->

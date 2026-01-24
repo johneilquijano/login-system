@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\InventoryRequest;
 use App\Models\InventoryRequestItem;
 use App\Models\User;
+use App\Services\AuditLogService;
 use App\Notifications\InventoryRequestSubmittedNotification;
 use App\Events\InventoryRequestSubmitted;
 use Illuminate\Http\Request;
@@ -81,6 +82,20 @@ class InventoryRequestController extends Controller
                 'notes' => $item['notes'],
             ]);
         }
+
+        // Log the creation of the inventory request
+        AuditLogService::logAction(
+            Auth::user(),
+            'create',
+            'inventory_request',
+            $inventoryRequest->id,
+            "Created inventory request: " . $inventoryRequest->request_title,
+            metadata: [
+                'item_count' => count($validated['items']),
+                'priority' => $validated['priority'],
+                'initial_status' => $validated['status']
+            ]
+        );
 
         // Send notification to all admins if submitted
         if ($validated['status'] === 'submitted') {
@@ -199,10 +214,19 @@ class InventoryRequestController extends Controller
                 ->with('error', 'Cannot cancel a request that has been approved or fulfilled');
         }
 
+        $oldStatus = $inventoryRequest->status;
         $inventoryRequest->update([
             'status' => 'cancelled',
             'cancelled_at' => now(),
         ]);
+
+        // Log the cancellation
+        AuditLogService::logInventoryStatusChange(
+            Auth::user(),
+            $inventoryRequest->id,
+            $oldStatus,
+            'cancelled'
+        );
 
         return redirect()->route('inventory-requests.index')
             ->with('success', 'Request cancelled successfully');
@@ -225,10 +249,29 @@ class InventoryRequestController extends Controller
                 ->with('error', 'Only draft requests can be submitted');
         }
 
+        $oldStatus = $inventoryRequest->status;
         $inventoryRequest->update([
             'status' => 'submitted',
             'submitted_at' => now(),
         ]);
+
+        // Log inventory request submission
+        AuditLogService::logAction(
+            Auth::user(),
+            'submit',
+            'inventory_request',
+            $inventoryRequest->id,
+            "Submitted inventory request",
+            metadata: ['item_count' => $inventoryRequest->items()->count()]
+        );
+
+        // Also log the status change
+        AuditLogService::logInventoryStatusChange(
+            Auth::user(),
+            $inventoryRequest->id,
+            $oldStatus,
+            'submitted'
+        );
 
         return redirect()->route('inventory-requests.show', $inventoryRequest)
             ->with('success', 'Request submitted successfully');

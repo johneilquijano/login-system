@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Events\InventoryRequestApproved;
 use App\Events\InventoryRequestDenied;
 use App\Events\InventoryRequestFulfilled;
+use App\Services\AuditLogService;
 use App\Notifications\InventoryRequestApprovedNotification;
 use App\Notifications\InventoryRequestDeniedNotification;
 use App\Notifications\InventoryRequestFulfilledNotification;
@@ -115,12 +116,21 @@ class InventoryRequestController extends Controller
             'admin_notes' => 'nullable|string|max:1000',
         ]);
 
+        $oldStatus = $inventoryRequest->status;
         $inventoryRequest->update([
             'status' => 'approved',
             'approved_at' => now(),
             'approved_by' => Auth::id(),
             'admin_notes' => $validated['admin_notes'],
         ]);
+
+        // Log status change
+        AuditLogService::logInventoryStatusChange(
+            Auth::user(),
+            $inventoryRequest->id,
+            $oldStatus,
+            'approved'
+        );
 
         // Create ordering task items for each approved request item
         $this->createOrderingTaskItems($inventoryRequest);
@@ -202,6 +212,7 @@ class InventoryRequestController extends Controller
             'admin_notes' => 'nullable|string|max:1000',
         ]);
 
+        $oldStatus = $inventoryRequest->status;
         $inventoryRequest->update([
             'status' => 'denied',
             'denied_at' => now(),
@@ -209,6 +220,14 @@ class InventoryRequestController extends Controller
             'denied_reason' => $validated['denied_reason'],
             'admin_notes' => $validated['admin_notes'],
         ]);
+
+        // Log status change
+        AuditLogService::logInventoryStatusChange(
+            Auth::user(),
+            $inventoryRequest->id,
+            $oldStatus,
+            'denied'
+        );
 
         // Send notification to employee
         $inventoryRequest->user->notify(new InventoryRequestDeniedNotification($inventoryRequest));
@@ -249,12 +268,21 @@ class InventoryRequestController extends Controller
             }
         }
 
+        $oldStatus = $inventoryRequest->status;
         // Mark as fulfilled
         $inventoryRequest->update([
             'status' => 'fulfilled',
             'fulfilled_at' => now(),
             'admin_notes' => $validated['fulfillment_notes'] ?? $inventoryRequest->admin_notes,
         ]);
+
+        // Log status change
+        AuditLogService::logInventoryStatusChange(
+            Auth::user(),
+            $inventoryRequest->id,
+            $oldStatus,
+            'fulfilled'
+        );
 
         // Send notification to employee
         $inventoryRequest->user->notify(new InventoryRequestFulfilledNotification($inventoryRequest));
@@ -289,5 +317,62 @@ class InventoryRequestController extends Controller
         ]);
 
         return redirect()->back()->with('success', 'Note added successfully');
+    }
+
+    /**
+     * Approve all submitted inventory requests
+     */
+    public function approveAll()
+    {
+        $orgId = Auth::user()->org_id;
+
+        // Get all submitted requests for this organization
+        $submittedRequests = InventoryRequest::forOrganization($orgId)
+            ->where('status', 'submitted')
+            ->get();
+
+        if ($submittedRequests->isEmpty()) {
+            return redirect()->route('admin.inventory-requests.index')
+                ->with('info', 'No submitted requests to approve');
+        }
+
+        $approvedCount = 0;
+
+        // Approve each request
+        foreach ($submittedRequests as $inventoryRequest) {
+            try {
+                $oldStatus = $inventoryRequest->status;
+                $inventoryRequest->update([
+                    'status' => 'approved',
+                    'approved_at' => now(),
+                    'approved_by' => Auth::id(),
+                ]);
+
+                // Log status change
+                AuditLogService::logInventoryStatusChange(
+                    Auth::user(),
+                    $inventoryRequest->id,
+                    $oldStatus,
+                    'approved'
+                );
+
+                // Create ordering task items for each approved request item
+                $this->createOrderingTaskItems($inventoryRequest);
+
+                // Send notification to employee
+                $inventoryRequest->user->notify(new InventoryRequestApprovedNotification($inventoryRequest));
+
+                // Dispatch event for notifications
+                event(new InventoryRequestApproved($inventoryRequest));
+
+                $approvedCount++;
+            } catch (\Exception $e) {
+                \Log::error('Error approving request ' . $inventoryRequest->id . ': ' . $e->getMessage());
+                continue;
+            }
+        }
+
+        return redirect()->route('admin.inventory-requests.index')
+            ->with('success', $approvedCount . ' request(s) approved successfully');
     }
 }

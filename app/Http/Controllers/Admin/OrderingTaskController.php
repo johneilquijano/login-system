@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Models\OrderingTask;
 use App\Models\OrderingTaskItem;
 use App\Models\AppNotification;
+use App\Services\AuditLogService;
 use App\Notifications\InventoryRequestFulfilledNotification;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -96,6 +97,16 @@ class OrderingTaskController extends Controller
                 'ordered_at' => now(),
             ]);
 
+            // Log ordering action
+            AuditLogService::logAction(
+                $user,
+                'approve',
+                'ordering_task_item',
+                $item->id,
+                "Marked item as ordered: " . ($item->model_name ?? 'Item'),
+                metadata: ['item_name' => $item->model_name, 'quantity' => $item->quantity]
+            );
+
             return response()->json([
                 'success' => true,
                 'message' => 'Item marked as ordered',
@@ -133,6 +144,21 @@ class OrderingTaskController extends Controller
             $item->receiveItems(
                 $validated['receive_quantity'],
                 $validated['receive_notes'] ?? null
+            );
+
+            // Log receiving action
+            AuditLogService::logAction(
+                $user,
+                'receive',
+                'ordering_task_item',
+                $item->id,
+                "Received items: " . ($item->model_name ?? 'Item') . " - Qty: " . $validated['receive_quantity'],
+                metadata: [
+                    'item_name' => $item->model_name,
+                    'quantity_received' => $validated['receive_quantity'],
+                    'total_received' => $item->quantity_received,
+                    'quantity_approved' => $item->quantity_approved
+                ]
             );
 
             // Check if parent request should be auto-fulfilled
@@ -193,6 +219,7 @@ class OrderingTaskController extends Controller
 
         // Auto-fulfill if all items are fully received
         if ($allFullyReceived && $inventoryRequest->status === 'approved') {
+            $oldStatus = $inventoryRequest->status;
             $inventoryRequest->update([
                 'status' => 'fulfilled',
                 'fulfilled_at' => now(),
@@ -208,6 +235,15 @@ class OrderingTaskController extends Controller
                     'fulfilled_quantity' => $totalApproved,
                 ]);
             }
+
+            // Log the automatic fulfillment
+            AuditLogService::logInventoryStatusChange(
+                Auth::user(),
+                $inventoryRequest->id,
+                $oldStatus,
+                'fulfilled',
+                'Auto-fulfilled: all items received and matched approved quantities'
+            );
 
             // Send notification to employee
             $inventoryRequest->user->notify(new InventoryRequestFulfilledNotification($inventoryRequest));

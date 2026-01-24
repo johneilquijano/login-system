@@ -20,11 +20,13 @@ use App\Http\Controllers\Admin\VehicleController as AdminVehicleController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\DirectAccessController;
 use App\Http\Controllers\Admin\ApiTokenController;
+use App\Http\Controllers\Admin\AuditLogController;
 use App\Http\Controllers\Api\AuthenticatedController;
 use App\Http\Controllers\Api\ApiResourceController;
 use App\Http\Controllers\SuperAdmin\DashboardController as SuperAdminDashboardController;
 use App\Http\Controllers\SuperAdmin\OrganizationController;
 use App\Http\Controllers\SuperAdmin\UserController as SuperAdminUserController;
+use App\Http\Controllers\SuperAdmin\AuditLogController as SuperAdminAuditLogController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Middleware\AdminMiddleware;
 use App\Http\Middleware\EmployeeMiddleware;
@@ -162,6 +164,7 @@ Route::middleware(['auth', 'admin', 'organization'])->prefix('admin')->name('adm
     Route::get('/inventory-requests', [AdminInventoryRequestController::class, 'index'])->name('inventory-requests.index');
     Route::get('/inventory-requests/{inventoryRequest}', [AdminInventoryRequestController::class, 'show'])->name('inventory-requests.show');
     Route::post('/inventory-requests/{inventoryRequest}/approve', [AdminInventoryRequestController::class, 'approve'])->name('inventory-requests.approve');
+    Route::post('/inventory-requests/approve-all', [AdminInventoryRequestController::class, 'approveAll'])->name('inventory-requests.approveAll');
     Route::post('/inventory-requests/{inventoryRequest}/deny', [AdminInventoryRequestController::class, 'deny'])->name('inventory-requests.deny');
     Route::post('/inventory-requests/{inventoryRequest}/fulfill', [AdminInventoryRequestController::class, 'fulfill'])->name('inventory-requests.fulfill');
     Route::post('/inventory-requests/{inventoryRequest}/add-note', [AdminInventoryRequestController::class, 'addNote'])->name('inventory-requests.addNote');
@@ -188,6 +191,9 @@ Route::middleware(['auth', 'admin', 'organization'])->prefix('admin')->name('adm
 
     // AI System Monitoring Setup
     Route::get('/ai-setup', [ApiTokenController::class, 'aiSetup'])->name('ai-setup.show');
+
+    // Audit Logs
+    Route::get('/audit-logs', [AuditLogController::class, 'index'])->name('audit-logs.index');
 });
 
 // Super Admin Routes (Protected)
@@ -213,6 +219,9 @@ Route::middleware(['auth', 'super-admin'])->prefix('super-admin')->name('super-a
     Route::post('/feedback/{feedback}/status', [AdminFeedbackController::class, 'updateStatus'])->name('feedback.updateStatus');
     Route::post('/feedback/{feedback}/notes', [AdminFeedbackController::class, 'updateNotes'])->name('feedback.updateNotes');
     Route::delete('/feedback/{feedback}', [AdminFeedbackController::class, 'destroy'])->name('feedback.destroy');
+
+    // Audit Logs (Cross-Org)
+    Route::get('/audit-logs', [SuperAdminAuditLogController::class, 'index'])->name('audit-logs.index');
 });
 
 // Employee & Admin "My Feedback" Route (Authenticated Users)

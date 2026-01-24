@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Services\AuditLogService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
@@ -32,8 +33,11 @@ class LoginController extends Controller
         if (Auth::attempt($credentials, $request->boolean('remember'))) {
             $request->session()->regenerate();
 
-            // Redirect based on role
+            // Log login event
             $user = Auth::user();
+            AuditLogService::logLogin($user);
+
+            // Redirect based on role
             if ($user && $user->is_super_admin) {
                 return redirect()->route('super-admin.dashboard');
             }
@@ -52,6 +56,12 @@ class LoginController extends Controller
 
     public function logout(Request $request)
     {
+        // Log logout event before actually logging out
+        $user = Auth::user();
+        if ($user) {
+            AuditLogService::logLogout($user);
+        }
+
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
