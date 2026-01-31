@@ -14,9 +14,9 @@
                 <!-- Main Content -->
                 <div class="p-4 md:p-6">
                     <!-- Welcome Banner -->
-                    <div class="mb-8 bg-gradient-to-r from-purple-600 to-indigo-600 rounded-lg shadow-md p-6 text-white">
+                    <div class="mb-8 bg-brand-100 rounded-lg shadow-md p-6 text-gray-900">
                         <h1 class="text-3xl font-bold">Welcome back, {{ Auth::user()->name }}</h1>
-                        <p class="mt-2 text-purple-100">Here's what's happening with your system today</p>
+                        <p class="mt-2 text-gray-600">Here's what's happening with your system today</p>
                     </div>
 
                     <!-- ===== 1) QUICK ACTIONS ===== -->

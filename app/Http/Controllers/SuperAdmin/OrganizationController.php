@@ -5,6 +5,7 @@ namespace App\Http\Controllers\SuperAdmin;
 use App\Http\Controllers\Controller;
 use App\Models\Organization;
 use App\Models\User;
+use App\Services\AuditLogService;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
@@ -57,7 +58,22 @@ class OrganizationController extends Controller
             'status' => 'required|in:active,inactive',
         ]);
 
-        Organization::create($validated);
+        $organization = Organization::create($validated);
+
+        // Log organization creation
+        AuditLogService::logAction(
+            user: auth()->user(),
+            action: 'create',
+            entityType: 'organization',
+            entityId: $organization->id,
+            description: "Organization created by super admin: {$organization->name}",
+            metadata: [
+                'organization_name' => $organization->name,
+                'organization_slug' => $organization->slug,
+                'organization_email' => $organization->email,
+                'organization_status' => $organization->status,
+            ]
+        );
 
         return redirect()->route('super-admin.organizations.index')->with('success', 'Organization created successfully.');
     }
@@ -80,13 +96,50 @@ class OrganizationController extends Controller
             'status' => 'required|in:active,inactive',
         ]);
 
+        // Track what changed for audit log
+        $changes = array_diff_assoc($validated, $organization->getAttributes());
+        
         $organization->update($validated);
+
+        // Log organization update only if there are actual changes
+        if (!empty($changes)) {
+            AuditLogService::logAction(
+                user: auth()->user(),
+                action: 'update',
+                entityType: 'organization',
+                entityId: $organization->id,
+                description: "Organization updated by super admin: {$organization->name}",
+                metadata: [
+                    'organization_name' => $organization->name,
+                    'organization_id' => $organization->id,
+                    'changes' => $changes,
+                ]
+            );
+        }
 
         return redirect()->route('super-admin.organizations.index')->with('success', 'Organization updated successfully.');
     }
 
     public function destroy(Organization $organization)
     {
+        $orgName = $organization->name;
+        $orgId = $organization->id;
+        $userCount = $organization->users()->count();
+
+        // Log organization deletion BEFORE actually deleting
+        AuditLogService::logAction(
+            user: auth()->user(),
+            action: 'delete',
+            entityType: 'organization',
+            entityId: $orgId,
+            description: "Organization deleted by super admin: {$orgName} (with {$userCount} members)",
+            metadata: [
+                'organization_name' => $orgName,
+                'organization_id' => $orgId,
+                'members_deleted' => $userCount,
+            ]
+        );
+
         $organization->delete();
 
         if (request()->ajax() || request()->header('X-Requested-With') === 'XMLHttpRequest') {
@@ -100,6 +153,21 @@ class OrganizationController extends Controller
     {
         $organization->update(['status' => 'inactive']);
 
+        // Log organization status change to inactive
+        AuditLogService::logAction(
+            user: auth()->user(),
+            action: 'status_change',
+            entityType: 'organization',
+            entityId: $organization->id,
+            description: "Organization disabled by super admin: {$organization->name}",
+            metadata: [
+                'organization_name' => $organization->name,
+                'organization_id' => $organization->id,
+                'old_status' => 'active',
+                'new_status' => 'inactive',
+            ]
+        );
+
         if (request()->ajax() || request()->header('X-Requested-With') === 'XMLHttpRequest') {
             return response()->json(['success' => true, 'message' => 'Organization disabled successfully.']);
         }
@@ -110,6 +178,21 @@ class OrganizationController extends Controller
     public function enable(Organization $organization)
     {
         $organization->update(['status' => 'active']);
+
+        // Log organization status change to active
+        AuditLogService::logAction(
+            user: auth()->user(),
+            action: 'status_change',
+            entityType: 'organization',
+            entityId: $organization->id,
+            description: "Organization enabled by super admin: {$organization->name}",
+            metadata: [
+                'organization_name' => $organization->name,
+                'organization_id' => $organization->id,
+                'old_status' => 'inactive',
+                'new_status' => 'active',
+            ]
+        );
 
         if (request()->ajax() || request()->header('X-Requested-With') === 'XMLHttpRequest') {
             return response()->json(['success' => true, 'message' => 'Organization enabled successfully.']);

@@ -1,6 +1,6 @@
 <div class="dashboard-sidebar hidden lg:flex flex-col w-64 bg-white shadow-lg h-screen sticky top-0">
-    <div class="h-16 bg-gradient-to-r from-blue-500 to-indigo-600 flex items-center px-6">
-        <h1 class="text-white font-bold text-lg">Employee Portal</h1>
+    <div class="h-16 bg-brand-100 flex items-center px-6">
+        <h1 class="text-gray-900 font-bold text-lg">Employee Portal</h1>
     </div>
 
     <!-- Navigation Menu -->

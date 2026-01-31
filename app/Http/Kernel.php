@@ -37,6 +37,7 @@ class Kernel extends HttpKernel
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            \App\Http\Middleware\LogPageViews::class,
         ],
 
         'api' => [
@@ -71,5 +72,7 @@ class Kernel extends HttpKernel
         'super-admin' => \App\Http\Middleware\SuperAdminMiddleware::class,
         'direct-access-token' => \App\Http\Middleware\AuthenticateDirectAccessToken::class,
         'api-token' => \App\Http\Middleware\AuthenticateApiToken::class,
+        'correct-role-path' => \App\Http\Middleware\EnsureCorrectRolePath::class,
+        'log-page-views' => \App\Http\Middleware\LogPageViews::class,
     ];
 }

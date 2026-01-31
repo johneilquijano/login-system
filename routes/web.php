@@ -1,8 +1,8 @@
 <?php
 
 use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\PasswordResetController;
+use App\Http\Controllers\Auth\RegisterOrganizationController;
 use App\Http\Controllers\PasswordController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DocumentController;
@@ -73,14 +73,15 @@ Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [LoginController::class, 'login']);
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout')->middleware('auth');
 
-Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
-Route::post('/register', [RegisterController::class, 'register']);
+// Organization Registration Routes (Public - with rate limiting)
+Route::middleware('throttle:10,1')->get('/register', [RegisterOrganizationController::class, 'create'])->name('register');
+Route::middleware('throttle:5,1')->post('/register', [RegisterOrganizationController::class, 'store'])->name('register.store');
 
 Route::get('/password-reset/{token}', [PasswordResetController::class, 'showResetForm'])->name('password.reset');
 Route::post('/password-reset', [PasswordResetController::class, 'resetPassword']);
 
 // Employee Routes (Protected)
-Route::middleware(['auth', 'employee', 'organization'])->group(function () {
+Route::middleware(['auth', 'employee', 'organization', 'correct-role-path'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/change-password', [PasswordController::class, 'showChangePasswordForm'])->name('password.form');
     Route::post('/change-password', [PasswordController::class, 'updatePassword'])->name('password.update');
@@ -127,7 +128,7 @@ Route::middleware(['auth', 'employee', 'organization'])->group(function () {
 });
 
 // Admin Routes (Protected)
-Route::middleware(['auth', 'admin', 'organization'])->prefix('admin')->name('admin.')->group(function () {
+Route::middleware(['auth', 'admin', 'organization', 'correct-role-path'])->prefix('admin')->name('admin.')->group(function () {
     // Admin Dashboard
     Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
 
@@ -197,7 +198,7 @@ Route::middleware(['auth', 'admin', 'organization'])->prefix('admin')->name('adm
 });
 
 // Super Admin Routes (Protected)
-Route::middleware(['auth', 'super-admin'])->prefix('super-admin')->name('super-admin.')->group(function () {
+Route::middleware(['auth', 'super-admin', 'correct-role-path'])->prefix('super-admin')->name('super-admin.')->group(function () {
     // Super Admin Dashboard
     Route::get('/dashboard', [SuperAdminDashboardController::class, 'index'])->name('dashboard');
 

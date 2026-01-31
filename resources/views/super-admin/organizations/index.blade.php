@@ -184,17 +184,24 @@
                 method: 'DELETE',
                 headers: {
                     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || '',
-                    'X-Requested-With': 'XMLHttpRequest'
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
                 }
             })
             .then(response => {
-                if (response.ok) {
+                if (response.ok || response.status === 200) {
                     performAjaxSearch();
                 } else {
-                    alert('Error deleting organization');
+                    return response.json().then(data => {
+                        alert('Error deleting organization: ' + (data.message || 'Unknown error'));
+                    });
                 }
             })
-            .catch(error => console.error('Error:', error));
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error deleting organization: ' + error.message);
+            });
         }
 
         // Disable organization via AJAX

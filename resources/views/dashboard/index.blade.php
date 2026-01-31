@@ -13,12 +13,6 @@
 
                 <!-- Main Content -->
                 <div class="p-4 md:p-6">
-                    <!-- Welcome Banner -->
-                    <div class="mb-6 md:mb-8">
-                        <h1 class="text-2xl md:text-3xl font-bold text-gray-900">Welcome back, {{ Auth::user()->name }}</h1>
-                        <p class="mt-2 text-sm md:text-base text-muted-foreground">Organization: {{ Auth::user()->organization->name ?? 'Not assigned' }}</p>
-                    </div>
-
                     <!-- Success Message -->
                     @if (session('success'))
                     <div class="mb-6 p-4 bg-green-50 border border-green-200 text-green-800 rounded-lg flex justify-between items-center shadow-sm">
