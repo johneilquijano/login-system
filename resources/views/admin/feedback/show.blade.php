@@ -277,7 +277,21 @@
                                 
                                 <div class="space-y-2">
                                     @if($feedback->url_path && $feedback->page_x !== null && $feedback->page_y !== null)
-                                    <a href="{{ $feedback->url_path }}?feedback_id={{ $feedback->id }}&page_x={{ $feedback->page_x }}&page_y={{ $feedback->page_y }}" 
+                                    @php
+                                        $targetUrl = $feedback->url_path;
+                                        // If super admin trying to view admin page, convert to employee/main path
+                                        if (Auth::user()->is_super_admin && strpos($feedback->url_path, '/admin') === 0) {
+                                            // Replace /admin/ with / to access the employee version if available
+                                            $targetUrl = str_replace('/admin/', '/', $feedback->url_path);
+                                            if (strpos($targetUrl, '/admin') === 0) {
+                                                $targetUrl = str_replace('/admin', '', $targetUrl);
+                                                if (empty($targetUrl)) {
+                                                    $targetUrl = '/dashboard';
+                                                }
+                                            }
+                                        }
+                                    @endphp
+                                    <a href="{{ url($targetUrl) }}?feedback_id={{ $feedback->id }}&page_x={{ $feedback->page_x }}&page_y={{ $feedback->page_y }}" 
                                        class="block w-full px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition text-center text-sm">
                                         👁 Open Page & Highlight
                                     </a>

@@ -173,4 +173,24 @@ class DashboardController extends Controller
             'latestInventoryRequests'
         ));
     }
+
+    /**
+     * Update auto-approve requests setting for the admin user
+     */
+    public function updateAutoApprove(Request $request)
+    {
+        $validated = $request->validate([
+            'auto_approve_requests' => 'required|boolean',
+        ]);
+
+        $user = Auth::user();
+        $user->update($validated);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Auto-approve setting updated successfully.',
+            'auto_approve_requests' => $user->auto_approve_requests,
+        ]);
+    }
 }
+

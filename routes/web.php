@@ -131,6 +131,7 @@ Route::middleware(['auth', 'employee', 'organization', 'correct-role-path'])->gr
 Route::middleware(['auth', 'admin', 'organization', 'correct-role-path'])->prefix('admin')->name('admin.')->group(function () {
     // Admin Dashboard
     Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
+    Route::patch('/auto-approve-setting', [AdminDashboardController::class, 'updateAutoApprove'])->name('auto-approve-setting.update');
 
     // User Management
     Route::resource('users', UserController::class);

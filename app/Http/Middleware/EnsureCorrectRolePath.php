@@ -23,15 +23,14 @@ class EnsureCorrectRolePath
             return $next($request);
         }
 
+        // Super Admins can access any page - bypass all role path checks
+        if ($user->is_super_admin) {
+            return $next($request);
+        }
+
         $path = $request->path();
-        $isSuperAdmin = $user->is_super_admin;
         $isAdmin = $user->role === 'admin';
         $isEmployee = $user->role === 'employee';
-
-        // Super Admin accessing admin routes - redirect to super-admin
-        if ($isSuperAdmin && str_starts_with($path, 'admin/') && !str_starts_with($path, 'admin/audit-logs')) {
-            return redirect('/super-admin/dashboard');
-        }
 
         // Admin accessing employee routes - redirect to admin
         if ($isAdmin && !str_starts_with($path, 'admin/') && !str_starts_with($path, 'super-admin/')) {

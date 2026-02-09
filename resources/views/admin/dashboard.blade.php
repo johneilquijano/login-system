@@ -150,6 +150,26 @@
                                         Approve All Requests
                                     </button>
                                 </form>
+
+                                <!-- Auto Approve Request Toggle -->
+                                <!-- Auto Approve Request Toggle -->
+                                <div class="mt-4 pt-4 border-t border-gray-200">
+                                    <div class="flex items-center justify-between">
+                                        <div class="flex items-center gap-3">
+                                            <svg class="h-5 w-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                            </svg>
+                                            <div>
+                                                <p class="text-sm font-semibold text-gray-900">Auto Approve Request</p>
+                                                <p class="text-xs text-gray-600">Enable automatic approval</p>
+                                            </div>
+                                        </div>
+                                        <!-- Toggle Switch -->
+                                        <button type="button" id="auto-approve-toggle" class="relative inline-flex h-8 w-14 items-center rounded-full bg-gray-300 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                                            <span class="inline-block h-6 w-6 transform rounded-full bg-white transition-transform" style="margin-left: 4px;" id="toggle-indicator"></span>
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
 
                             <!-- Tile B: Ordering Tasks -->
@@ -507,3 +527,146 @@
         </div>
     </div>
 </x-layout>
+
+<script>
+    // Auto Approve Request Toggle Functionality
+    const toggleButton = document.getElementById('auto-approve-toggle');
+    const toggleIndicator = document.getElementById('toggle-indicator');
+    let isEnabled = {{ Auth::user()->auto_approve_requests ? 'true' : 'false' }};
+
+    // Initialize toggle state from database
+    if (isEnabled) {
+        toggleButton.style.backgroundColor = '#3b82f6';
+        toggleIndicator.style.marginLeft = '28px';
+        toggleButton.setAttribute('data-state', 'on');
+    }
+
+    if (toggleButton && toggleIndicator) {
+        toggleButton.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            const newState = !isEnabled;
+            
+            if (newState) {
+                // Turn ON - Show confirmation before approving
+                if (confirm('Are you sure you want to automatically approve all submitted inventory requests? Employees will receive notifications.')) {
+                    // Update UI immediately (optimistic update)
+                    toggleButton.style.backgroundColor = '#3b82f6';
+                    toggleIndicator.style.marginLeft = '28px';
+                    toggleButton.setAttribute('data-state', 'on');
+                    isEnabled = true;
+                    
+                    // Save state to database
+                    fetch('{{ route("admin.auto-approve-setting.update") }}', {
+                        method: 'PATCH',
+                        headers: {
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || '',
+                            'X-Requested-With': 'XMLHttpRequest',
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            auto_approve_requests: true
+                        })
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                            // Make API call to approve all requests (async, don't wait)
+                            return fetch('{{ route("admin.inventory-requests.approveAll") }}', {
+                                method: 'POST',
+                                headers: {
+                                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || '',
+                                    'X-Requested-With': 'XMLHttpRequest',
+                                    'Content-Type': 'application/json',
+                                    'Accept': 'application/json'
+                                },
+                                body: JSON.stringify({})
+                            });
+                        } else {
+                            throw new Error('Failed to save setting');
+                        }
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                            // Show success message
+                            const message = document.createElement('div');
+                            message.className = 'fixed top-4 right-4 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg shadow-lg z-50';
+                            message.textContent = 'All submitted requests approved successfully! Auto-approve is now enabled.';
+                            document.body.appendChild(message);
+                            
+                            // Remove message after 4 seconds
+                            setTimeout(() => message.remove(), 4000);
+                        } else {
+                            throw new Error('Failed to approve requests');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        // Revert toggle
+                        isEnabled = false;
+                        toggleButton.style.backgroundColor = '#d1d5db';
+                        toggleIndicator.style.marginLeft = '4px';
+                        
+                        const message = document.createElement('div');
+                        message.className = 'fixed top-4 right-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg shadow-lg z-50';
+                        message.textContent = 'Error: ' + error.message;
+                        document.body.appendChild(message);
+                        
+                        setTimeout(() => message.remove(), 3000);
+                    });
+                } else {
+                    // User cancelled, don't change state
+                }
+            } else {
+                // Turn OFF
+                // Update UI immediately (optimistic update)
+                toggleButton.style.backgroundColor = '#d1d5db';
+                toggleIndicator.style.marginLeft = '4px';
+                toggleButton.setAttribute('data-state', 'off');
+                isEnabled = false;
+                
+                // Save state to database
+                fetch('{{ route("admin.auto-approve-setting.update") }}', {
+                    method: 'PATCH',
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || '',
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        auto_approve_requests: false
+                    })
+                })
+                .then(response => {
+                    if (response.ok) {
+                        // Show confirmation message
+                        const message = document.createElement('div');
+                        message.className = 'fixed top-4 right-4 bg-blue-100 border border-blue-400 text-blue-700 px-4 py-3 rounded-lg shadow-lg z-50';
+                        message.textContent = 'Auto-approve has been disabled.';
+                        document.body.appendChild(message);
+                        
+                        setTimeout(() => message.remove(), 3000);
+                    } else {
+                        throw new Error('Failed to save setting');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    // Revert toggle
+                    isEnabled = true;
+                    toggleButton.style.backgroundColor = '#3b82f6';
+                    toggleIndicator.style.marginLeft = '28px';
+                    
+                    const message = document.createElement('div');
+                    message.className = 'fixed top-4 right-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg shadow-lg z-50';
+                    message.textContent = 'Error: ' + error.message;
+                    document.body.appendChild(message);
+                    
+                    setTimeout(() => message.remove(), 3000);
+                });
+            }
+        });
+    }
+</script>

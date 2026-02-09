@@ -30,6 +30,7 @@ class User extends Authenticatable
         'api_token',
         'api_token_created_at',
         'api_token_last_used_at',
+        'auto_approve_requests',
     ];
 
     /**
@@ -51,6 +52,7 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
         'is_super_admin' => 'boolean',
+        'auto_approve_requests' => 'boolean',
         'direct_access_token_expires_at' => 'datetime',
         'api_token_created_at' => 'datetime',
         'api_token_last_used_at' => 'datetime',
