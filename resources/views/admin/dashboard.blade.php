@@ -13,6 +13,34 @@
 
                 <!-- Main Content -->
                 <div class="p-4 md:p-6">
+                    @php
+                        $actionRequiredCount = $pendingRequestsCount + $orderingTasksPendingCount + $dueTodayCount + $overdueCount;
+                    @endphp
+
+                    <!-- Mobile Action Required Summary -->
+                    <div class="md:hidden mb-6 bg-white border border-gray-200 rounded-lg p-4 shadow-sm">
+                        <div class="flex items-start justify-between gap-3">
+                            <div>
+                                <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Action Required</p>
+                                <p class="text-lg font-semibold text-gray-900 mt-1">{{ $actionRequiredCount }} items need action today</p>
+                            </div>
+                            <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-yellow-100 text-yellow-800">
+                                Today
+                            </span>
+                        </div>
+                        <div class="mt-4 grid grid-cols-3 gap-2">
+                            <a href="{{ route('admin.inventory-requests.index', ['status' => 'submitted']) }}" class="inline-flex items-center justify-center px-3 py-2 text-xs font-semibold text-blue-700 bg-blue-50 rounded-md hover:bg-blue-100">
+                                Review
+                            </a>
+                            <a href="{{ route('admin.inventory-requests.index', ['status' => 'submitted']) }}" class="inline-flex items-center justify-center px-3 py-2 text-xs font-semibold text-green-700 bg-green-50 rounded-md hover:bg-green-100">
+                                Approve
+                            </a>
+                            <a href="{{ route('admin.ordering-tasks.index') }}" class="inline-flex items-center justify-center px-3 py-2 text-xs font-semibold text-indigo-700 bg-indigo-50 rounded-md hover:bg-indigo-100">
+                                Assign
+                            </a>
+                        </div>
+                    </div>
+
                     <!-- Welcome Banner -->
                     <div class="mb-8 bg-brand-100 rounded-lg shadow-md p-6 text-gray-900">
                         <h1 class="text-3xl font-bold">Welcome back, {{ Auth::user()->name }}</h1>
@@ -369,8 +397,51 @@
                                 </a>
                             </div>
 
-                            <!-- Table -->
-                            <div class="overflow-x-auto">
+                            <!-- Mobile/Tablet Cards -->
+                            <div class="md:hidden p-4 space-y-3">
+                                @forelse($latestInventoryRequests as $request)
+                                    @php
+                                        $statusClasses = [
+                                            'submitted' => 'bg-yellow-100 text-yellow-800',
+                                            'approved' => 'bg-blue-100 text-blue-800',
+                                            'denied' => 'bg-red-100 text-red-800',
+                                            'fulfilled' => 'bg-green-100 text-green-800',
+                                        ];
+                                    @endphp
+                                    <div class="rounded-lg border border-gray-200 bg-white p-4 shadow-sm">
+                                        <div class="flex items-start justify-between gap-3">
+                                            <div>
+                                                <p class="text-sm font-semibold text-gray-900">Request #{{ $request->id }}</p>
+                                                <p class="text-xs text-gray-600 mt-1">{{ $request->user->name }}</p>
+                                            </div>
+                                            <span class="inline-block px-2.5 py-1 text-xs font-semibold rounded {{ $statusClasses[$request->status] ?? 'bg-gray-100 text-gray-800' }}">
+                                                {{ ucfirst($request->status) }}
+                                            </span>
+                                        </div>
+
+                                        <div class="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-gray-600">
+                                            <span class="font-medium text-gray-700">
+                                                {{ $request->priority === 'urgent' ? 'Urgent' : 'Normal' }}
+                                            </span>
+                                            <span class="text-gray-400">•</span>
+                                            <span>Submitted {{ $request->created_at->format('M d, Y') }}</span>
+                                        </div>
+
+                                        <div class="mt-4 flex items-center justify-end">
+                                            <a href="{{ route('admin.inventory-requests.show', $request) }}" class="inline-flex items-center justify-center px-3 py-1.5 text-sm font-semibold text-blue-600 bg-blue-50 rounded-md hover:bg-blue-100">
+                                                View
+                                            </a>
+                                        </div>
+                                    </div>
+                                @empty
+                                    <div class="rounded-lg border border-gray-200 bg-white p-6 text-center text-sm text-gray-600">
+                                        No inventory requests found
+                                    </div>
+                                @endforelse
+                            </div>
+
+                            <!-- Desktop Table -->
+                            <div class="hidden md:block overflow-x-auto">
                                 <table class="w-full">
                                     <thead class="bg-gray-50 border-b border-gray-200">
                                         <tr>

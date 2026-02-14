@@ -120,7 +120,43 @@
         <!-- Audit Logs Table -->
         <div class="bg-white rounded-lg shadow-md border border-slate-200 overflow-hidden">
             @if($auditLogs->count() > 0)
-                <div class="overflow-x-auto">
+                <!-- Mobile/Tablet Cards -->
+                <div class="lg:hidden p-4 space-y-3">
+                    @foreach($auditLogs as $log)
+                        <div class="rounded-lg border border-slate-200 bg-white p-4 shadow-sm">
+                            <div class="flex items-start justify-between gap-3">
+                                <div>
+                                    <p class="text-xs text-slate-500">{{ $log->created_at->format('M d, Y H:i:s') }}</p>
+                                    <p class="text-sm font-semibold text-slate-900 mt-1">{{ $log->user->name ?? 'Unknown' }}</p>
+                                    <p class="text-xs text-slate-500">{{ $log->user_role ?? '-' }}</p>
+                                </div>
+                                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800">
+                                    {{ $log->action_label }}
+                                </span>
+                            </div>
+
+                            <div class="mt-3 text-sm text-slate-600">
+                                <p class="font-medium text-slate-700">
+                                    {{ $log->entity_type }}
+                                    @if($log->entity_id)
+                                        <span class="text-slate-400">#{{ $log->entity_id }}</span>
+                                    @endif
+                                </p>
+                                <p class="text-slate-600 mt-1">{{ Str::limit($log->description ?? '-', 120) }}</p>
+                            </div>
+
+                            <div class="mt-3 flex flex-wrap items-center gap-2 text-xs text-slate-600">
+                                <span class="inline-flex items-center px-2 py-1 rounded font-mono bg-slate-100 text-slate-700">
+                                    {{ $log->method ?? '-' }}
+                                </span>
+                                <span class="text-slate-400">•</span>
+                                <span class="font-mono">{{ $log->ip_address ?? '-' }}</span>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+
+                <div class="hidden lg:block overflow-x-auto">
                     <table class="w-full">
                         <thead class="bg-slate-50 border-b border-slate-200">
                             <tr>

@@ -80,7 +80,56 @@
                     <!-- Feedback Table -->
                     @if($feedbacks->count() > 0)
                         <div class="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden">
-                            <div class="overflow-x-auto -mx-4 md:mx-0 px-4 md:px-0">
+                            <!-- Mobile/Tablet Cards -->
+                            <div class="lg:hidden p-4 space-y-3">
+                                @foreach($feedbacks as $feedback)
+                                    @php
+                                        $typeColors = [
+                                            'bug' => ['bg' => 'bg-red-100', 'text' => 'text-red-800'],
+                                            'ux' => ['bg' => 'bg-blue-100', 'text' => 'text-blue-800'],
+                                            'feature' => ['bg' => 'bg-purple-100', 'text' => 'text-purple-800'],
+                                        ];
+                                        $statusColors = [
+                                            'new' => ['bg' => 'bg-blue-100', 'text' => 'text-blue-800'],
+                                            'in_review' => ['bg' => 'bg-amber-100', 'text' => 'text-amber-800'],
+                                            'fixed' => ['bg' => 'bg-green-100', 'text' => 'text-green-800'],
+                                            'ignored' => ['bg' => 'bg-gray-100', 'text' => 'text-gray-800'],
+                                        ];
+                                        $severityColors = [
+                                            'low' => ['bg' => 'bg-green-100', 'text' => 'text-green-800'],
+                                            'medium' => ['bg' => 'bg-amber-100', 'text' => 'text-amber-800'],
+                                            'high' => ['bg' => 'bg-red-100', 'text' => 'text-red-800'],
+                                        ];
+                                        $type = $typeColors[$feedback->category] ?? ['bg' => 'bg-gray-100', 'text' => 'text-gray-800'];
+                                        $status = $statusColors[$feedback->status] ?? ['bg' => 'bg-gray-100', 'text' => 'text-gray-800'];
+                                    @endphp
+                                    <div class="rounded-lg border border-gray-200 bg-white p-4 shadow-sm">
+                                        <div class="flex items-start justify-between gap-3">
+                                            <div>
+                                                <p class="text-sm font-semibold text-gray-900">{{ Str::limit($feedback->message, 60) }}</p>
+                                                <p class="text-xs text-gray-500 mt-1">{{ $feedback->created_at->format('M d, Y H:i') }}</p>
+                                            </div>
+                                            <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium {{ $status['bg'] }} {{ $status['text'] }}">
+                                                {{ $feedback->status_label }}
+                                            </span>
+                                        </div>
+
+                                        <div class="mt-3 flex flex-wrap items-center gap-2 text-xs text-gray-600">
+                                            <span class="inline-flex items-center px-2.5 py-1 rounded-full font-medium {{ $type['bg'] }} {{ $type['text'] }}">
+                                                {{ ucfirst($feedback->category) }}
+                                            </span>
+                                            @if($feedback->severity)
+                                                @php $sev = $severityColors[$feedback->severity] ?? ['bg' => 'bg-gray-100', 'text' => 'text-gray-800']; @endphp
+                                                <span class="inline-flex items-center px-2.5 py-1 rounded-full font-medium {{ $sev['bg'] }} {{ $sev['text'] }}">
+                                                    {{ ucfirst($feedback->severity) }}
+                                                </span>
+                                            @endif
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+
+                            <div class="hidden lg:block overflow-x-auto -mx-4 md:mx-0 px-4 md:px-0">
                                 <table class="w-full min-w-max md:min-w-full">
                                     <thead class="bg-gray-50 border-b border-gray-200 sticky top-0">
                                         <tr>

@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 use App\Models\AuditLog;
 
 class LogPageViews
@@ -45,7 +46,7 @@ class LogPageViews
                     'action' => 'page_view',
                     'entity_type' => 'page',
                     'entity_id' => null,
-                    'description' => 'Viewed page: ' . ($request->route()?->getName() ?? $request->path()),
+                    'description' => 'Viewed page: ' . $this->formatPageName($request->route()?->getName(), $request->path()),
                     'url_path' => $request->path(),
                     'route_name' => $request->route()?->getName(),
                     'method' => $request->method(),
@@ -60,5 +61,27 @@ class LogPageViews
         }
 
         return $response;
+    }
+
+    private function formatPageName(?string $routeName, string $path): string
+    {
+        $label = $routeName ?: $path;
+
+        if ($routeName) {
+            $segments = explode('.', $routeName);
+            $action = end($segments);
+            $removableActions = ['index', 'show', 'create', 'edit', 'update', 'store', 'destroy'];
+
+            if (in_array($action, $removableActions, true)) {
+                array_pop($segments);
+            }
+
+            $label = implode(' ', $segments);
+        }
+
+        $label = str_replace(['-', '_', '/'], ' ', $label);
+        $label = preg_replace('/\s+/', ' ', $label);
+
+        return Str::title(trim($label));
     }
 }

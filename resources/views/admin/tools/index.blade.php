@@ -70,7 +70,93 @@
 
                     <!-- Tools Table -->
                     <div class="bg-white rounded-2xl border border-gray-200 shadow-lg overflow-hidden">
-                        <div class="overflow-x-auto -mx-4 md:mx-0 px-4 md:px-0">
+                        <!-- Mobile/Tablet Cards -->
+                        <div class="lg:hidden p-4 space-y-3">
+                            @forelse($tools as $tool)
+                                @php
+                                    $status = $tool->getStatus();
+                                    $statusColor = $status === 'Available' ? 'bg-emerald-100 text-emerald-800' : ($status === 'Checked Out' ? 'bg-yellow-100 text-yellow-800' : 'bg-orange-100 text-orange-800');
+                                    $available = $tool->getAvailableQuantity();
+                                    $total = $tool->quantity;
+                                    $activeCheckouts = $tool->getActiveCheckouts();
+                                    $checkoutCount = $activeCheckouts->count();
+                                    $earliestDue = $tool->getEarliestDueDate();
+                                    $conditionColor = $tool->condition === 'good' ? 'bg-green-100 text-green-800' : ($tool->condition === 'fair' ? 'bg-yellow-100 text-yellow-800' : 'bg-orange-100 text-orange-800');
+                                @endphp
+                                <div class="rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
+                                    <div class="flex items-start justify-between gap-3">
+                                        <div class="flex items-center gap-3">
+                                            <div class="w-12 h-12 bg-gradient-to-br from-gray-100 to-gray-200 rounded-lg flex items-center justify-center overflow-hidden">
+                                                @if($tool->image_path)
+                                                    <img src="{{ asset($tool->image_path) }}" alt="{{ $tool->name }}" class="w-full h-full object-cover">
+                                                @else
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
+                                                    </svg>
+                                                @endif
+                                            </div>
+                                            <div>
+                                                <p class="text-sm font-semibold text-gray-900">{{ $tool->name }}</p>
+                                                <p class="text-xs text-gray-500">S/N: {{ $tool->serial_number ?? 'N/A' }}</p>
+                                            </div>
+                                        </div>
+                                        <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold {{ $statusColor }}">
+                                            {{ $status }}
+                                        </span>
+                                    </div>
+
+                                    <div class="mt-3 flex flex-wrap items-center gap-2 text-xs text-gray-600">
+                                        <span class="inline-flex items-center px-2.5 py-1 rounded-full font-semibold bg-blue-100 text-blue-800">
+                                            {{ $tool->category }}
+                                        </span>
+                                        <span class="inline-flex items-center px-2.5 py-1 rounded-full font-semibold {{ $available > 0 ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
+                                            {{ $available }} / {{ $total }} available
+                                        </span>
+                                        <span class="inline-flex items-center px-2.5 py-1 rounded-full font-semibold {{ $conditionColor }}">
+                                            {{ ucwords(str_replace('_', ' ', $tool->condition)) }}
+                                        </span>
+                                        <span class="text-gray-400">•</span>
+                                        <span>{{ $checkoutCount }} active</span>
+                                        <span class="text-gray-400">•</span>
+                                        <span>Due: {{ $earliestDue ? $earliestDue->format('M d, Y') : '—' }}</span>
+                                    </div>
+
+                                    <div class="mt-4 flex items-center justify-end gap-3">
+                                        <button onclick="viewTool('{{ $tool->id }}')" class="inline-flex items-center justify-center px-3 py-1.5 text-xs font-semibold text-blue-700 bg-blue-50 rounded-md hover:bg-blue-100">
+                                            View
+                                        </button>
+                                        <div class="flex items-center gap-2">
+                                            <button onclick="editTool('{{ $tool->id }}')" class="p-2 rounded-md bg-amber-50 text-amber-700 hover:bg-amber-100" title="Edit">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                                </svg>
+                                            </button>
+                                            <button onclick="toggleMaintenance('{{ $tool->id }}', {{ $tool->is_maintenance ? 'true' : 'false' }})" class="p-2 rounded-md bg-orange-50 text-orange-700 hover:bg-orange-100" title="Maintenance">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
+                                                </svg>
+                                            </button>
+                                            <button onclick="viewToolHistory('{{ $tool->id }}')" class="p-2 rounded-md bg-purple-50 text-purple-700 hover:bg-purple-100" title="History">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                </svg>
+                                            </button>
+                                            <button onclick="deleteTool('{{ $tool->id }}')" class="p-2 rounded-md bg-red-50 text-red-700 hover:bg-red-100" title="Delete">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            @empty
+                                <div class="rounded-xl border border-gray-200 bg-white p-6 text-center text-sm text-gray-600">
+                                    No tools found
+                                </div>
+                            @endforelse
+                        </div>
+
+                        <div class="hidden lg:block overflow-x-auto -mx-4 md:mx-0 px-4 md:px-0">
                             <table class="w-full min-w-max md:min-w-full">
                                 <thead class="bg-gray-50 border-b border-gray-200 sticky top-0">
                                     <tr>

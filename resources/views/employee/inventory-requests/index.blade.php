@@ -84,7 +84,67 @@
                     <!-- Requests Table/List -->
                     @if($requests->count() > 0)
                     <div class="bg-white rounded-lg shadow-md border border-gray-200 overflow-hidden">
-                        <div class="overflow-x-auto -mx-4 md:mx-0 px-4 md:px-0">
+                        <div class="lg:hidden divide-y divide-gray-200">
+                            @foreach($requests as $request)
+                            <div class="p-4 searchable-row" data-search="{{ strtolower($request->request_title) }}" data-status="{{ $request->status }}" data-date="{{ $request->created_at->format('Y-m-d') }}">
+                                <div class="flex items-start justify-between gap-3">
+                                    <div>
+                                        <p class="text-sm font-semibold text-gray-900">#{{ str_pad($request->id, 4, '0', STR_PAD_LEFT) }} - {{ $request->request_title }}</p>
+                                        <p class="text-xs text-gray-500 mt-1">
+                                            {{ $request->submitted_at ? $request->submitted_at->format('M d, Y') : 'Not submitted' }}
+                                        </p>
+                                    </div>
+                                    <span class="inline-block px-2.5 py-1 rounded-full text-xs font-semibold 
+                                        @if($request->status === 'draft')
+                                            bg-gray-100 text-gray-800
+                                        @elseif($request->status === 'submitted')
+                                            bg-yellow-100 text-yellow-800
+                                        @elseif($request->status === 'approved')
+                                            bg-green-100 text-green-800
+                                        @elseif($request->status === 'denied')
+                                            bg-red-100 text-red-800
+                                        @elseif($request->status === 'fulfilled')
+                                            bg-indigo-100 text-indigo-800
+                                        @else
+                                            bg-gray-100 text-gray-800
+                                        @endif">
+                                        {{ ucfirst(str_replace('_', ' ', $request->status)) }}
+                                    </span>
+                                </div>
+
+                                <div class="mt-3 flex flex-wrap items-center gap-2 text-xs text-gray-600">
+                                    <button onclick="viewRequestItems({{ $request->id }})" class="text-blue-600 hover:text-blue-800 font-semibold">
+                                        {{ $request->items->count() }} item(s)
+                                    </button>
+                                    <span class="inline-block px-2.5 py-1 rounded-full text-xs font-semibold
+                                        @if($request->priority === 'urgent')
+                                            bg-red-100 text-red-800
+                                        @else
+                                            bg-blue-100 text-blue-800
+                                        @endif">
+                                        {{ ucfirst($request->priority) }}
+                                    </span>
+                                </div>
+
+                                <div class="mt-4 flex flex-wrap gap-3 text-xs font-semibold">
+                                    <a href="{{ route('inventory-requests.show', $request) }}" class="text-blue-600 hover:text-blue-800">View</a>
+
+                                    @if($request->status === 'draft')
+                                        <a href="{{ route('inventory-requests.edit', $request) }}" class="text-indigo-600 hover:text-indigo-800">Edit</a>
+                                    @endif
+
+                                    @if(in_array($request->status, ['draft', 'submitted']))
+                                        <form method="POST" action="{{ route('inventory-requests.cancel', $request) }}" onsubmit="return confirm('Are you sure you want to cancel this request?');">
+                                            @csrf
+                                            <button type="submit" class="text-red-600 hover:text-red-800 font-semibold">Cancel</button>
+                                        </form>
+                                    @endif
+                                </div>
+                            </div>
+                            @endforeach
+                        </div>
+
+                        <div class="hidden lg:block overflow-x-auto -mx-4 md:mx-0 px-4 md:px-0">
                             <table class="w-full min-w-max md:min-w-full">
                                 <thead class="bg-gray-100 border-b border-gray-200 sticky top-0">
                                     <tr>

@@ -85,7 +85,61 @@
                     <!-- Requests Table -->
                     @if($requests->count() > 0)
                     <div class="bg-white rounded-lg shadow-md border border-gray-200 overflow-hidden">
-                        <div class="overflow-x-auto -mx-4 md:mx-0 px-4 md:px-0">
+                        <!-- Mobile/Tablet Cards -->
+                        <div class="lg:hidden p-4 space-y-3">
+                            @foreach($requests as $request)
+                                <div class="rounded-lg border border-gray-200 bg-white p-4 shadow-sm">
+                                    <div class="flex items-start justify-between gap-3">
+                                        <div>
+                                            <p class="text-sm font-semibold text-gray-900">Request #{{ str_pad($request->id, 4, '0', STR_PAD_LEFT) }}</p>
+                                            <p class="text-xs text-gray-600 mt-1">{{ $request->user->name }}</p>
+                                        </div>
+                                        <span class="inline-block px-2.5 py-1 rounded-full text-xs font-semibold
+                                            @if($request->status === 'submitted')
+                                                bg-yellow-100 text-yellow-800
+                                            @elseif($request->status === 'approved')
+                                                bg-blue-100 text-blue-800
+                                            @elseif($request->status === 'denied')
+                                                bg-red-100 text-red-800
+                                            @elseif($request->status === 'fulfilled')
+                                                bg-green-100 text-green-800
+                                            @else
+                                                bg-gray-100 text-gray-800
+                                            @endif">
+                                            {{ ucfirst(str_replace('_', ' ', $request->status)) }}
+                                        </span>
+                                    </div>
+
+                                    <p class="text-sm text-gray-900 mt-2">{{ $request->request_title }}</p>
+
+                                    <div class="mt-3 flex flex-wrap items-center gap-2 text-xs text-gray-600">
+                                        <span class="inline-block px-2.5 py-1 rounded-full font-semibold
+                                            @if($request->priority === 'urgent')
+                                                bg-red-100 text-red-800
+                                            @else
+                                                bg-blue-100 text-blue-800
+                                            @endif">
+                                            {{ ucfirst($request->priority) }}
+                                        </span>
+                                        <span class="text-gray-400">•</span>
+                                        <span>Submitted {{ $request->submitted_at ? $request->submitted_at->format('M d, Y') : '-' }}</span>
+                                        <span class="text-gray-400">•</span>
+                                        <span>Needed {{ $request->needed_by_date ? $request->needed_by_date->format('M d, Y') : '-' }}</span>
+                                        @if($request->needed_by_date && $request->needed_by_date < now() && $request->status !== 'fulfilled' && $request->status !== 'denied')
+                                            <span class="inline-block px-2 py-0.5 bg-red-100 text-red-800 text-xs rounded font-semibold">Overdue</span>
+                                        @endif
+                                    </div>
+
+                                    <div class="mt-4 flex items-center justify-end">
+                                        <a href="{{ route('admin.inventory-requests.show', $request) }}" class="inline-flex items-center justify-center px-3 py-1.5 text-sm font-semibold text-blue-700 bg-blue-50 rounded-md hover:bg-blue-100">
+                                            View
+                                        </a>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+
+                        <div class="hidden lg:block overflow-x-auto -mx-4 md:mx-0 px-4 md:px-0">
                             <table class="w-full min-w-max md:min-w-full">
                                 <thead class="bg-gray-100 border-b border-gray-200 sticky top-0">
                                     <tr>

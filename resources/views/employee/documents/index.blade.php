@@ -122,7 +122,71 @@
 
                         <!-- Documents Table -->
                         @if($documents->count() > 0)
-                        <div class="overflow-x-auto -mx-8 md:mx-0 px-8 md:px-0">
+                        <div class="lg:hidden space-y-3">
+                            @foreach($documents as $doc)
+                            <div class="rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
+                                <div class="flex items-start justify-between gap-3">
+                                    <div>
+                                        <a href="{{ route('documents.show', $doc) }}" class="text-sm font-semibold text-blue-600 hover:text-blue-800 hover:underline">
+                                            {{ $doc->title }}
+                                        </a>
+                                        <div class="mt-2">
+                                            <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-purple-100 text-purple-700 border border-purple-200">
+                                                {{ $doc->formatted_type }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold 
+                                        @if($doc->status === 'approved')
+                                            bg-emerald-100 text-emerald-700 border border-emerald-200
+                                        @elseif($doc->status === 'pending_review')
+                                            bg-orange-100 text-orange-700 border border-orange-200
+                                        @elseif($doc->status === 'rejected')
+                                            bg-red-100 text-red-700 border border-red-200
+                                        @else
+                                            bg-gray-100 text-gray-700 border border-gray-200
+                                        @endif">
+                                        {{ ucfirst(str_replace('_', ' ', $doc->status)) }}
+                                    </span>
+                                </div>
+
+                                <div class="mt-3 grid grid-cols-2 gap-3 text-xs text-gray-600">
+                                    <div>
+                                        <p class="font-semibold text-gray-700">Uploaded</p>
+                                        <p>{{ $doc->created_at->format('M d, Y') }}</p>
+                                        <p class="text-gray-500">{{ $doc->created_at->format('H:i') }}</p>
+                                    </div>
+                                    <div>
+                                        <p class="font-semibold text-gray-700">Signature</p>
+                                        @if(!$doc->signed_at)
+                                        <span class="inline-block mt-1 px-3 py-1 rounded-full text-xs font-semibold bg-yellow-100 text-yellow-700 border border-yellow-200">Pending</span>
+                                        @else
+                                        <span class="inline-block mt-1 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-700 border border-emerald-200">Signed</span>
+                                        @endif
+                                    </div>
+                                </div>
+
+                                <div class="mt-4 flex flex-wrap gap-2">
+                                    <a href="{{ route('documents.show', $doc) }}" class="bg-blue-100 hover:bg-blue-200 text-blue-700 hover:text-blue-900 font-semibold py-2 px-3 rounded-lg transition-all text-xs border border-blue-200 hover:border-blue-300 inline-flex items-center justify-center" title="Preview document">
+                                        Preview
+                                    </a>
+                                    @if(!$doc->signed_at)
+                                    <a href="{{ route('documents.sign', $doc) }}" class="bg-emerald-100 hover:bg-emerald-200 text-emerald-700 hover:text-emerald-900 font-semibold py-2 px-3 rounded-lg transition-all text-xs border border-emerald-200 hover:border-emerald-300 inline-flex items-center justify-center" title="Sign document">
+                                        Sign
+                                    </a>
+                                    @endif
+                                    <a href="{{ route('documents.download', $doc) }}" class="bg-gray-100 hover:bg-gray-200 text-gray-700 hover:text-gray-900 font-semibold py-2 px-3 rounded-lg transition-all text-xs border border-gray-200 hover:border-gray-300 inline-flex items-center justify-center" title="Download document">
+                                        Download
+                                    </a>
+                                    <button onclick="openDeleteModal('{{ $doc->id }}', '{{ $doc->title }}')" class="bg-red-100 hover:bg-red-200 text-red-700 hover:text-red-900 font-semibold py-2 px-3 rounded-lg transition-all text-xs border border-red-200 hover:border-red-300 inline-flex items-center justify-center" title="Delete document">
+                                        Delete
+                                    </button>
+                                </div>
+                            </div>
+                            @endforeach
+                        </div>
+
+                        <div class="hidden lg:block overflow-x-auto -mx-8 md:mx-0 px-8 md:px-0">
                             <table class="w-full min-w-max md:min-w-full">
                                 <thead class="bg-gray-50 border-b border-gray-200 sticky top-0">
                                     <tr>

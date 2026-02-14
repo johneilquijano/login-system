@@ -168,7 +168,66 @@
                     @if($tab === 'history')
                     <div class="bg-white rounded-2xl border border-gray-200 shadow-lg">
                         @if($items->count() > 0)
-                        <div class="overflow-x-auto -mx-4 md:mx-0 px-4 md:px-0">
+                        <div class="lg:hidden divide-y divide-gray-200">
+                            @foreach($items as $checkout)
+                            <div class="p-4">
+                                <div class="flex items-start justify-between gap-3">
+                                    <div class="flex items-center gap-3">
+                                        <div class="flex-shrink-0 w-12 h-12 bg-gradient-to-br from-gray-100 to-gray-200 rounded-lg flex items-center justify-center overflow-hidden">
+                                            @if($checkout->tool && $checkout->tool->image_path)
+                                                <img src="{{ asset($checkout->tool->image_path) }}" alt="{{ $checkout->tool_name }}" class="w-full h-full object-cover">
+                                            @else
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
+                                                </svg>
+                                            @endif
+                                        </div>
+                                        <div>
+                                            <p class="text-sm font-semibold text-gray-900">{{ $checkout->tool_name ?? ($checkout->tool->name ?? 'Tool') }}</p>
+                                            <p class="text-xs text-gray-500">{{ $checkout->tool->category ?? 'N/A' }}</p>
+                                        </div>
+                                    </div>
+                                    <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium {{ $checkout->returned_at ? 'bg-blue-100 text-blue-800' : 'bg-yellow-100 text-yellow-800' }}">
+                                        {{ $checkout->returned_at ? 'Returned' : 'Checked Out' }}
+                                    </span>
+                                </div>
+
+                                <div class="mt-3 grid grid-cols-2 gap-3 text-xs text-gray-600">
+                                    <div>
+                                        <p class="font-semibold text-gray-700">Date</p>
+                                        <p>{{ $checkout->checked_out_at ? $checkout->checked_out_at->format('M d, Y') : $checkout->created_at->format('M d, Y') }}</p>
+                                        <p class="text-gray-500">{{ $checkout->checked_out_at ? $checkout->checked_out_at->format('H:i A') : $checkout->created_at->format('H:i A') }}</p>
+                                    </div>
+                                    <div>
+                                        <p class="font-semibold text-gray-700">Condition</p>
+                                        @if($checkout->tool)
+                                            <span class="inline-flex items-center mt-1 px-2.5 py-1 rounded-full text-xs font-medium 
+                                                @if($checkout->tool->condition === 'good') bg-green-100 text-green-800
+                                                @elseif($checkout->tool->condition === 'fair') bg-yellow-100 text-yellow-800
+                                                @else bg-orange-100 text-orange-800 @endif">
+                                                {{ ucfirst($checkout->tool->condition ?? 'Unknown') }}
+                                            </span>
+                                        @else
+                                            <span class="text-xs text-gray-500">N/A</span>
+                                        @endif
+                                    </div>
+                                </div>
+
+                                <div class="mt-3 text-xs text-gray-600">
+                                    <p class="font-semibold text-gray-700">Duration</p>
+                                    @if($checkout->returned_at && $checkout->checked_out_at)
+                                        <p class="text-gray-900">{{ $checkout->checked_out_at->diffInDays($checkout->returned_at) }} day(s)</p>
+                                        <p class="text-gray-500">{{ $checkout->returned_at->format('M d, Y H:i A') }}</p>
+                                    @else
+                                        <p class="text-gray-900">Still checked out</p>
+                                        <p class="text-gray-500">{{ $checkout->checked_out_at ? $checkout->checked_out_at->diffForHumans() : 'N/A' }}</p>
+                                    @endif
+                                </div>
+                            </div>
+                            @endforeach
+                        </div>
+
+                        <div class="hidden lg:block overflow-x-auto -mx-4 md:mx-0 px-4 md:px-0">
                             <table class="w-full min-w-max md:min-w-full">
                                 <thead class="bg-gray-50 border-b border-gray-200 sticky top-0">
                                     <tr>

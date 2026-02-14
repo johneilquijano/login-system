@@ -133,7 +133,70 @@
 
                         <!-- Documents Table -->
                         @if($documents->count() > 0)
-                        <div class="overflow-x-auto -mx-4 md:mx-0">
+                        <!-- Mobile/Tablet Cards -->
+                        <div class="lg:hidden space-y-3">
+                            @foreach($documents as $doc)
+                                <div class="rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
+                                    <div class="flex items-start justify-between gap-3">
+                                        <div>
+                                            <a href="{{ route('admin.documents.show', $doc) }}" class="text-sm font-semibold text-gray-900 hover:text-blue-700">
+                                                {{ $doc->title }}
+                                            </a>
+                                            <p class="text-xs text-gray-500 mt-1">{{ $doc->created_at->format('M d, Y H:i') }}</p>
+                                        </div>
+                                        <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold
+                                            @if($doc->status === 'approved')
+                                                bg-emerald-100 text-emerald-700 border border-emerald-200
+                                            @elseif($doc->status === 'pending_review')
+                                                bg-orange-100 text-orange-700 border border-orange-200
+                                            @elseif($doc->status === 'rejected')
+                                                bg-red-100 text-red-700 border border-red-200
+                                            @else
+                                                bg-gray-100 text-gray-700 border border-gray-200
+                                            @endif">
+                                            {{ ucfirst(str_replace('_', ' ', $doc->status)) }}
+                                        </span>
+                                    </div>
+
+                                    <div class="mt-3 flex flex-wrap items-center gap-2 text-xs text-gray-600">
+                                        <span class="inline-block px-2.5 py-1 rounded-full font-semibold bg-purple-100 text-purple-700 border border-purple-200">
+                                            {{ $doc->formatted_type }}
+                                        </span>
+                                        <span class="inline-block px-2.5 py-1 rounded-full font-semibold
+                                            @if(!$doc->signed_at)
+                                                bg-yellow-100 text-yellow-700 border border-yellow-200
+                                            @else
+                                                bg-emerald-100 text-emerald-700 border border-emerald-200
+                                            @endif">
+                                            {{ $doc->signed_at ? 'Signed' : 'Pending Signature' }}
+                                        </span>
+                                        <span class="text-gray-400">•</span>
+                                        <span>
+                                            Assigned: {{ $doc->user ? $doc->user->name : 'Unassigned' }}
+                                        </span>
+                                    </div>
+
+                                    <div class="mt-4 flex flex-wrap gap-2">
+                                        <a href="{{ route('admin.documents.show', $doc) }}" class="inline-flex items-center justify-center px-3 py-1.5 text-xs font-semibold text-blue-700 bg-blue-50 rounded-md hover:bg-blue-100">
+                                            View
+                                        </a>
+                                        <a href="{{ route('admin.documents.download', $doc) }}" class="inline-flex items-center justify-center px-3 py-1.5 text-xs font-semibold text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200">
+                                            Download
+                                        </a>
+                                        @if(!$doc->user)
+                                            <button onclick="openQuickAssignModal('{{ $doc->id }}', '{{ $doc->title }}')" class="inline-flex items-center justify-center px-3 py-1.5 text-xs font-semibold text-indigo-700 bg-indigo-50 rounded-md hover:bg-indigo-100">
+                                                Assign
+                                            </button>
+                                        @endif
+                                        <button onclick="openDeleteModal('{{ $doc->id }}', '{{ $doc->title }}')" class="inline-flex items-center justify-center px-3 py-1.5 text-xs font-semibold text-red-700 bg-red-50 rounded-md hover:bg-red-100">
+                                            Delete
+                                        </button>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+
+                        <div class="hidden lg:block overflow-x-auto -mx-4 md:mx-0">
                             <table class="w-full min-w-max md:min-w-full">
                                 <thead class="bg-gray-50 border-b border-gray-200 sticky top-0">
                                     <tr>

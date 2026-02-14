@@ -128,7 +128,66 @@
                     <!-- Feedback Table -->
                     @if($feedbacks->count() > 0)
                     <div class="bg-white rounded-lg shadow border border-gray-200 overflow-hidden">
-                        <div class="overflow-x-auto -mx-4 md:mx-0 px-4 md:px-0">
+                        <div class="lg:hidden divide-y divide-gray-200">
+                            @foreach($feedbacks as $feedback)
+                            <div class="p-4">
+                                <div class="flex items-start justify-between gap-3">
+                                    <div>
+                                        <p class="text-sm font-semibold text-gray-900">{{ $feedback->category_label }}</p>
+                                        <p class="text-xs text-gray-500 mt-1">{{ $feedback->created_at->format('M d, Y H:i') }}</p>
+                                    </div>
+                                    <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold
+                                        @if($feedback->status === 'new')
+                                            bg-yellow-100 text-yellow-800
+                                        @elseif($feedback->status === 'in_review')
+                                            bg-blue-100 text-blue-800
+                                        @elseif($feedback->status === 'fixed')
+                                            bg-green-100 text-green-800
+                                        @else
+                                            bg-gray-100 text-gray-800
+                                        @endif">
+                                        {{ $feedback->status_label }}
+                                    </span>
+                                </div>
+
+                                <div class="mt-3 text-xs text-gray-600">
+                                    <p class="text-gray-900">{{ Str::limit($feedback->message, 90) }}</p>
+                                </div>
+
+                                <div class="mt-3 flex flex-wrap items-center gap-2 text-xs text-gray-600">
+                                    <span class="inline-block px-2.5 py-1 rounded-full text-xs font-semibold bg-purple-100 text-purple-800">
+                                        {{ $feedback->category_label }}
+                                    </span>
+                                    @if($feedback->severity)
+                                    <span class="inline-block px-2.5 py-1 rounded-full text-xs font-semibold
+                                        @if($feedback->severity === 'high')
+                                            bg-red-100 text-red-800
+                                        @elseif($feedback->severity === 'medium')
+                                            bg-orange-100 text-orange-800
+                                        @else
+                                            bg-green-100 text-green-800
+                                        @endif">
+                                        {{ $feedback->severity_label }}
+                                    </span>
+                                    @endif
+                                    <span class="text-gray-500">{{ $feedback->user->name }} ({{ $feedback->user_role }})</span>
+                                </div>
+
+                                <div class="mt-3 text-xs text-gray-600">
+                                    <p class="font-semibold text-gray-700">Page</p>
+                                    <p class="text-gray-500 truncate">{{ $feedback->url_path }}</p>
+                                </div>
+
+                                <div class="mt-4">
+                                    <a href="{{ route('super-admin.feedback.show', $feedback) }}" class="text-blue-600 hover:text-blue-800 font-semibold text-xs">
+                                        View
+                                    </a>
+                                </div>
+                            </div>
+                            @endforeach
+                        </div>
+
+                        <div class="hidden lg:block overflow-x-auto -mx-4 md:mx-0 px-4 md:px-0">
                             <table class="w-full min-w-max md:min-w-full">
                                 <thead class="bg-gray-100 border-b border-gray-200 sticky top-0">
                                     <tr>
