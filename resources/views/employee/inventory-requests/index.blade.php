@@ -229,6 +229,7 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                         </svg>
                         <p class="text-gray-600 font-medium text-base md:text-lg">No inventory requests yet</p>
+                        <p class="text-xs text-gray-500 mt-2 lg:hidden">You're all caught up.</p>
                         <button onclick="openNewRequestModal()" class="text-blue-600 hover:text-blue-800 font-semibold mt-3 inline-block text-sm md:text-base">Create your first request</button>
                     </div>
                     @endif

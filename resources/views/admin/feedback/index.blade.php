@@ -275,6 +275,7 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                         </svg>
                         <p class="text-gray-600 font-medium">No feedback found</p>
+                        <p class="text-xs text-gray-500 mt-2 lg:hidden">You're all caught up.</p>
                     </div>
                     @endif
                 </div>

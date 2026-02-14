@@ -221,6 +221,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 11.5V14m0-2.5v-6a1.5 1.5 0 113 0m-3 6a1.5 1.5 0 00-3 0v2.25A4.125 4.125 0 0014.25 21h7.5A4.125 4.125 0 0026 16.875v-2.25m-12-4.5V14m0-2.5a6 6 0 117.022 5.961L20 13m-6-2.5h6"></path>
                             </svg>
                             <h3 class="text-lg font-semibold text-gray-900 mt-4">No feedback yet</h3>
+                            <p class="text-xs text-gray-500 mt-2 lg:hidden">You're all caught up.</p>
                             <p class="text-gray-600 mt-2">You haven't submitted any feedback. Use the "Report Issue" button to share your thoughts.</p>
                         </div>
                     @endif

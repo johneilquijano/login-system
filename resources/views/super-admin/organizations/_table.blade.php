@@ -31,6 +31,7 @@
     @empty
     <div class="p-6 text-center text-xs text-gray-500">
         No organizations found. <a href="{{ route('super-admin.organizations.create') }}" class="text-blue-600 hover:text-blue-800">Create one</a>
+        <p class="mt-2 text-xs text-gray-500">You're all caught up.</p>
     </div>
     @endforelse
 </div>

@@ -285,6 +285,7 @@
                                 </svg>
                             </div>
                             <p class="text-gray-900 font-semibold text-lg">No documents yet</p>
+                            <p class="text-xs text-gray-500 mt-2 lg:hidden">You're all caught up.</p>
                             <p class="text-gray-600 text-sm mt-2 max-w-sm mx-auto">Start by uploading your first document or wait for your organization to share documents with you.</p>
                             <a href="{{ route('documents.upload') }}" class="inline-block mt-6 bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 text-white font-semibold py-3 px-8 rounded-xl transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
                                 Upload Your First Document
