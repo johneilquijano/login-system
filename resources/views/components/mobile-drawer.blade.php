@@ -117,6 +117,17 @@
                     <span>Dashboard</span>
                 </a>
 
+                <a href="{{ route('admin.users.index') }}" onclick="closeMobileDrawer()" @class([
+                    'mobile-nav-link flex items-center px-4 py-3 rounded-lg transition',
+                    'bg-blue-50 text-blue-700 font-semibold' => request()->routeIs('admin.users.*'),
+                    'text-gray-700 hover:bg-gray-50' => !request()->routeIs('admin.users.*')
+                ])>
+                    <svg class="w-5 h-5 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.856-1.487M15 10a3 3 0 11-6 0 3 3 0 016 0zM6 20a6 6 0 0112 0v2H6v-2z"></path>
+                    </svg>
+                    <span>Manage Users</span>
+                </a>
+
                 <a href="{{ route('admin.documents.index') }}" onclick="closeMobileDrawer()" @class([
                     'mobile-nav-link flex items-center px-4 py-3 rounded-lg transition',
                     'bg-blue-50 text-blue-700 font-semibold' => request()->routeIs('admin.documents.*'),
@@ -125,7 +136,7 @@
                     <svg class="w-5 h-5 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                     </svg>
-                    <span>Documents</span>
+                    <span>Document Management</span>
                 </a>
 
                 <a href="{{ route('admin.tools.index') }}" onclick="closeMobileDrawer()" @class([
@@ -136,7 +147,7 @@
                     <svg class="w-5 h-5 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path>
                     </svg>
-                    <span>Tools</span>
+                    <span>Tools Inventory</span>
                 </a>
 
                 <a href="{{ route('admin.inventory-requests.index') }}" onclick="closeMobileDrawer()" @class([
@@ -147,19 +158,44 @@
                     <svg class="w-5 h-5 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                     </svg>
-                    <span>Inventory</span>
+                    <span>Inventory Requests</span>
                 </a>
 
-                <a href="{{ route('admin.users.index') }}" onclick="closeMobileDrawer()" @class([
+                <a href="{{ route('admin.ordering-tasks.index') }}" onclick="closeMobileDrawer()" @class([
                     'mobile-nav-link flex items-center px-4 py-3 rounded-lg transition',
-                    'bg-blue-50 text-blue-700 font-semibold' => request()->routeIs('admin.users.*'),
-                    'text-gray-700 hover:bg-gray-50' => !request()->routeIs('admin.users.*')
+                    'bg-blue-50 text-blue-700 font-semibold' => request()->routeIs('admin.ordering-tasks.*'),
+                    'text-gray-700 hover:bg-gray-50' => !request()->routeIs('admin.ordering-tasks.*')
                 ])>
                     <svg class="w-5 h-5 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.856-1.487M15 10a3 3 0 11-6 0 3 3 0 016 0zM4.318 20H3c-.897 0-1.358-.393-1.497-.988A10.025 10.025 0 0123.94 19c0-.595-.079-1.172-.231-1.731-.13-.529-.581-.992-1.521-.992h-1.896a3 3 0 00-3 3v2z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
                     </svg>
-                    <span>Users</span>
+                    <span>Ordering Tasks</span>
                 </a>
+
+                <a href="{{ route('admin.vehicles.index') }}" onclick="closeMobileDrawer()" @class([
+                    'mobile-nav-link flex items-center px-4 py-3 rounded-lg transition',
+                    'bg-blue-50 text-blue-700 font-semibold' => request()->routeIs('admin.vehicles.*'),
+                    'text-gray-700 hover:bg-gray-50' => !request()->routeIs('admin.vehicles.*')
+                ])>
+                    <svg class="w-5 h-5 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                    </svg>
+                    <span>Vehicles</span>
+                </a>
+
+                <a href="{{ route('admin.audit-logs.index') }}" onclick="closeMobileDrawer()" @class([
+                    'mobile-nav-link flex items-center px-4 py-3 rounded-lg transition',
+                    'bg-blue-50 text-blue-700 font-semibold' => request()->routeIs('admin.audit-logs.*'),
+                    'text-gray-700 hover:bg-gray-50' => !request()->routeIs('admin.audit-logs.*')
+                ])>
+                    <svg class="w-5 h-5 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    <span>Audit Logs</span>
+                </a>
+
+                <!-- System Section Divider -->
+                <div class="px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider mt-4">System</div>
 
                 <a href="{{ route('feedback.my') }}" onclick="closeMobileDrawer()" @class([
                     'mobile-nav-link flex items-center px-4 py-3 rounded-lg transition',

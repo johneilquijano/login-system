@@ -30,8 +30,8 @@
                     <!-- Tasks List -->
                     <div class="space-y-4">
                         @forelse($tasks as $task)
-                            <div class="bg-white rounded-2xl border border-gray-200 shadow-lg p-6 hover:shadow-xl transition-shadow">
-                                <div class="flex justify-between items-start mb-4">
+                            <div class="bg-white rounded-2xl border border-gray-200 shadow-lg p-6 hover:shadow-xl transition-shadow text-center sm:text-left">
+                                <div class="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-3 mb-4">
                                     <div>
                                         <h3 class="text-lg font-bold text-gray-900">
                                             Ordering Task #{{ $task->id }}
@@ -41,26 +41,26 @@
                                         </p>
                                     </div>
                                     <a href="{{ route('admin.ordering-tasks.show', $task) }}"
-                                       class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-all">
+                                       class="w-full sm:w-auto px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-all text-center">
                                         View Details
                                     </a>
                                 </div>
 
                                 <!-- Status Counts -->
-                                <div class="grid grid-cols-4 gap-4">
-                                    <div class="bg-gray-50 rounded-lg p-4">
+                                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                                    <div class="bg-gray-50 rounded-lg p-4 text-center sm:text-left">
                                         <p class="text-sm text-gray-600 mb-1">Total Items</p>
                                         <p class="text-2xl font-bold text-gray-900">{{ $taskCounts[$task->id]['total'] ?? 0 }}</p>
                                     </div>
-                                    <div class="bg-yellow-50 rounded-lg p-4">
+                                    <div class="bg-yellow-50 rounded-lg p-4 text-center sm:text-left">
                                         <p class="text-sm text-yellow-700 mb-1">Pending</p>
                                         <p class="text-2xl font-bold text-yellow-900">{{ $taskCounts[$task->id]['pending'] ?? 0 }}</p>
                                     </div>
-                                    <div class="bg-blue-50 rounded-lg p-4">
+                                    <div class="bg-blue-50 rounded-lg p-4 text-center sm:text-left">
                                         <p class="text-sm text-blue-700 mb-1">Ordered</p>
                                         <p class="text-2xl font-bold text-blue-900">{{ $taskCounts[$task->id]['ordered'] ?? 0 }}</p>
                                     </div>
-                                    <div class="bg-green-50 rounded-lg p-4">
+                                    <div class="bg-green-50 rounded-lg p-4 text-center sm:text-left">
                                         <p class="text-sm text-green-700 mb-1">Received</p>
                                         <p class="text-2xl font-bold text-green-900">{{ $taskCounts[$task->id]['received'] ?? 0 }}</p>
                                     </div>
