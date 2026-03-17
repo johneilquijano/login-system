@@ -7,7 +7,7 @@
                 <p class="text-xs text-gray-500 mt-1">{{ $org->email }}</p>
                 <p class="text-xs text-gray-500">{{ $org->slug }}</p>
             </div>
-            <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold {{ $org->status === 'active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
+            <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold {{ $org->status === 'active' ? 'border border-green-800 text-green-800 uppercase' : 'border border-red-800 text-red-800 uppercase' }}">
                 {{ ucfirst($org->status) }}
             </span>
         </div>
@@ -55,7 +55,7 @@
                 <td class="px-3 md:px-6 py-4 text-xs md:text-sm text-gray-600 whitespace-nowrap">{{ $org->email }}</td>
                 <td class="px-3 md:px-6 py-4 text-xs md:text-sm text-gray-600 whitespace-nowrap">{{ $org->slug }}</td>
                 <td class="px-3 md:px-6 py-4 text-xs md:text-sm whitespace-nowrap">
-                    <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold {{ $org->status === 'active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
+                    <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold {{ $org->status === 'active' ? 'border border-green-800 text-green-800 uppercase' : 'border border-red-800 text-red-800 uppercase' }}">
                         {{ ucfirst($org->status) }}
                     </span>
                 </td>

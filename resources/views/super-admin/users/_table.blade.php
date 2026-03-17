@@ -13,16 +13,16 @@
                     @endif
                 </p>
             </div>
-            <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold {{ $user->role === 'admin' ? 'bg-purple-100 text-purple-800' : 'bg-blue-100 text-blue-800' }}">
+            <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold {{ $user->role === 'admin' ? 'border border-purple-800 text-purple-800 uppercase' : 'border border-blue-800 text-blue-800 uppercase' }}">
                 {{ ucfirst($user->role) }}
             </span>
         </div>
 
         <div class="mt-3 flex flex-wrap items-center gap-2 text-xs text-gray-600">
             @if($user->status === 'active')
-                <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-800">Active</span>
+                <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold border border-green-800 text-green-800 uppercase">Active</span>
             @else
-                <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-red-100 text-red-800">Disabled</span>
+                <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold border border-red-800 text-red-800 uppercase">Disabled</span>
             @endif
             <span class="text-gray-500">Joined {{ $user->created_at->format('M d, Y') }}</span>
         </div>
@@ -72,15 +72,15 @@
                     @endif
                 </td>
                 <td class="px-3 md:px-6 py-4 text-xs md:text-sm whitespace-nowrap">
-                    <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold {{ $user->role === 'admin' ? 'bg-purple-100 text-purple-800' : 'bg-blue-100 text-blue-800' }}">
+                    <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold {{ $user->role === 'admin' ? 'border border-purple-800 text-purple-800 uppercase' : 'border border-blue-800 text-blue-800 uppercase' }}">
                         {{ ucfirst($user->role) }}
                     </span>
                 </td>
                 <td class="px-3 md:px-6 py-4 text-xs md:text-sm whitespace-nowrap">
                     @if($user->status === 'active')
-                        <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-800">Active</span>
+                        <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold border border-green-800 text-green-800 uppercase">Active</span>
                     @else
-                        <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-red-100 text-red-800">Disabled</span>
+                        <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold border border-red-800 text-red-800 uppercase">Disabled</span>
                     @endif
                 </td>
                 <td class="px-3 md:px-6 py-4 text-xs md:text-sm text-gray-600 whitespace-nowrap">{{ $user->created_at->format('M d, Y') }}</td>

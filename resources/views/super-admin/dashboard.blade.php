@@ -97,7 +97,7 @@
                                             <p class="font-medium text-gray-900">{{ $org->name }}</p>
                                             <p class="text-sm text-gray-500">{{ $org->email }}</p>
                                         </div>
-                                        <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold {{ $org->status === 'active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
+                                        <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold {{ $org->status === 'active' ? 'border border-green-800 text-green-800 uppercase' : 'border border-red-800 text-red-800 uppercase' }}">
                                             {{ ucfirst($org->status) }}
                                         </span>
                                     </div>
@@ -124,7 +124,7 @@
                                             <p class="font-medium text-gray-900">{{ $user->name }}</p>
                                             <p class="text-sm text-gray-500">{{ $user->email }}</p>
                                         </div>
-                                        <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold {{ $user->role === 'admin' ? 'bg-purple-100 text-purple-800' : 'bg-blue-100 text-blue-800' }}">
+                                        <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold {{ $user->role === 'admin' ? 'border border-purple-800 text-purple-800 uppercase' : 'border border-blue-800 text-blue-800 uppercase' }}">
                                             {{ ucfirst($user->role) }}
                                         </span>
                                     </div>

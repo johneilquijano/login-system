@@ -38,13 +38,13 @@
                                     <h3 class="text-lg md:text-xl font-bold text-gray-900">{{ $feedback->category_label }}</h3>
                                     <span class="inline-block px-4 py-2 rounded-full text-xs md:text-sm font-semibold whitespace-nowrap
                                         @if($feedback->status === 'new')
-                                            bg-yellow-100 text-yellow-800
+                                            border border-yellow-800 text-yellow-800 uppercase
                                         @elseif($feedback->status === 'in_review')
-                                            bg-blue-100 text-blue-800
+                                            border border-blue-800 text-blue-800 uppercase
                                         @elseif($feedback->status === 'fixed')
-                                            bg-green-100 text-green-800
+                                            border border-green-800 text-green-800 uppercase
                                         @else
-                                            bg-gray-100 text-gray-800
+                                            border border-gray-800 text-gray-800 uppercase
                                         @endif">
                                         {{ $feedback->status_label }}
                                     </span>
@@ -78,11 +78,11 @@
                                         <p class="text-xs md:text-sm text-gray-600 mb-1">Severity</p>
                                         <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold
                                             @if($feedback->severity === 'high')
-                                                bg-red-100 text-red-800
+                                                border border-red-800 text-red-800 uppercase
                                             @elseif($feedback->severity === 'medium')
-                                                bg-orange-100 text-orange-800
+                                                border border-orange-800 text-orange-800 uppercase
                                             @else
-                                                bg-green-100 text-green-800
+                                                border border-green-800 text-green-800 uppercase
                                             @endif">
                                             {{ $feedback->severity_label }}
                                         </span>
@@ -252,7 +252,7 @@
                                     </div>
                                     <div>
                                         <p class="text-gray-600 font-medium">Role</p>
-                                        <p class="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-purple-100 text-purple-800">
+                                        <p class="inline-block px-3 py-1 rounded-full text-xs font-semibold border border-purple-800 text-purple-800 uppercase">
                                             {{ ucfirst($feedback->user_role) }}
                                         </p>
                                     </div>
