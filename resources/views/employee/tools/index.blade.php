@@ -72,10 +72,10 @@
                                 <div class="p-4">
                                     <!-- Category and Status Line -->
                                     <div class="flex justify-between items-center mb-3">
-                                        <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-blue-100 text-blue-700 border border-blue-200">
+                                        <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold border border-blue-800 text-blue-800 uppercase">
                                             {{ ucfirst($tool->category) }}
                                         </span>
-                                        <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-700 border border-emerald-200">
+                                        <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold border border-green-800 text-green-800 uppercase">
                                             Available
                                         </span>
                                     </div>
@@ -87,11 +87,11 @@
                                     <div class="mb-4">
                                         <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold 
                                             @if($tool->condition === 'good')
-                                                bg-green-100 text-green-700 border border-green-200
+                                                border border-green-800 text-green-800 uppercase
                                             @elseif($tool->condition === 'fair')
-                                                bg-yellow-100 text-yellow-700 border border-yellow-200
+                                                border border-yellow-800 text-yellow-800 uppercase
                                             @elseif($tool->condition === 'needs_repair')
-                                                bg-orange-100 text-orange-700 border border-orange-200
+                                                border border-orange-800 text-orange-800 uppercase
                                             @endif">
                                             {{ ucfirst(str_replace('_', ' ', $tool->condition)) }}
                                         </span>
@@ -263,7 +263,7 @@
                                         <!-- Action Badge -->
                                         <td class="px-4 md:px-6 py-3 md:py-4 whitespace-nowrap">
                                             <div class="flex gap-2">
-                                                <span class="inline-flex items-center px-2 md:px-2.5 py-0.5 rounded-full text-xs font-medium {{ $checkout->returned_at ? 'bg-blue-100 text-blue-800' : 'bg-yellow-100 text-yellow-800' }}">
+                                                <span class="inline-flex items-center px-2 md:px-2.5 py-0.5 rounded-full text-xs font-medium {{ $checkout->returned_at ? 'border border-blue-800 text-blue-800 uppercase' : 'border border-yellow-800 text-yellow-800 uppercase' }}">
                                                     {{ $checkout->returned_at ? 'Returned' : 'Checked Out' }}
                                                 </span>
                                             </div>
@@ -279,10 +279,10 @@
                                         <td class="px-4 md:px-6 py-3 md:py-4 whitespace-nowrap">
                                             @if($checkout->tool)
                                                 <span class="inline-flex items-center px-2 md:px-2.5 py-0.5 rounded-full text-xs font-medium 
-                                                    @if($checkout->tool->condition === 'good') bg-green-100 text-green-800
-                                                    @elseif($checkout->tool->condition === 'fair') bg-yellow-100 text-yellow-800
-                                                    @else bg-orange-100 text-orange-800 @endif">
-                                                    {{ ucfirst($checkout->tool->condition ?? 'Unknown') }}
+                                                    @if($checkout->tool->condition === 'good') border border-green-800 text-green-800 uppercase
+                                                    @elseif($checkout->tool->condition === 'fair') border border-yellow-800 text-yellow-800 uppercase
+                                                    @else border border-orange-800 text-orange-800 uppercase @endif">
+                                                    {{ ucfirst(str_replace('_', ' ', $checkout->tool->condition ?? 'Unknown')) }}
                                                 </span>
                                             @else
                                                 <span class="text-xs text-gray-500">N/A</span>

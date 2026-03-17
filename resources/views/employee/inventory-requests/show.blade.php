@@ -43,17 +43,17 @@
                                     <h3 class="text-lg md:text-xl font-bold text-gray-900">{{ $inventoryRequest->request_title }}</h3>
                                     <span class="inline-block px-3 md:px-4 py-1 md:py-2 rounded-full text-xs md:text-sm font-semibold w-fit
                                         @if($inventoryRequest->status === 'draft')
-                                            bg-gray-100 text-gray-800
+                                            border border-gray-800 text-gray-800 uppercase
                                         @elseif($inventoryRequest->status === 'submitted')
-                                            bg-yellow-100 text-yellow-800
+                                            border border-yellow-800 text-yellow-800 uppercase
                                         @elseif($inventoryRequest->status === 'approved')
-                                            bg-green-100 text-green-800
+                                            border border-green-800 text-green-800 uppercase
                                         @elseif($inventoryRequest->status === 'denied')
-                                            bg-red-100 text-red-800
+                                            border border-red-800 text-red-800 uppercase
                                         @elseif($inventoryRequest->status === 'fulfilled')
-                                            bg-indigo-100 text-indigo-800
+                                            border border-blue-800 text-blue-800 uppercase
                                         @else
-                                            bg-gray-100 text-gray-800
+                                            border border-gray-800 text-gray-800 uppercase
                                         @endif">
                                         {{ ucfirst(str_replace('_', ' ', $inventoryRequest->status)) }}
                                     </span>
@@ -66,9 +66,9 @@
                                         <p class="text-base md:text-lg font-semibold text-gray-900">
                                             <span class="inline-block px-2 md:px-3 py-1 rounded-full text-xs md:text-sm
                                                 @if($inventoryRequest->priority === 'urgent')
-                                                    bg-red-100 text-red-800
+                                                    border border-red-800 text-red-800 uppercase
                                                 @else
-                                                    bg-blue-100 text-blue-800
+                                                    border border-blue-800 text-blue-800 uppercase
                                                 @endif">
                                                 {{ ucfirst($inventoryRequest->priority) }}
                                             </span>

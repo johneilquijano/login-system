@@ -94,19 +94,19 @@
                                             {{ $request->submitted_at ? $request->submitted_at->format('M d, Y') : 'Not submitted' }}
                                         </p>
                                     </div>
-                                    <span class="inline-block px-2.5 py-1 rounded-full text-xs font-semibold 
+                                    <span class="inline-block px-2.5 py-1 rounded-full text-xs font-semibold
                                         @if($request->status === 'draft')
-                                            bg-gray-100 text-gray-800
+                                            border border-gray-800 text-gray-800 uppercase
                                         @elseif($request->status === 'submitted')
-                                            bg-yellow-100 text-yellow-800
+                                            border border-yellow-800 text-yellow-800 uppercase
                                         @elseif($request->status === 'approved')
-                                            bg-green-100 text-green-800
+                                            border border-green-800 text-green-800 uppercase
                                         @elseif($request->status === 'denied')
-                                            bg-red-100 text-red-800
+                                            border border-red-800 text-red-800 uppercase
                                         @elseif($request->status === 'fulfilled')
-                                            bg-indigo-100 text-indigo-800
+                                            border border-blue-800 text-blue-800 uppercase
                                         @else
-                                            bg-gray-100 text-gray-800
+                                            border border-gray-800 text-gray-800 uppercase
                                         @endif">
                                         {{ ucfirst(str_replace('_', ' ', $request->status)) }}
                                     </span>
@@ -118,9 +118,9 @@
                                     </button>
                                     <span class="inline-block px-2.5 py-1 rounded-full text-xs font-semibold
                                         @if($request->priority === 'urgent')
-                                            bg-red-100 text-red-800
+                                            border border-red-800 text-red-800 uppercase
                                         @else
-                                            bg-blue-100 text-blue-800
+                                            border border-blue-800 text-blue-800 uppercase
                                         @endif">
                                         {{ ucfirst($request->priority) }}
                                     </span>
@@ -170,9 +170,9 @@
                                         <td class="px-4 md:px-6 py-3 md:py-4 text-xs whitespace-nowrap">
                                             <span class="inline-block px-2 md:px-3 py-1 rounded-full text-xs font-semibold
                                                 @if($request->priority === 'urgent')
-                                                    bg-red-100 text-red-800
+                                                    border border-red-800 text-red-800 uppercase
                                                 @else
-                                                    bg-blue-100 text-blue-800
+                                                    border border-blue-800 text-blue-800 uppercase
                                                 @endif">
                                                 {{ ucfirst($request->priority) }}
                                             </span>
@@ -180,17 +180,17 @@
                                         <td class="px-4 md:px-6 py-3 md:py-4 text-xs whitespace-nowrap">
                                             <span class="inline-block px-2 md:px-3 py-1 rounded-full text-xs font-semibold 
                                                 @if($request->status === 'draft')
-                                                    bg-gray-100 text-gray-800
+                                                    border border-gray-800 text-gray-800 uppercase
                                                 @elseif($request->status === 'submitted')
-                                                    bg-yellow-100 text-yellow-800
+                                                    border border-yellow-800 text-yellow-800 uppercase
                                                 @elseif($request->status === 'approved')
-                                                    bg-green-100 text-green-800
+                                                    border border-green-800 text-green-800 uppercase
                                                 @elseif($request->status === 'denied')
-                                                    bg-red-100 text-red-800
+                                                    border border-red-800 text-red-800 uppercase
                                                 @elseif($request->status === 'fulfilled')
-                                                    bg-indigo-100 text-indigo-800
+                                                    border border-blue-800 text-blue-800 uppercase
                                                 @else
-                                                    bg-gray-100 text-gray-800
+                                                    border border-gray-800 text-gray-800 uppercase
                                                 @endif">
                                                 {{ ucfirst(str_replace('_', ' ', $request->status)) }}
                                             </span>
