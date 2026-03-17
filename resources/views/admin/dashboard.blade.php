@@ -42,7 +42,7 @@
                     </div>
 
                     <!-- Welcome Banner -->
-                    <div class="mb-8 bg-brand-100 rounded-lg shadow-md p-6 text-gray-900">
+                    <div class="mb-8 bg-brand-100 border border-gray-200 rounded-lg shadow-md p-6 text-gray-900">
                         <h1 class="text-3xl font-bold">Welcome back, {{ Auth::user()->name }}</h1>
                         <p class="mt-2 text-gray-600">Here's what's happening with your system today</p>
                     </div>
@@ -152,9 +152,9 @@
                                                         <p class="text-xs text-gray-600">{{ $request->user->name }}</p>
                                                     </div>
                                                     @if($request->priority === 'urgent')
-                                                        <span class="inline-block px-2 py-1 text-xs font-semibold bg-red-100 text-red-800 rounded">Urgent</span>
+                                                        <span class="inline-block px-2 py-1 text-xs font-semibold border border-red-800 text-red-800 rounded uppercase">URGENT</span>
                                                     @else
-                                                        <span class="inline-block px-2 py-1 text-xs font-semibold bg-yellow-100 text-yellow-800 rounded">Normal</span>
+                                                        <span class="inline-block px-2 py-1 text-xs font-semibold border border-yellow-800 text-yellow-800 rounded uppercase">NORMAL</span>
                                                     @endif
                                                 </div>
                                                 <p class="text-xs text-gray-500 mt-1">{{ $request->created_at->diffForHumans() }}</p>
@@ -240,13 +240,13 @@
                                                     </div>
                                                     <span class="inline-block px-2 py-1 text-xs font-semibold 
                                                         @if($item->status === 'pending')
-                                                            bg-yellow-100 text-yellow-800
+                                                            border border-yellow-800 text-yellow-800 uppercase
                                                         @elseif($item->status === 'ordered')
-                                                            bg-blue-100 text-blue-800
+                                                            border border-blue-800 text-blue-800 uppercase
                                                         @elseif($item->status === 'partially_received')
-                                                            bg-orange-100 text-orange-800
+                                                            border border-orange-800 text-orange-800 uppercase
                                                         @else
-                                                            bg-green-100 text-green-800
+                                                            border border-green-800 text-green-800 uppercase
                                                         @endif
                                                         rounded">
                                                         {{ ucfirst(str_replace('_', ' ', $item->status)) }}
@@ -298,7 +298,7 @@
                                                         <p class="text-sm font-semibold text-gray-900">{{ $tool->name }}</p>
                                                         <p class="text-xs text-gray-600">{{ $tool->category ?? '-' }}</p>
                                                     </div>
-                                                    <span class="inline-block px-2 py-1 text-xs font-semibold bg-orange-100 text-orange-800 rounded">Maintenance</span>
+                                                    <span class="inline-block px-2 py-1 text-xs font-semibold border border-orange-800 text-orange-800 rounded uppercase">MAINTENANCE</span>
                                                 </div>
                                                 <p class="text-xs text-gray-500 mt-1">Updated {{ $tool->updated_at->diffForHumans() }}</p>
                                             </a>
@@ -353,9 +353,9 @@
                                                         <p class="text-xs text-gray-600">{{ $checkout->user->name }}</p>
                                                     </div>
                                                     @if($checkout->return_due_date->isPast())
-                                                        <span class="inline-block px-2 py-1 text-xs font-semibold bg-red-100 text-red-800 rounded">Overdue</span>
+                                                        <span class="inline-block px-2 py-1 text-xs font-semibold border border-red-800 text-red-800 rounded uppercase">OVERDUE</span>
                                                     @else
-                                                        <span class="inline-block px-2 py-1 text-xs font-semibold bg-yellow-100 text-yellow-800 rounded">Due Today</span>
+                                                        <span class="inline-block px-2 py-1 text-xs font-semibold border border-yellow-800 text-yellow-800 rounded uppercase">DUE TODAY</span>
                                                     @endif
                                                 </div>
                                                 <p class="text-xs {{ $checkout->return_due_date->isPast() ? 'text-red-600' : 'text-gray-500' }} mt-1">
@@ -402,10 +402,10 @@
                                 @forelse($latestInventoryRequests as $request)
                                     @php
                                         $statusClasses = [
-                                            'submitted' => 'bg-yellow-100 text-yellow-800',
-                                            'approved' => 'bg-blue-100 text-blue-800',
-                                            'denied' => 'bg-red-100 text-red-800',
-                                            'fulfilled' => 'bg-green-100 text-green-800',
+                                            'submitted' => 'border border-yellow-800 text-yellow-800 uppercase',
+                                            'approved' => 'border border-blue-800 text-blue-800 uppercase',
+                                            'denied' => 'border border-red-800 text-red-800 uppercase',
+                                            'fulfilled' => 'border border-green-800 text-green-800 uppercase',
                                         ];
                                     @endphp
                                     <div class="rounded-lg border border-gray-200 bg-white p-4 shadow-sm">
@@ -414,7 +414,7 @@
                                                 <p class="text-sm font-semibold text-gray-900">Request #{{ $request->id }}</p>
                                                 <p class="text-xs text-gray-600 mt-1">{{ $request->user->name }}</p>
                                             </div>
-                                            <span class="inline-block px-2.5 py-1 text-xs font-semibold rounded {{ $statusClasses[$request->status] ?? 'bg-gray-100 text-gray-800' }}">
+                                            <span class="inline-block px-2.5 py-1 text-xs font-semibold rounded {{ $statusClasses[$request->status] ?? 'border border-gray-800 text-gray-800 uppercase' }}">
                                                 {{ ucfirst($request->status) }}
                                             </span>
                                         </div>
@@ -460,21 +460,21 @@
                                             <td class="px-6 py-4 text-sm text-gray-600">{{ $request->user->name }}</td>
                                             <td class="px-6 py-4 text-sm">
                                                 @if($request->priority === 'urgent')
-                                                    <span class="inline-block px-2 py-1 text-xs font-semibold bg-red-100 text-red-800 rounded">Urgent</span>
+                                                    <span class="inline-block px-2 py-1 text-xs font-semibold border border-red-800 text-red-800 rounded uppercase">URGENT</span>
                                                 @else
-                                                    <span class="inline-block px-2 py-1 text-xs font-semibold bg-gray-100 text-gray-800 rounded">Normal</span>
+                                                    <span class="inline-block px-2 py-1 text-xs font-semibold border border-gray-800 text-gray-800 rounded uppercase">NORMAL</span>
                                                 @endif
                                             </td>
                                             <td class="px-6 py-4 text-sm">
                                                 @php
                                                     $statusClasses = [
-                                                        'submitted' => 'bg-yellow-100 text-yellow-800',
-                                                        'approved' => 'bg-blue-100 text-blue-800',
-                                                        'denied' => 'bg-red-100 text-red-800',
-                                                        'fulfilled' => 'bg-green-100 text-green-800',
+                                                        'submitted' => 'border border-yellow-800 text-yellow-800 uppercase',
+                                                        'approved' => 'border border-blue-800 text-blue-800 uppercase',
+                                                        'denied' => 'border border-red-800 text-red-800 uppercase',
+                                                        'fulfilled' => 'border border-green-800 text-green-800 uppercase',
                                                     ];
                                                 @endphp
-                                                <span class="inline-block px-2 py-1 text-xs font-semibold {{ $statusClasses[$request->status] ?? 'bg-gray-100 text-gray-800' }} rounded">
+                                                <span class="inline-block px-2 py-1 text-xs font-semibold {{ $statusClasses[$request->status] ?? 'border border-gray-800 text-gray-800 uppercase' }} rounded">
                                                     {{ ucfirst($request->status) }}
                                                 </span>
                                             </td>

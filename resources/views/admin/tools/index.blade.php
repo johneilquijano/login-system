@@ -75,13 +75,13 @@
                             @forelse($tools as $tool)
                                 @php
                                     $status = $tool->getStatus();
-                                    $statusColor = $status === 'Available' ? 'bg-emerald-100 text-emerald-800' : ($status === 'Checked Out' ? 'bg-yellow-100 text-yellow-800' : 'bg-orange-100 text-orange-800');
+                                    $statusColor = $status === 'Available' ? 'border border-green-800 text-green-800 uppercase' : ($status === 'Checked Out' ? 'border border-yellow-800 text-yellow-800 uppercase' : 'border border-orange-800 text-orange-800 uppercase');
                                     $available = $tool->getAvailableQuantity();
                                     $total = $tool->quantity;
                                     $activeCheckouts = $tool->getActiveCheckouts();
                                     $checkoutCount = $activeCheckouts->count();
                                     $earliestDue = $tool->getEarliestDueDate();
-                                    $conditionColor = $tool->condition === 'good' ? 'bg-green-100 text-green-800' : ($tool->condition === 'fair' ? 'bg-yellow-100 text-yellow-800' : 'bg-orange-100 text-orange-800');
+                                    $conditionColor = $tool->condition === 'good' ? 'border border-green-800 text-green-800 uppercase' : ($tool->condition === 'fair' ? 'border border-yellow-800 text-yellow-800 uppercase' : 'border border-orange-800 text-orange-800 uppercase');
                                 @endphp
                                 <div class="rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
                                     <div class="flex items-start justify-between gap-3">
@@ -106,10 +106,10 @@
                                     </div>
 
                                     <div class="mt-3 flex flex-wrap items-center gap-2 text-xs text-gray-600">
-                                        <span class="inline-flex items-center px-2.5 py-1 rounded-full font-semibold bg-blue-100 text-blue-800">
+                                        <span class="inline-flex items-center px-2.5 py-1 rounded-full font-semibold border border-blue-800 text-blue-800 uppercase">
                                             {{ $tool->category }}
                                         </span>
-                                        <span class="inline-flex items-center px-2.5 py-1 rounded-full font-semibold {{ $available > 0 ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
+                                        <span class="inline-flex items-center px-2.5 py-1 rounded-full font-semibold {{ $available > 0 ? 'border border-green-800 text-green-800 uppercase' : 'border border-red-800 text-red-800 uppercase' }}">
                                             {{ $available }} / {{ $total }} available
                                         </span>
                                         <span class="inline-flex items-center px-2.5 py-1 rounded-full font-semibold {{ $conditionColor }}">
@@ -195,7 +195,7 @@
 
                                         <!-- Category -->
                                         <td class="px-4 md:px-6 py-4 whitespace-nowrap">
-                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border border-blue-800 text-blue-800 uppercase">
                                                 {{ $tool->category }}
                                             </span>
                                         </td>
@@ -204,7 +204,7 @@
                                         <td class="px-4 md:px-6 py-4 whitespace-nowrap">
                                             @php
                                                 $status = $tool->getStatus();
-                                                $statusColor = $status === 'Available' ? 'bg-emerald-100 text-emerald-800' : ($status === 'Checked Out' ? 'bg-yellow-100 text-yellow-800' : 'bg-orange-100 text-orange-800');
+                                                $statusColor = $status === 'Available' ? 'border border-green-800 text-green-800 uppercase' : ($status === 'Checked Out' ? 'border border-yellow-800 text-yellow-800 uppercase' : 'border border-orange-800 text-orange-800 uppercase');
                                             @endphp
                                             <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $statusColor }}">
                                                 {{ $status }}
@@ -217,7 +217,7 @@
                                                 $available = $tool->getAvailableQuantity();
                                                 $total = $tool->quantity;
                                             @endphp
-                                            <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold {{ $available > 0 ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
+                                            <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold {{ $available > 0 ? 'border border-green-800 text-green-800 uppercase' : 'border border-red-800 text-red-800 uppercase' }}">
                                                 {{ $available }} / {{ $total }}
                                             </span>
                                         </td>
@@ -266,7 +266,7 @@
                                         <!-- Condition -->
                                         <td class="px-4 md:px-6 py-4 whitespace-nowrap">
                                             @php
-                                                $conditionColor = $tool->condition === 'good' ? 'bg-green-100 text-green-800' : ($tool->condition === 'fair' ? 'bg-yellow-100 text-yellow-800' : 'bg-orange-100 text-orange-800');
+                                                $conditionColor = $tool->condition === 'good' ? 'border border-green-800 text-green-800 uppercase' : ($tool->condition === 'fair' ? 'border border-yellow-800 text-yellow-800 uppercase' : 'border border-orange-800 text-orange-800 uppercase');
                                             @endphp
                                             <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $conditionColor }}">
                                                 {{ ucwords(str_replace('_', ' ', $tool->condition)) }}

@@ -9,13 +9,13 @@
                         <p class="text-xs text-gray-600 mt-1">{{ $user->email }}</p>
                     </div>
                     <div class="flex items-center gap-2">
-                        <span class="inline-block px-2.5 py-1 rounded-full text-xs font-semibold {{ $user->role === 'admin' ? 'bg-purple-100 text-purple-800' : 'bg-blue-100 text-blue-800' }}">
+                        <span class="inline-block px-2.5 py-1 rounded-full text-xs font-semibold border {{ $user->role === 'admin' ? 'border-purple-800 text-purple-800' : 'border-blue-800 text-blue-800' }} uppercase">
                             {{ ucfirst($user->role) }}
                         </span>
                         @if($user->status === 'active')
-                            <span class="inline-block px-2.5 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-800">Active</span>
+                            <span class="inline-block px-2.5 py-1 rounded-full text-xs font-semibold border border-green-800 text-green-800 uppercase">Active</span>
                         @else
-                            <span class="inline-block px-2.5 py-1 rounded-full text-xs font-semibold bg-red-100 text-red-800">Disabled</span>
+                            <span class="inline-block px-2.5 py-1 rounded-full text-xs font-semibold border border-red-800 text-red-800 uppercase">Disabled</span>
                         @endif
                     </div>
                 </div>
@@ -90,15 +90,15 @@
                     <td class="px-4 md:px-6 py-4 text-sm text-gray-900 whitespace-nowrap">{{ $user->name }}</td>
                     <td class="px-4 md:px-6 py-4 text-sm text-gray-600 whitespace-nowrap">{{ $user->email }}</td>
                     <td class="px-4 md:px-6 py-4 text-sm whitespace-nowrap">
-                        <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold {{ $user->role === 'admin' ? 'bg-purple-100 text-purple-800' : 'bg-blue-100 text-blue-800' }}">
+                        <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold border {{ $user->role === 'admin' ? 'border-purple-800 text-purple-800' : 'border-blue-800 text-blue-800' }} uppercase">
                             {{ ucfirst($user->role) }}
                         </span>
                     </td>
                     <td class="px-4 md:px-6 py-4 text-sm whitespace-nowrap">
                         @if($user->status === 'active')
-                            <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-800">Active</span>
+                            <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold border border-green-800 text-green-800 uppercase">Active</span>
                         @else
-                            <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-red-100 text-red-800">Disabled</span>
+                            <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold border border-red-800 text-red-800 uppercase">Disabled</span>
                         @endif
                     </td>
                     <td class="px-4 md:px-6 py-4 text-sm text-gray-600 whitespace-nowrap">{{ $user->created_at->format('M d, Y') }}</td>

@@ -95,14 +95,14 @@
 
                                         <!-- Job Number -->
                                         <td class="px-6 py-4">
-                                            <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-blue-100 text-blue-800">
+                                            <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold border border-blue-800 text-blue-800 uppercase">
                                                 {{ $item->job_number }}
                                             </span>
                                         </td>
 
                                         <!-- Model Number -->
                                         <td class="px-6 py-4">
-                                            <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-purple-100 text-purple-800">
+                                            <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold border border-purple-800 text-purple-800 uppercase">
                                                 {{ $item->model_number }}
                                             </span>
                                         </td>
@@ -133,11 +133,11 @@
                                         <td class="px-6 py-4">
                                             @php
                                                 $statusColor = match($item->status) {
-                                                    'pending' => 'bg-yellow-100 text-yellow-800',
-                                                    'ordered' => 'bg-blue-100 text-blue-800',
-                                                    'partially_received' => 'bg-orange-100 text-orange-800',
-                                                    'received' => 'bg-green-100 text-green-800',
-                                                    default => 'bg-gray-100 text-gray-800'
+                                                    'pending' => 'border border-yellow-800 text-yellow-800 uppercase',
+                                                    'ordered' => 'border border-blue-800 text-blue-800 uppercase',
+                                                    'partially_received' => 'border border-orange-800 text-orange-800 uppercase',
+                                                    'received' => 'border border-green-800 text-green-800 uppercase',
+                                                    default => 'border border-gray-800 text-gray-800 uppercase'
                                                 };
                                             @endphp
                                             <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold {{ $statusColor }}">

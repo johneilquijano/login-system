@@ -85,23 +85,23 @@
                                 @foreach($feedbacks as $feedback)
                                     @php
                                         $typeColors = [
-                                            'bug' => ['bg' => 'bg-red-100', 'text' => 'text-red-800'],
-                                            'ux' => ['bg' => 'bg-blue-100', 'text' => 'text-blue-800'],
-                                            'feature' => ['bg' => 'bg-purple-100', 'text' => 'text-purple-800'],
+                                            'bug' => 'border border-red-800 text-red-800 uppercase',
+                                            'ux' => 'border border-blue-800 text-blue-800 uppercase',
+                                            'feature' => 'border border-purple-800 text-purple-800 uppercase',
                                         ];
                                         $statusColors = [
-                                            'new' => ['bg' => 'bg-blue-100', 'text' => 'text-blue-800'],
-                                            'in_review' => ['bg' => 'bg-amber-100', 'text' => 'text-amber-800'],
-                                            'fixed' => ['bg' => 'bg-green-100', 'text' => 'text-green-800'],
-                                            'ignored' => ['bg' => 'bg-gray-100', 'text' => 'text-gray-800'],
+                                            'new' => 'border border-blue-800 text-blue-800 uppercase',
+                                            'in_review' => 'border border-yellow-800 text-yellow-800 uppercase',
+                                            'fixed' => 'border border-green-800 text-green-800 uppercase',
+                                            'ignored' => 'border border-gray-800 text-gray-800 uppercase',
                                         ];
                                         $severityColors = [
-                                            'low' => ['bg' => 'bg-green-100', 'text' => 'text-green-800'],
-                                            'medium' => ['bg' => 'bg-amber-100', 'text' => 'text-amber-800'],
-                                            'high' => ['bg' => 'bg-red-100', 'text' => 'text-red-800'],
+                                            'low' => 'border border-green-800 text-green-800 uppercase',
+                                            'medium' => 'border border-yellow-800 text-yellow-800 uppercase',
+                                            'high' => 'border border-red-800 text-red-800 uppercase',
                                         ];
-                                        $type = $typeColors[$feedback->category] ?? ['bg' => 'bg-gray-100', 'text' => 'text-gray-800'];
-                                        $status = $statusColors[$feedback->status] ?? ['bg' => 'bg-gray-100', 'text' => 'text-gray-800'];
+                                        $type = $typeColors[$feedback->category] ?? 'border border-gray-800 text-gray-800 uppercase';
+                                        $status = $statusColors[$feedback->status] ?? 'border border-gray-800 text-gray-800 uppercase';
                                     @endphp
                                     <div class="rounded-lg border border-gray-200 bg-white p-4 shadow-sm">
                                         <div class="flex items-start justify-between gap-3">
@@ -109,18 +109,18 @@
                                                 <p class="text-sm font-semibold text-gray-900">{{ Str::limit($feedback->message, 60) }}</p>
                                                 <p class="text-xs text-gray-500 mt-1">{{ $feedback->created_at->format('M d, Y H:i') }}</p>
                                             </div>
-                                            <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium {{ $status['bg'] }} {{ $status['text'] }}">
+                                            <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium {{ $status }}">
                                                 {{ $feedback->status_label }}
                                             </span>
                                         </div>
 
                                         <div class="mt-3 flex flex-wrap items-center gap-2 text-xs text-gray-600">
-                                            <span class="inline-flex items-center px-2.5 py-1 rounded-full font-medium {{ $type['bg'] }} {{ $type['text'] }}">
+                                            <span class="inline-flex items-center px-2.5 py-1 rounded-full font-medium {{ $type }}">
                                                 {{ ucfirst($feedback->category) }}
                                             </span>
                                             @if($feedback->severity)
-                                                @php $sev = $severityColors[$feedback->severity] ?? ['bg' => 'bg-gray-100', 'text' => 'text-gray-800']; @endphp
-                                                <span class="inline-flex items-center px-2.5 py-1 rounded-full font-medium {{ $sev['bg'] }} {{ $sev['text'] }}">
+                                                @php $sev = $severityColors[$feedback->severity] ?? 'border border-gray-800 text-gray-800 uppercase'; @endphp
+                                                <span class="inline-flex items-center px-2.5 py-1 rounded-full font-medium {{ $sev }}">
                                                     {{ ucfirst($feedback->severity) }}
                                                 </span>
                                             @endif
@@ -147,13 +147,13 @@
                                                 <td class="px-4 md:px-6 py-4 whitespace-nowrap">
                                                 @php
                                                     $typeColors = [
-                                                        'bug' => ['bg' => 'bg-red-100', 'text' => 'text-red-800'],
-                                                        'ux' => ['bg' => 'bg-blue-100', 'text' => 'text-blue-800'],
-                                                        'feature' => ['bg' => 'bg-purple-100', 'text' => 'text-purple-800'],
+                                                        'bug' => 'border border-red-800 text-red-800 uppercase',
+                                                        'ux' => 'border border-blue-800 text-blue-800 uppercase',
+                                                        'feature' => 'border border-purple-800 text-purple-800 uppercase',
                                                     ];
-                                                    $colors = $typeColors[$feedback->category] ?? ['bg' => 'bg-gray-100', 'text' => 'text-gray-800'];
+                                                    $colors = $typeColors[$feedback->category] ?? 'border border-gray-800 text-gray-800 uppercase';
                                                 @endphp
-                                                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium {{ $colors['bg'] }} {{ $colors['text'] }}">
+                                                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium {{ $colors }}">
                                                     {{ ucfirst($feedback->category) }}
                                                 </span>
                                             </td>
@@ -167,14 +167,14 @@
                                                 <td class="px-4 md:px-6 py-4 whitespace-nowrap">
                                                 @php
                                                     $statusColors = [
-                                                        'new' => ['bg' => 'bg-blue-100', 'text' => 'text-blue-800'],
-                                                        'in_review' => ['bg' => 'bg-amber-100', 'text' => 'text-amber-800'],
-                                                        'fixed' => ['bg' => 'bg-green-100', 'text' => 'text-green-800'],
-                                                        'ignored' => ['bg' => 'bg-gray-100', 'text' => 'text-gray-800'],
+                                                        'new' => 'border border-blue-800 text-blue-800 uppercase',
+                                                        'in_review' => 'border border-yellow-800 text-yellow-800 uppercase',
+                                                        'fixed' => 'border border-green-800 text-green-800 uppercase',
+                                                        'ignored' => 'border border-gray-800 text-gray-800 uppercase',
                                                     ];
-                                                    $colors = $statusColors[$feedback->status] ?? ['bg' => 'bg-gray-100', 'text' => 'text-gray-800'];
+                                                    $colors = $statusColors[$feedback->status] ?? 'border border-gray-800 text-gray-800 uppercase';
                                                 @endphp
-                                                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium {{ $colors['bg'] }} {{ $colors['text'] }}">
+                                                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium {{ $colors }}">
                                                     {{ $feedback->status_label }}
                                                 </span>
                                             </td>
@@ -184,13 +184,13 @@
                                                 @if($feedback->severity)
                                                     @php
                                                         $severityColors = [
-                                                            'low' => ['bg' => 'bg-green-100', 'text' => 'text-green-800'],
-                                                            'medium' => ['bg' => 'bg-amber-100', 'text' => 'text-amber-800'],
-                                                            'high' => ['bg' => 'bg-red-100', 'text' => 'text-red-800'],
+                                                            'low' => 'border border-green-800 text-green-800 uppercase',
+                                                            'medium' => 'border border-yellow-800 text-yellow-800 uppercase',
+                                                            'high' => 'border border-red-800 text-red-800 uppercase',
                                                         ];
-                                                        $colors = $severityColors[$feedback->severity] ?? ['bg' => 'bg-gray-100', 'text' => 'text-gray-800'];
+                                                        $colors = $severityColors[$feedback->severity] ?? 'border border-gray-800 text-gray-800 uppercase';
                                                     @endphp
-                                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium {{ $colors['bg'] }} {{ $colors['text'] }}">
+                                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium {{ $colors }}">
                                                         {{ ucfirst($feedback->severity) }}
                                                     </span>
                                                 @else

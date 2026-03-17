@@ -109,7 +109,19 @@ class AuditLog extends Model
             'submit' => 'Submitted',
             'claim' => 'Claimed',
             'complete' => 'Completed',
-            default => ucfirst($this->action),
+            'page_view' => 'Page View',
+            default => ucfirst(str_replace('_', ' ', $this->action)),
+        };
+    }
+
+    public function getActionColorAttribute(): string
+    {
+        return match ($this->action) {
+            'login', 'logout', 'download', 'assign' => 'border border-blue-800 text-blue-800 uppercase',
+            'create', 'upload', 'sign', 'approve', 'submit', 'claim', 'complete', 'page_view' => 'border border-green-800 text-green-800 uppercase',
+            'delete', 'deny' => 'border border-red-800 text-red-800 uppercase',
+            'update', 'status_change' => 'border border-yellow-800 text-yellow-800 uppercase',
+            default => 'border border-gray-800 text-gray-800 uppercase',
         };
     }
 

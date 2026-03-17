@@ -151,7 +151,7 @@
                                         <div class="text-xs text-slate-500">{{ $log->user_role ?? '-' }}</div>
                                     </td>
                                     <td class="px-6 py-4 text-sm">
-                                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800">
+                                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium {{ $log->action_color }}">
                                             {{ $log->action_label }}
                                         </span>
                                     </td>

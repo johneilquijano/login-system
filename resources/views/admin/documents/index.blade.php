@@ -144,31 +144,31 @@
                                             </a>
                                             <p class="text-xs text-gray-500 mt-1">{{ $doc->created_at->format('M d, Y H:i') }}</p>
                                         </div>
-                                        <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold
+                                        <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold uppercase
                                             @if($doc->status === 'approved')
-                                                bg-emerald-100 text-emerald-700 border border-emerald-200
+                                                border border-green-800 text-green-800
                                             @elseif($doc->status === 'pending_review')
-                                                bg-orange-100 text-orange-700 border border-orange-200
+                                                border border-orange-800 text-orange-800
                                             @elseif($doc->status === 'rejected')
-                                                bg-red-100 text-red-700 border border-red-200
+                                                border border-red-800 text-red-800
                                             @else
-                                                bg-gray-100 text-gray-700 border border-gray-200
+                                                border border-gray-800 text-gray-800
                                             @endif">
                                             {{ ucfirst(str_replace('_', ' ', $doc->status)) }}
                                         </span>
                                     </div>
 
                                     <div class="mt-3 flex flex-wrap items-center gap-2 text-xs text-gray-600">
-                                        <span class="inline-block px-2.5 py-1 rounded-full font-semibold bg-purple-100 text-purple-700 border border-purple-200">
+                                        <span class="inline-block px-2.5 py-1 rounded-full font-semibold border border-purple-800 text-purple-800 uppercase">
                                             {{ $doc->formatted_type }}
                                         </span>
                                         <span class="inline-block px-2.5 py-1 rounded-full font-semibold
                                             @if(!$doc->signed_at)
-                                                bg-yellow-100 text-yellow-700 border border-yellow-200
+                                                border border-yellow-800 text-yellow-800 uppercase
                                             @else
-                                                bg-emerald-100 text-emerald-700 border border-emerald-200
+                                                border border-green-800 text-green-800 uppercase
                                             @endif">
-                                            {{ $doc->signed_at ? 'Signed' : 'Pending Signature' }}
+                                            {{ $doc->signed_at ? 'SIGNED' : 'PENDING SIGNATURE' }}
                                         </span>
                                         <span class="text-gray-400">•</span>
                                         <span>
@@ -229,7 +229,7 @@
                                             @endif
                                         </td>
                                         <td class="px-4 md:px-6 py-4 text-sm text-gray-700 whitespace-nowrap">
-                                            <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-purple-100 text-purple-700 border border-purple-200">
+                                            <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold border border-purple-800 text-purple-800 uppercase">
                                                 {{ $doc->formatted_type }}
                                             </span>
                                         </td>
@@ -238,21 +238,21 @@
                                         </td>
                                         <td class="px-4 md:px-6 py-4 text-sm whitespace-nowrap">
                                             @if(!$doc->signed_at)
-                                            <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-yellow-100 text-yellow-700 border border-yellow-200">Pending</span>
+                                            <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold border border-yellow-800 text-yellow-800 uppercase">Pending Signature</span>
                                             @else
-                                            <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-700 border border-emerald-200">Signed</span>
+                                            <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold border border-green-800 text-green-800 uppercase">Signed</span>
                                             @endif
                                         </td>
                                         <td class="px-4 md:px-6 py-4 text-sm whitespace-nowrap">
-                                            <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold 
+                                            <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold uppercase
                                                 @if($doc->status === 'approved')
-                                                    bg-emerald-100 text-emerald-700 border border-emerald-200
+                                                    border border-green-800 text-green-800
                                                 @elseif($doc->status === 'pending_review')
-                                                    bg-orange-100 text-orange-700 border border-orange-200
+                                                    border border-orange-800 text-orange-800
                                                 @elseif($doc->status === 'rejected')
-                                                    bg-red-100 text-red-700 border border-red-200
+                                                    border border-red-800 text-red-800
                                                 @else
-                                                    bg-gray-100 text-gray-700 border border-gray-200
+                                                    border border-gray-800 text-gray-800
                                                 @endif">
                                                 {{ ucfirst(str_replace('_', ' ', $doc->status)) }}
                                             </span>

@@ -130,7 +130,7 @@
                                     <p class="text-sm font-semibold text-slate-900 mt-1">{{ $log->user->name ?? 'Unknown' }}</p>
                                     <p class="text-xs text-slate-500">{{ $log->user_role ?? '-' }}</p>
                                 </div>
-                                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800">
+                                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium {{ $log->action_color }}">
                                     {{ $log->action_label }}
                                 </span>
                             </div>
@@ -146,7 +146,7 @@
                             </div>
 
                             <div class="mt-3 flex flex-wrap items-center gap-2 text-xs text-slate-600">
-                                <span class="inline-flex items-center px-2 py-1 rounded font-mono bg-slate-100 text-slate-700">
+                                <span class="inline-flex items-center px-2 py-1 rounded text-xs font-mono bg-slate-100 text-slate-700">
                                     {{ $log->method ?? '-' }}
                                 </span>
                                 <span class="text-slate-400">•</span>
@@ -180,7 +180,7 @@
                                         <div class="text-xs text-slate-500">{{ $log->user_role ?? '-' }}</div>
                                     </td>
                                     <td class="px-6 py-4 text-sm">
-                                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800">
+                                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium {{ $log->action_color }}">
                                             {{ $log->action_label }}
                                         </span>
                                     </td>

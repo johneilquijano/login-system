@@ -44,7 +44,7 @@
                                     <div>
                                         <label class="block text-sm font-semibold text-gray-700 mb-1">File Type</label>
                                         <p class="text-gray-600">
-                                            <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-purple-100 text-purple-700 border border-purple-200">
+                                            <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold border border-purple-800 text-purple-800 uppercase">
                                                 {{ $document->formatted_type }}
                                             </span>
                                         </p>
@@ -78,15 +78,15 @@
                                     <!-- Document Status -->
                                     <div>
                                         <label class="block text-sm font-semibold text-gray-700 mb-2">Document Status</label>
-                                        <span class="inline-block px-4 py-2 rounded-full text-sm font-semibold 
+                                        <span class="inline-block px-4 py-2 rounded-full text-sm font-semibold uppercase
                                             @if($document->status === 'approved')
-                                                bg-emerald-100 text-emerald-700 border border-emerald-200
+                                                border border-green-800 text-green-800
                                             @elseif($document->status === 'pending_review')
-                                                bg-orange-100 text-orange-700 border border-orange-200
+                                                border border-orange-800 text-orange-800
                                             @elseif($document->status === 'rejected')
-                                                bg-red-100 text-red-700 border border-red-200
+                                                border border-red-800 text-red-800
                                             @else
-                                                bg-gray-100 text-gray-700 border border-gray-200
+                                                border border-gray-800 text-gray-800
                                             @endif">
                                             {{ ucfirst(str_replace('_', ' ', $document->status)) }}
                                         </span>
@@ -96,12 +96,12 @@
                                     <div>
                                         <label class="block text-sm font-semibold text-gray-700 mb-2">Signature Status</label>
                                         @if(!$document->signed_at)
-                                        <span class="inline-block px-4 py-2 rounded-full text-sm font-semibold bg-yellow-100 text-yellow-700 border border-yellow-200">
+                                        <span class="inline-block px-4 py-2 rounded-full text-sm font-semibold border border-yellow-800 text-yellow-800 uppercase">
                                             Pending Signature
                                         </span>
                                         @else
                                         <div class="space-y-3">
-                                            <span class="inline-block px-4 py-2 rounded-full text-sm font-semibold bg-emerald-100 text-emerald-700 border border-emerald-200">
+                                            <span class="inline-block px-4 py-2 rounded-full text-sm font-semibold border border-green-800 text-green-800 uppercase">
                                                 Signed
                                             </span>
                                             <p class="text-sm text-gray-600">{{ $document->signed_at->format('F d, Y \a\t h:i A') }}</p>
